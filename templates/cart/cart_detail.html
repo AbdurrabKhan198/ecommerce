@@ -1,0 +1,916 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Shopping Cart - Women's Wear Store{% endblock %}
+
+{% block extra_css %}
+<style>
+.cart-container {
+    padding: 3rem 0;
+    min-height: 70vh;
+}
+
+.cart-header {
+    background: var(--gradient-primary);
+    color: var(--white);
+    padding: 2rem 0;
+    margin-bottom: 3rem;
+    border-radius: var(--radius-lg);
+}
+
+.cart-steps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    color: var(--grey-500);
+    font-weight: 500;
+}
+
+.step.active {
+    color: var(--primary-color);
+}
+
+.step-number {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--grey-300);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.5rem;
+    font-weight: 600;
+}
+
+.step.active .step-number {
+    background: var(--primary-color);
+}
+
+.step.completed .step-number {
+    background: var(--success);
+}
+
+.step-connector {
+    width: 50px;
+    height: 2px;
+    background: var(--grey-300);
+    margin: 0 1rem;
+}
+
+.cart-item {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: var(--transition-normal);
+}
+
+.cart-item:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.item-image {
+    width: 120px;
+    height: 120px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.item-details {
+    flex: 1;
+    padding-left: 1.5rem;
+}
+
+.item-title {
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.item-meta {
+    color: var(--grey-600);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.item-price {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.item-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    border: 2px solid var(--grey-300);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.qty-btn {
+    background: var(--grey-100);
+    border: none;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    font-weight: 600;
+}
+
+.qty-btn:hover {
+    background: var(--primary-light);
+}
+
+.qty-input {
+    border: none;
+    text-align: center;
+    width: 50px;
+    padding: 0.5rem 0.25rem;
+    font-weight: 600;
+}
+
+.remove-btn {
+    background: none;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition-normal);
+    font-size: 0.9rem;
+}
+
+.remove-btn:hover {
+    background: var(--danger);
+    color: var(--white);
+}
+
+.cart-summary {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 2rem;
+    position: sticky;
+    top: 2rem;
+}
+
+.summary-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--grey-200);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.5rem 0;
+}
+
+.summary-row.total {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    border-top: 2px solid var(--grey-200);
+    margin-top: 1rem;
+    padding-top: 1rem;
+}
+
+.promo-code {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: var(--grey-100);
+    border-radius: var(--radius-md);
+}
+
+.promo-input {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.promo-input input {
+    flex: 1;
+}
+
+.shipping-options {
+    margin: 1.5rem 0;
+}
+
+.shipping-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border: 2px solid var(--grey-300);
+    border-radius: var(--radius-md);
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: var(--transition-normal);
+}
+
+.shipping-option:hover,
+.shipping-option.selected {
+    border-color: var(--primary-color);
+    background: var(--primary-light);
+}
+
+.checkout-btn {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.continue-shopping {
+    width: 100%;
+    padding: 0.75rem 2rem;
+    font-weight: 500;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--grey-100);
+    border-radius: var(--radius-lg);
+}
+
+.empty-cart i {
+    font-size: 4rem;
+    color: var(--grey-400);
+    margin-bottom: 1.5rem;
+}
+
+.empty-cart h3 {
+    color: var(--dark);
+    margin-bottom: 1rem;
+}
+
+.empty-cart p {
+    color: var(--grey-600);
+    margin-bottom: 2rem;
+}
+
+.suggested-products {
+    margin-top: 3rem;
+}
+
+.suggested-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.wishlist-btn {
+    background: none;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition-normal);
+    font-size: 0.9rem;
+}
+
+.wishlist-btn:hover,
+.wishlist-btn.active {
+    background: var(--primary-color);
+    color: var(--white);
+}
+
+.security-badges {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--grey-200);
+}
+
+.security-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--grey-600);
+    font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+    .cart-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .item-details {
+        padding-left: 0;
+        padding-top: 1rem;
+    }
+    
+    .item-actions {
+        justify-content: center;
+        margin-top: 1rem;
+    }
+    
+    .cart-steps {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .step-connector {
+        width: 2px;
+        height: 30px;
+        margin: 0.5rem 0;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container cart-container">
+    <!-- Cart Header -->
+    <div class="cart-header text-center">
+        <h1 class="display-5 mb-3">Shopping Cart</h1>
+        <p class="lead mb-0">Review your items and proceed to checkout</p>
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="cart-steps">
+        <div class="step active completed">
+            <div class="step-number">1</div>
+            <span>Cart</span>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <span>Checkout</span>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <span>Payment</span>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+            <div class="step-number">4</div>
+            <span>Confirmation</span>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Cart Items -->
+        <div class="col-lg-8">
+            <!-- Cart Item 1 -->
+            <div class="cart-item">
+                <div class="d-flex">
+                    <div class="item-image">
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                             alt="Premium Cotton Leggings">
+                    </div>
+                    <div class="item-details">
+                        <h5 class="item-title">Premium Cotton Ankle Length Leggings</h5>
+                        <div class="item-meta">
+                            <span class="me-3"><strong>Color:</strong> Black</span>
+                            <span class="me-3"><strong>Size:</strong> M</span>
+                            <span><strong>SKU:</strong> WW-LEG-001</span>
+                        </div>
+                        <div class="item-price">
+                            ₹799 <span class="text-muted text-decoration-line-through fs-6">₹1,299</span>
+                            <span class="badge bg-success ms-2">38% OFF</span>
+                        </div>
+                        <div class="item-actions">
+                            <div class="quantity-controls">
+                                <button class="qty-btn decrease-qty" data-item="1">-</button>
+                                <input type="number" class="qty-input" value="2" min="1" max="10" data-item="1">
+                                <button class="qty-btn increase-qty" data-item="1">+</button>
+                            </div>
+                            <button class="wishlist-btn" data-item="1">
+                                <i class="far fa-heart me-1"></i>Save for Later
+                            </button>
+                            <button class="remove-btn" data-item="1">
+                                <i class="fas fa-trash me-1"></i>Remove
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cart Item 2 -->
+            <div class="cart-item">
+                <div class="d-flex">
+                    <div class="item-image">
+                        <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                             alt="Palazzo Pants">
+                    </div>
+                    <div class="item-details">
+                        <h5 class="item-title">Designer Palazzo Pants</h5>
+                        <div class="item-meta">
+                            <span class="me-3"><strong>Color:</strong> Navy Blue</span>
+                            <span class="me-3"><strong>Size:</strong> L</span>
+                            <span><strong>SKU:</strong> WW-PAN-002</span>
+                        </div>
+                        <div class="item-price">
+                            ₹1,299 <span class="text-muted text-decoration-line-through fs-6">₹1,899</span>
+                            <span class="badge bg-success ms-2">32% OFF</span>
+                        </div>
+                        <div class="item-actions">
+                            <div class="quantity-controls">
+                                <button class="qty-btn decrease-qty" data-item="2">-</button>
+                                <input type="number" class="qty-input" value="1" min="1" max="10" data-item="2">
+                                <button class="qty-btn increase-qty" data-item="2">+</button>
+                            </div>
+                            <button class="wishlist-btn" data-item="2">
+                                <i class="far fa-heart me-1"></i>Save for Later
+                            </button>
+                            <button class="remove-btn" data-item="2">
+                                <i class="fas fa-trash me-1"></i>Remove
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cart Item 3 -->
+            <div class="cart-item">
+                <div class="d-flex">
+                    <div class="item-image">
+                        <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                             alt="Silk Dupatta">
+                    </div>
+                    <div class="item-details">
+                        <h5 class="item-title">Embroidered Silk Dupatta</h5>
+                        <div class="item-meta">
+                            <span class="me-3"><strong>Color:</strong> Pink</span>
+                            <span class="me-3"><strong>Pattern:</strong> Floral</span>
+                            <span><strong>SKU:</strong> WW-DUP-003</span>
+                        </div>
+                        <div class="item-price">
+                            ₹599 <span class="text-muted text-decoration-line-through fs-6">₹899</span>
+                            <span class="badge bg-success ms-2">33% OFF</span>
+                        </div>
+                        <div class="item-actions">
+                            <div class="quantity-controls">
+                                <button class="qty-btn decrease-qty" data-item="3">-</button>
+                                <input type="number" class="qty-input" value="1" min="1" max="10" data-item="3">
+                                <button class="qty-btn increase-qty" data-item="3">+</button>
+                            </div>
+                            <button class="wishlist-btn" data-item="3">
+                                <i class="far fa-heart me-1"></i>Save for Later
+                            </button>
+                            <button class="remove-btn" data-item="3">
+                                <i class="fas fa-trash me-1"></i>Remove
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="col-lg-4">
+            <div class="cart-summary">
+                <h3 class="summary-title">
+                    <i class="fas fa-receipt me-2"></i>Order Summary
+                </h3>
+
+                <div class="summary-row">
+                    <span>Items (4):</span>
+                    <span>₹2,697</span>
+                </div>
+                <div class="summary-row">
+                    <span>Discount:</span>
+                    <span class="text-success">-₹1,200</span>
+                </div>
+                <div class="summary-row">
+                    <span>Delivery:</span>
+                    <span class="text-success">Free</span>
+                </div>
+
+                <!-- Promo Code -->
+                <div class="promo-code">
+                    <h6 class="mb-2">
+                        <i class="fas fa-tag me-2"></i>Promo Code
+                    </h6>
+                    <div class="promo-input">
+                        <input type="text" class="form-control" placeholder="Enter promo code" id="promoCode">
+                        <button class="btn btn-outline-primary" id="applyPromo">Apply</button>
+                    </div>
+                    <small class="text-muted mt-1 d-block">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Use code WELCOME10 for 10% off
+                    </small>
+                </div>
+
+                <!-- Shipping Options -->
+                <div class="shipping-options">
+                    <h6 class="mb-2">
+                        <i class="fas fa-shipping-fast me-2"></i>Delivery Options
+                    </h6>
+                    <div class="shipping-option selected">
+                        <div>
+                            <strong>Standard Delivery</strong>
+                            <div class="small text-muted">5-7 business days</div>
+                        </div>
+                        <span class="text-success">Free</span>
+                    </div>
+                    <div class="shipping-option">
+                        <div>
+                            <strong>Express Delivery</strong>
+                            <div class="small text-muted">2-3 business days</div>
+                        </div>
+                        <span>₹99</span>
+                    </div>
+                </div>
+
+                <div class="summary-row total">
+                    <span>Total Amount:</span>
+                    <span>₹1,497</span>
+                </div>
+
+                <div class="d-grid gap-2 mt-3">
+                    <button class="btn btn-primary checkout-btn">
+                        <i class="fas fa-lock me-2"></i>Proceed to Checkout
+                    </button>
+                    <a href="{% url 'shop:shop' %}" class="btn btn-outline-primary continue-shopping">
+                        <i class="fas fa-arrow-left me-2"></i>Continue Shopping
+                    </a>
+                </div>
+
+                <!-- Security Badges -->
+                <div class="security-badges">
+                    <div class="security-badge">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Secure</span>
+                    </div>
+                    <div class="security-badge">
+                        <i class="fas fa-lock"></i>
+                        <span>SSL Encrypted</span>
+                    </div>
+                    <div class="security-badge">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Safe Payment</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Suggested Products -->
+    <div class="suggested-products">
+        <h3 class="mb-3">
+            <i class="fas fa-heart me-2"></i>You Might Also Like
+        </h3>
+        <div class="suggested-grid">
+            {% for i in "1234" %}
+            <div class="card border-0 shadow-sm">
+                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" 
+                     class="card-img-top" alt="Suggested Product" style="height: 150px; object-fit: cover;">
+                <div class="card-body p-2">
+                    <h6 class="card-title small">Suggested Product {{ forloop.counter }}</h6>
+                    <div class="text-primary fw-bold">₹{{ forloop.counter }}99</div>
+                    <button class="btn btn-sm btn-outline-primary w-100 mt-2">
+                        <i class="fas fa-plus me-1"></i>Add to Cart
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Empty Cart State (Hidden by default) -->
+<div class="container cart-container d-none" id="emptyCartState">
+    <div class="empty-cart">
+        <i class="fas fa-shopping-cart"></i>
+        <h3>Your cart is empty</h3>
+        <p>Looks like you haven't added any items to your cart yet. Start shopping to fill it up!</p>
+        <a href="{% url 'shop:shop' %}" class="btn btn-primary btn-lg">
+            <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    initializeCart();
+});
+
+function initializeCart() {
+    // Quantity controls
+    initializeQuantityControls();
+    
+    // Remove items
+    initializeRemoveButtons();
+    
+    // Wishlist functionality
+    initializeWishlistButtons();
+    
+    // Promo code
+    initializePromoCode();
+    
+    // Shipping options
+    initializeShippingOptions();
+    
+    // Checkout button
+    initializeCheckoutButton();
+}
+
+function initializeQuantityControls() {
+    // Decrease quantity
+    document.querySelectorAll('.decrease-qty').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const itemId = btn.dataset.item;
+            const input = document.querySelector(`.qty-input[data-item="${itemId}"]`);
+            const currentValue = parseInt(input.value);
+            
+            if (currentValue > 1) {
+                input.value = currentValue - 1;
+                updateItemTotal(itemId);
+            }
+        });
+    });
+    
+    // Increase quantity
+    document.querySelectorAll('.increase-qty').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const itemId = btn.dataset.item;
+            const input = document.querySelector(`.qty-input[data-item="${itemId}"]`);
+            const currentValue = parseInt(input.value);
+            const maxValue = parseInt(input.max) || 10;
+            
+            if (currentValue < maxValue) {
+                input.value = currentValue + 1;
+                updateItemTotal(itemId);
+            }
+        });
+    });
+    
+    // Direct input change
+    document.querySelectorAll('.qty-input').forEach(input => {
+        input.addEventListener('change', () => {
+            const value = parseInt(input.value);
+            const min = parseInt(input.min) || 1;
+            const max = parseInt(input.max) || 10;
+            
+            if (value < min) input.value = min;
+            if (value > max) input.value = max;
+            
+            updateItemTotal(input.dataset.item);
+        });
+    });
+}
+
+function initializeRemoveButtons() {
+    document.querySelectorAll('.remove-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const itemId = btn.dataset.item;
+            
+            // Show confirmation
+            if (confirm('Are you sure you want to remove this item from your cart?')) {
+                removeItem(itemId);
+            }
+        });
+    });
+}
+
+function initializeWishlistButtons() {
+    document.querySelectorAll('.wishlist-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const itemId = btn.dataset.item;
+            const icon = btn.querySelector('i');
+            
+            // Toggle wishlist state
+            btn.classList.toggle('active');
+            
+            if (btn.classList.contains('active')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                btn.innerHTML = '<i class="fas fa-heart me-1"></i>Saved';
+                showNotification('Item saved to wishlist!', 'success');
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                btn.innerHTML = '<i class="far fa-heart me-1"></i>Save for Later';
+                showNotification('Item removed from wishlist', 'info');
+            }
+        });
+    });
+}
+
+function initializePromoCode() {
+    const applyBtn = document.getElementById('applyPromo');
+    const promoInput = document.getElementById('promoCode');
+    
+    applyBtn.addEventListener('click', () => {
+        const code = promoInput.value.trim().toUpperCase();
+        
+        if (code === 'WELCOME10') {
+            showNotification('Promo code applied! 10% discount added.', 'success');
+            applyPromoDiscount(10);
+            applyBtn.textContent = 'Applied';
+            applyBtn.classList.remove('btn-outline-primary');
+            applyBtn.classList.add('btn-success');
+            applyBtn.disabled = true;
+        } else if (code === 'SAVE20') {
+            showNotification('Promo code applied! 20% discount added.', 'success');
+            applyPromoDiscount(20);
+            applyBtn.textContent = 'Applied';
+            applyBtn.classList.remove('btn-outline-primary');
+            applyBtn.classList.add('btn-success');
+            applyBtn.disabled = true;
+        } else if (code) {
+            showNotification('Invalid promo code. Please try again.', 'error');
+        } else {
+            showNotification('Please enter a promo code.', 'warning');
+        }
+    });
+    
+    // Allow Enter key to apply promo
+    promoInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            applyBtn.click();
+        }
+    });
+}
+
+function initializeShippingOptions() {
+    document.querySelectorAll('.shipping-option').forEach(option => {
+        option.addEventListener('click', () => {
+            // Remove selected from all options
+            document.querySelectorAll('.shipping-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected to clicked option
+            option.classList.add('selected');
+            
+            // Update shipping cost in summary
+            updateShippingCost(option);
+        });
+    });
+}
+
+function initializeCheckoutButton() {
+    const checkoutBtn = document.querySelector('.checkout-btn');
+    
+    checkoutBtn.addEventListener('click', () => {
+        // Add loading state
+        const originalText = checkoutBtn.innerHTML;
+        checkoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+        checkoutBtn.disabled = true;
+        
+        // Simulate processing
+        setTimeout(() => {
+            // Redirect to checkout page
+            window.location.href = '/checkout/';
+        }, 1500);
+    });
+}
+
+function updateItemTotal(itemId) {
+    // Simulate updating item total based on quantity
+    const quantity = parseInt(document.querySelector(`.qty-input[data-item="${itemId}"]`).value);
+    
+    // Update cart totals
+    updateCartTotals();
+    
+    showNotification('Cart updated!', 'success');
+}
+
+function removeItem(itemId) {
+    const cartItem = document.querySelector(`[data-item="${itemId}"]`).closest('.cart-item');
+    
+    // Add fade out animation
+    cartItem.style.opacity = '0';
+    cartItem.style.transform = 'translateX(-20px)';
+    
+    setTimeout(() => {
+        cartItem.remove();
+        updateCartTotals();
+        showNotification('Item removed from cart', 'info');
+        
+        // Check if cart is empty
+        const remainingItems = document.querySelectorAll('.cart-item');
+        if (remainingItems.length === 0) {
+            showEmptyCart();
+        }
+    }, 300);
+}
+
+function applyPromoDiscount(percentage) {
+    // Simulate applying discount
+    const currentTotal = 1497; // Example total
+    const discount = Math.round(currentTotal * (percentage / 100));
+    const newTotal = currentTotal - discount;
+    
+    // Update the discount row in summary
+    const discountRow = document.querySelector('.summary-row:nth-child(2) span:last-child');
+    discountRow.textContent = `-₹${1200 + discount}`;
+    
+    // Update total
+    const totalRow = document.querySelector('.summary-row.total span:last-child');
+    totalRow.textContent = `₹${newTotal}`;
+}
+
+function updateShippingCost(selectedOption) {
+    const shippingCostText = selectedOption.querySelector('div + span').textContent;
+    const shippingRow = document.querySelector('.summary-row:nth-child(3) span:last-child');
+    
+    if (shippingCostText === 'Free') {
+        shippingRow.textContent = 'Free';
+        shippingRow.className = 'text-success';
+    } else {
+        shippingRow.textContent = shippingCostText;
+        shippingRow.className = '';
+        
+        // Update total with shipping cost
+        const shippingCost = parseInt(shippingCostText.replace('₹', ''));
+        const currentTotal = 1497;
+        const newTotal = currentTotal + shippingCost;
+        
+        const totalRow = document.querySelector('.summary-row.total span:last-child');
+        totalRow.textContent = `₹${newTotal}`;
+    }
+}
+
+function updateCartTotals() {
+    // Simulate recalculating cart totals
+    // This would typically make an AJAX call to update server-side totals
+    console.log('Cart totals updated');
+}
+
+function showEmptyCart() {
+    // Hide main cart content
+    document.querySelector('.cart-container').classList.add('d-none');
+    // Show empty cart state
+    document.getElementById('emptyCartState').classList.remove('d-none');
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `toast position-fixed top-0 end-0 m-3 bg-${type} text-white`;
+    notification.style.zIndex = '9999';
+    notification.innerHTML = `
+        <div class="toast-body d-flex align-items-center">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
+            ${message}
+            <button type="button" class="btn-close btn-close-white ms-auto" onclick="this.closest('.toast').remove()"></button>
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Suggested products functionality
+document.querySelectorAll('.suggested-grid .btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const originalText = this.innerHTML;
+        this.innerHTML = '<i class="fas fa-check me-1"></i>Added!';
+        this.classList.remove('btn-outline-primary');
+        this.classList.add('btn-success');
+        
+        showNotification('Product added to cart!', 'success');
+        
+        setTimeout(() => {
+            this.innerHTML = originalText;
+            this.classList.remove('btn-success');
+            this.classList.add('btn-outline-primary');
+        }, 2000);
+    });
+});
+</script>
+{% endblock %}

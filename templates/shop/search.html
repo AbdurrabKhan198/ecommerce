@@ -1,0 +1,554 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Search Results - Women's Wear Store{% endblock %}
+
+{% block extra_css %}
+<style>
+.search-header {
+    background: var(--gradient-primary);
+    color: var(--white);
+    padding: 3rem 0;
+    margin-bottom: 3rem;
+}
+
+.search-results-container {
+    min-height: 60vh;
+}
+
+.search-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--grey-200);
+}
+
+.results-count {
+    color: var(--grey-600);
+    font-size: 0.95rem;
+}
+
+.sort-options {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.sort-options select {
+    border: 1px solid var(--grey-300);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1rem;
+    background: var(--white);
+}
+
+.no-results {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--grey-100);
+    border-radius: var(--radius-lg);
+    margin: 2rem 0;
+}
+
+.no-results i {
+    font-size: 4rem;
+    color: var(--grey-400);
+    margin-bottom: 1rem;
+}
+
+.no-results h3 {
+    color: var(--dark);
+    margin-bottom: 1rem;
+}
+
+.no-results p {
+    color: var(--grey-600);
+    margin-bottom: 2rem;
+}
+
+.search-suggestions {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+    margin-top: 2rem;
+}
+
+.search-suggestions h4 {
+    color: var(--dark);
+    margin-bottom: 1rem;
+}
+
+.suggestion-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.suggestion-tag {
+    background: var(--grey-100);
+    color: var(--dark);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: var(--transition-normal);
+}
+
+.suggestion-tag:hover {
+    background: var(--primary-color);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+.search-filters {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 2rem;
+}
+
+.filter-group {
+    margin-bottom: 1.5rem;
+}
+
+.filter-group:last-child {
+    margin-bottom: 0;
+}
+
+.filter-group label {
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.price-range {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.price-input {
+    flex: 1;
+    max-width: 100px;
+}
+
+.search-highlight {
+    background: linear-gradient(135deg, var(--accent-rose), var(--accent-mint));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 600;
+}
+
+.related-searches {
+    background: var(--gradient-secondary);
+    color: var(--white);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    margin-top: 3rem;
+}
+
+.related-searches h4 {
+    color: var(--white);
+    margin-bottom: 1rem;
+}
+
+.related-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.related-link {
+    color: var(--white);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: var(--radius-md);
+    transition: var(--transition-normal);
+}
+
+.related-link:hover {
+    background: rgba(255,255,255,0.2);
+    color: var(--white);
+}
+
+@media (max-width: 768px) {
+    .search-meta {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .sort-options {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .price-range {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Search Header -->
+<section class="search-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 mb-3">
+                    {% if query %}
+                        Search Results for "<span class="text-warning">{{ query }}</span>"
+                    {% else %}
+                        Search Our Collection
+                    {% endif %}
+                </h1>
+                <p class="lead mb-0">
+                    Discover the perfect pieces for your wardrobe
+                </p>
+            </div>
+            <div class="col-lg-4">
+                <!-- Enhanced Search Form -->
+                <form method="GET" action="{% url 'shop:search' %}" class="search-form">
+                    <div class="input-group">
+                        <input type="search" 
+                               class="form-control form-control-lg" 
+                               name="q" 
+                               value="{{ query|default:'' }}" 
+                               placeholder="Search for leggings, pants, dupattas..."
+                               aria-label="Search products">
+                        <button class="btn btn-warning btn-lg" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container search-results-container">
+    <div class="row">
+        <!-- Filters Sidebar -->
+        <div class="col-lg-3 mb-4">
+            <div class="search-filters">
+                <h5 class="mb-3">
+                    <i class="fas fa-filter me-2"></i>Filter Results
+                </h5>
+                
+                <form method="GET" action="{% url 'shop:search' %}">
+                    <input type="hidden" name="q" value="{{ query }}">
+                    
+                    <div class="filter-group">
+                        <label>Price Range</label>
+                        <div class="price-range">
+                            <input type="number" 
+                                   class="form-control price-input" 
+                                   name="min_price" 
+                                   placeholder="Min"
+                                   value="{{ request.GET.min_price }}">
+                            <span>to</span>
+                            <input type="number" 
+                                   class="form-control price-input" 
+                                   name="max_price" 
+                                   placeholder="Max"
+                                   value="{{ request.GET.max_price }}">
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Category</label>
+                        <select name="category" class="form-control">
+                            <option value="">All Categories</option>
+                            <option value="leggings" {% if request.GET.category == 'leggings' %}selected{% endif %}>Leggings</option>
+                            <option value="pants" {% if request.GET.category == 'pants' %}selected{% endif %}>Pants</option>
+                            <option value="dupattas" {% if request.GET.category == 'dupattas' %}selected{% endif %}>Dupattas</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Fabric</label>
+                        <select name="fabric" class="form-control">
+                            <option value="">All Fabrics</option>
+                            <option value="cotton" {% if request.GET.fabric == 'cotton' %}selected{% endif %}>Cotton</option>
+                            <option value="silk" {% if request.GET.fabric == 'silk' %}selected{% endif %}>Silk</option>
+                            <option value="polyester" {% if request.GET.fabric == 'polyester' %}selected{% endif %}>Polyester</option>
+                            <option value="net" {% if request.GET.fabric == 'net' %}selected{% endif %}>Net</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Size</label>
+                        <select name="size" class="form-control">
+                            <option value="">All Sizes</option>
+                            <option value="XS" {% if request.GET.size == 'XS' %}selected{% endif %}>XS</option>
+                            <option value="S" {% if request.GET.size == 'S' %}selected{% endif %}>S</option>
+                            <option value="M" {% if request.GET.size == 'M' %}selected{% endif %}>M</option>
+                            <option value="L" {% if request.GET.size == 'L' %}selected{% endif %}>L</option>
+                            <option value="XL" {% if request.GET.size == 'XL' %}selected{% endif %}>XL</option>
+                            <option value="XXL" {% if request.GET.size == 'XXL' %}selected{% endif %}>XXL</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-filter me-2"></i>Apply Filters
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Search Results -->
+        <div class="col-lg-9">
+            <!-- Search Meta -->
+            <div class="search-meta">
+                <div class="results-count">
+                    {% if products %}
+                        Showing {{ products|length }} result{{ products|length|pluralize }} 
+                        {% if query %}for "{{ query }}"{% endif %}
+                    {% else %}
+                        {% if query %}
+                            No results found for "{{ query }}"
+                        {% else %}
+                            Enter a search term to find products
+                        {% endif %}
+                    {% endif %}
+                </div>
+                
+                {% if products %}
+                <div class="sort-options">
+                    <label for="sort" class="me-2">Sort by:</label>
+                    <select name="sort" id="sort" onchange="this.form.submit()">
+                        <option value="relevance">Relevance</option>
+                        <option value="price_low">Price: Low to High</option>
+                        <option value="price_high">Price: High to Low</option>
+                        <option value="newest">Newest First</option>
+                        <option value="rating">Customer Rating</option>
+                    </select>
+                </div>
+                {% endif %}
+            </div>
+            
+            {% if products %}
+                <!-- Product Grid -->
+                <div class="row g-4">
+                    {% for product in products %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="product-card card h-100 border-0 shadow-sm">
+                            <div class="position-relative">
+                                {% with product.images.first as first_image %}
+                                <img src="{% if first_image %}{{ first_image.image.url }}{% else %}https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80{% endif %}" 
+                                     class="card-img-top" 
+                                     alt="{{ product.name }}"
+                                     style="height: 250px; object-fit: cover;">
+                                {% endwith %}
+                                
+                                {% if product.discount_percentage > 0 %}
+                                <span class="badge bg-danger position-absolute top-0 end-0 m-2">
+                                    {{ product.discount_percentage }}% OFF
+                                </span>
+                                {% endif %}
+                                
+                                <div class="product-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style="background: rgba(0,0,0,0.7); opacity: 0; transition: all 0.3s ease;">
+                                    <div class="text-center">
+                                        <a href="{{ product.get_absolute_url }}" class="btn btn-light btn-sm me-2">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <button class="btn btn-primary btn-sm wishlist-btn" data-product-id="{{ product.id }}">
+                                            <i class="far fa-heart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card-body">
+                                <h6 class="card-title">
+                                    <a href="{{ product.get_absolute_url }}" class="text-decoration-none text-dark">
+                                        {{ product.name }}
+                                    </a>
+                                </h6>
+                                
+                                {% if product.average_rating > 0 %}
+                                <div class="mb-2">
+                                    {% for i in "12345" %}
+                                        <i class="fas fa-star {% if forloop.counter > product.average_rating %}text-muted{% else %}text-warning{% endif %}"></i>
+                                    {% endfor %}
+                                    <small class="text-muted ms-1">({{ product.review_count }})</small>
+                                </div>
+                                {% endif %}
+                                
+                                <div class="price mb-3">
+                                    <span class="h6 text-primary">₹{{ product.selling_price }}</span>
+                                    {% if product.mrp > product.selling_price %}
+                                    <span class="text-muted text-decoration-line-through ms-2">₹{{ product.mrp }}</span>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="d-grid">
+                                    <a href="{{ product.get_absolute_url }}" class="btn btn-outline-primary">
+                                        <i class="fas fa-shopping-cart me-2"></i>View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Pagination -->
+                {% if is_paginated %}
+                <nav aria-label="Search results pagination" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?q={{ query }}&page=1">First</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}">Previous</a>
+                            </li>
+                        {% endif %}
+                        
+                        <li class="page-item active">
+                            <span class="page-link">
+                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                            </span>
+                        </li>
+                        
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}">Next</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?q={{ query }}&page={{ page_obj.paginator.num_pages }}">Last</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+                
+            {% else %}
+                <!-- No Results -->
+                <div class="no-results">
+                    <i class="fas fa-search"></i>
+                    <h3>
+                        {% if query %}
+                            No products found for "{{ query }}"
+                        {% else %}
+                            Start Your Search
+                        {% endif %}
+                    </h3>
+                    <p>
+                        {% if query %}
+                            Try different keywords or check out our suggestions below
+                        {% else %}
+                            Search for leggings, pants, dupattas, or any fashion item
+                        {% endif %}
+                    </p>
+                    
+                    {% if not query %}
+                    <a href="{% url 'shop:shop' %}" class="btn btn-primary">
+                        <i class="fas fa-th-large me-2"></i>Browse All Products
+                    </a>
+                    {% endif %}
+                </div>
+                
+                <!-- Search Suggestions -->
+                <div class="search-suggestions">
+                    <h4>
+                        <i class="fas fa-lightbulb me-2"></i>
+                        {% if query %}Try These Searches{% else %}Popular Searches{% endif %}
+                    </h4>
+                    <div class="suggestion-tags">
+                        <a href="?q=cotton leggings" class="suggestion-tag">Cotton Leggings</a>
+                        <a href="?q=silk dupattas" class="suggestion-tag">Silk Dupattas</a>
+                        <a href="?q=formal pants" class="suggestion-tag">Formal Pants</a>
+                        <a href="?q=printed leggings" class="suggestion-tag">Printed Leggings</a>
+                        <a href="?q=palazzo pants" class="suggestion-tag">Palazzo Pants</a>
+                        <a href="?q=embroidered dupattas" class="suggestion-tag">Embroidered Dupattas</a>
+                        <a href="?q=ankle length" class="suggestion-tag">Ankle Length</a>
+                        <a href="?q=wide leg pants" class="suggestion-tag">Wide Leg Pants</a>
+                    </div>
+                </div>
+            {% endif %}
+            
+            <!-- Related Searches -->
+            <div class="related-searches">
+                <h4>
+                    <i class="fas fa-tags me-2"></i>Related Categories
+                </h4>
+                <div class="related-links">
+                    <a href="{% url 'shop:shop' %}" class="related-link">All Products</a>
+                    <a href="#" class="related-link">New Arrivals</a>
+                    <a href="#" class="related-link">Best Sellers</a>
+                    <a href="#" class="related-link">Sale Items</a>
+                    <a href="#" class="related-link">Cotton Collection</a>
+                    <a href="#" class="related-link">Silk Collection</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Product card hover effects
+    document.querySelectorAll('.product-card').forEach(card => {
+        const overlay = card.querySelector('.product-overlay');
+        
+        card.addEventListener('mouseenter', () => {
+            if (overlay) overlay.style.opacity = '1';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            if (overlay) overlay.style.opacity = '0';
+        });
+    });
+    
+    // Wishlist functionality
+    document.querySelectorAll('.wishlist-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            this.classList.toggle('active');
+            const icon = this.querySelector('i');
+            
+            if (this.classList.contains('active')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                this.classList.add('btn-danger');
+                this.classList.remove('btn-primary');
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                this.classList.add('btn-primary');
+                this.classList.remove('btn-danger');
+            }
+        });
+    });
+    
+    // Auto-submit filters on change
+    document.querySelectorAll('.search-filters select').forEach(select => {
+        select.addEventListener('change', function() {
+            this.closest('form').submit();
+        });
+    });
+    
+    // Search form enhancements
+    const searchInput = document.querySelector('input[name="q"]');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                this.closest('form').submit();
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

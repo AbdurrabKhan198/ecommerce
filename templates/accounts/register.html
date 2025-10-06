@@ -1,0 +1,463 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sign Up - Women's Wear Store{% endblock %}
+
+{% block extra_css %}
+<style>
+.register-container {
+    background: var(--gradient-secondary);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.register-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    padding: 3rem;
+    width: 100%;
+    max-width: 500px;
+}
+
+.register-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.register-header h2 {
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+}
+
+.register-header p {
+    color: var(--grey-600);
+    margin: 0;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.btn-register {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.divider {
+    text-align: center;
+    margin: 1.5rem 0;
+    position: relative;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--grey-300);
+}
+
+.divider span {
+    background: var(--white);
+    padding: 0 1rem;
+    color: var(--grey-500);
+    font-size: 0.9rem;
+}
+
+.social-register {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border: 2px solid var(--grey-300);
+    border-radius: var(--radius-md);
+    background: var(--white);
+    color: var(--dark);
+    text-decoration: none;
+    transition: var(--transition-normal);
+}
+
+.social-btn:hover {
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.register-footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--grey-200);
+}
+
+.register-footer a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.register-footer a:hover {
+    text-decoration: underline;
+}
+
+.password-strength {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.strength-bar {
+    height: 4px;
+    background: var(--grey-200);
+    border-radius: 2px;
+    margin-top: 0.25rem;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--danger);
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.strength-weak { background: var(--danger); }
+.strength-medium { background: var(--warning); }
+.strength-strong { background: var(--success); }
+
+.terms-checkbox {
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="register-container">
+    <div class="register-card">
+        <div class="register-header">
+            <i class="fas fa-user-plus text-secondary mb-3" style="font-size: 2.5rem;"></i>
+            <h2>Create Account</h2>
+            <p>Join our fashion community</p>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" class="register-form">
+            {% csrf_token %}
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="first_name" class="form-label">First Name</label>
+                    <input type="text" 
+                           class="form-control" 
+                           id="first_name" 
+                           name="first_name" 
+                           placeholder="Enter your first name"
+                           value="{{ form.first_name.value|default:'' }}"
+                           required>
+                    {% if form.first_name.errors %}
+                        <div class="text-danger small mt-1">
+                            {% for error in form.first_name.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="last_name" class="form-label">Last Name</label>
+                    <input type="text" 
+                           class="form-control" 
+                           id="last_name" 
+                           name="last_name" 
+                           placeholder="Enter your last name"
+                           value="{{ form.last_name.value|default:'' }}"
+                           required>
+                    {% if form.last_name.errors %}
+                        <div class="text-danger small mt-1">
+                            {% for error in form.last_name.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" 
+                       class="form-control" 
+                       id="email" 
+                       name="email" 
+                       placeholder="Enter your email address"
+                       value="{{ form.email.value|default:'' }}"
+                       required>
+                {% if form.email.errors %}
+                    <div class="text-danger small mt-1">
+                        {% for error in form.email.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" 
+                       class="form-control" 
+                       id="username" 
+                       name="username" 
+                       placeholder="Choose a username"
+                       value="{{ form.username.value|default:'' }}"
+                       required>
+                {% if form.username.errors %}
+                    <div class="text-danger small mt-1">
+                        {% for error in form.username.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="password1" class="form-label">Password</label>
+                <div class="input-group">
+                    <input type="password" 
+                           class="form-control" 
+                           id="password1" 
+                           name="password1" 
+                           placeholder="Create a strong password"
+                           required>
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword1">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="password-strength">
+                    <div class="strength-text">Password strength: <span id="strengthText">Enter password</span></div>
+                    <div class="strength-bar">
+                        <div class="strength-fill" id="strengthBar"></div>
+                    </div>
+                </div>
+                {% if form.password1.errors %}
+                    <div class="text-danger small mt-1">
+                        {% for error in form.password1.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="password2" class="form-label">Confirm Password</label>
+                <div class="input-group">
+                    <input type="password" 
+                           class="form-control" 
+                           id="password2" 
+                           name="password2" 
+                           placeholder="Confirm your password"
+                           required>
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword2">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                {% if form.password2.errors %}
+                    <div class="text-danger small mt-1">
+                        {% for error in form.password2.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <div class="form-check terms-checkbox">
+                    <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
+                    <label class="form-check-label" for="terms">
+                        I agree to the <a href="#" class="text-secondary">Terms of Service</a> and 
+                        <a href="#" class="text-secondary">Privacy Policy</a>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="newsletter" name="newsletter">
+                    <label class="form-check-label" for="newsletter">
+                        Subscribe to our newsletter for exclusive offers and fashion updates
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-secondary btn-register">
+                <i class="fas fa-user-plus me-2"></i>Create Account
+            </button>
+        </form>
+
+        <div class="divider">
+            <span>or sign up with</span>
+        </div>
+
+        <div class="social-register">
+            <a href="#" class="social-btn">
+                <i class="fab fa-google"></i>
+                <span>Sign up with Google</span>
+            </a>
+            <a href="#" class="social-btn">
+                <i class="fab fa-facebook-f"></i>
+                <span>Sign up with Facebook</span>
+            </a>
+        </div>
+
+        <div class="register-footer">
+            <p class="mb-0">
+                Already have an account? 
+                <a href="{% url 'accounts:login' %}">Sign in here</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle password visibility
+    function setupPasswordToggle(toggleId, passwordId) {
+        const toggle = document.getElementById(toggleId);
+        const password = document.getElementById(passwordId);
+        
+        toggle.addEventListener('click', function() {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            
+            const icon = this.querySelector('i');
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+    }
+    
+    setupPasswordToggle('togglePassword1', 'password1');
+    setupPasswordToggle('togglePassword2', 'password2');
+    
+    // Password strength checker
+    const password1 = document.getElementById('password1');
+    const strengthText = document.getElementById('strengthText');
+    const strengthBar = document.getElementById('strengthBar');
+    
+    password1.addEventListener('input', function() {
+        const password = this.value;
+        const strength = checkPasswordStrength(password);
+        
+        strengthText.textContent = strength.text;
+        strengthBar.style.width = strength.percentage + '%';
+        strengthBar.className = 'strength-fill ' + strength.class;
+    });
+    
+    function checkPasswordStrength(password) {
+        if (password.length === 0) {
+            return { text: 'Enter password', percentage: 0, class: '' };
+        }
+        
+        let score = 0;
+        if (password.length >= 8) score++;
+        if (/[A-Z]/.test(password)) score++;
+        if (/[a-z]/.test(password)) score++;
+        if (/[0-9]/.test(password)) score++;
+        if (/[^A-Za-z0-9]/.test(password)) score++;
+        
+        if (score < 3) {
+            return { text: 'Weak', percentage: 33, class: 'strength-weak' };
+        } else if (score < 5) {
+            return { text: 'Medium', percentage: 66, class: 'strength-medium' };
+        } else {
+            return { text: 'Strong', percentage: 100, class: 'strength-strong' };
+        }
+    }
+    
+    // Password confirmation checker
+    const password2 = document.getElementById('password2');
+    
+    password2.addEventListener('input', function() {
+        const password1Val = password1.value;
+        const password2Val = this.value;
+        
+        if (password2Val && password1Val !== password2Val) {
+            this.classList.add('is-invalid');
+        } else {
+            this.classList.remove('is-invalid');
+        }
+    });
+    
+    // Form validation
+    const form = document.querySelector('.register-form');
+    form.addEventListener('submit', function(e) {
+        const requiredFields = ['first_name', 'last_name', 'email', 'username', 'password1', 'password2'];
+        let isValid = true;
+        
+        requiredFields.forEach(fieldName => {
+            const field = document.getElementById(fieldName);
+            if (!field.value.trim()) {
+                field.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+            }
+        });
+        
+        // Check password match
+        if (password1.value !== password2.value) {
+            password2.classList.add('is-invalid');
+            isValid = false;
+        }
+        
+        // Check terms acceptance
+        const terms = document.getElementById('terms');
+        if (!terms.checked) {
+            alert('Please accept the Terms of Service and Privacy Policy');
+            isValid = false;
+        }
+        
+        if (!isValid) {
+            e.preventDefault();
+            return false;
+        }
+        
+        // Add loading state
+        const submitBtn = this.querySelector('button[type="submit"]');
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Creating Account...';
+        submitBtn.disabled = true;
+    });
+});
+</script>
+{% endblock %}

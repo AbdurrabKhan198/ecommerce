@@ -1,0 +1,990 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Shop - Women's Wear Store{% endblock %}
+
+{% block extra_css %}
+<style>
+.shop-header {
+    background: var(--gradient-primary);
+    color: var(--white);
+    padding: 4rem 0;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.shop-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+    animation: float 20s linear infinite;
+}
+
+.shop-content {
+    position: relative;
+    z-index: 2;
+}
+
+.filters-sidebar {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 2rem;
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
+}
+
+.filter-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--grey-200);
+}
+
+.filter-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.filter-title {
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    transition: var(--transition-fast);
+    cursor: pointer;
+}
+
+.filter-option:hover {
+    background: var(--grey-100);
+}
+
+.filter-option input {
+    margin: 0;
+}
+
+.filter-option label {
+    margin: 0;
+    cursor: pointer;
+    flex: 1;
+}
+
+.price-range-slider {
+    margin: 1rem 0;
+}
+
+.price-inputs {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.price-inputs input {
+    flex: 1;
+}
+
+.color-swatches {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.color-swatch {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--grey-300);
+    cursor: pointer;
+    transition: var(--transition-normal);
+    position: relative;
+}
+
+.color-swatch:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-md);
+}
+
+.color-swatch.selected {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.3);
+}
+
+.size-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.size-option {
+    padding: 0.5rem;
+    border: 2px solid var(--grey-300);
+    border-radius: var(--radius-sm);
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    background: var(--white);
+    font-weight: 500;
+}
+
+.size-option:hover {
+    border-color: var(--primary-color);
+    background: var(--primary-light);
+}
+
+.size-option.selected {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+    color: var(--white);
+}
+
+.products-header {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.products-meta {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.view-options {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.view-btn {
+    padding: 0.5rem;
+    border: 2px solid var(--grey-300);
+    border-radius: var(--radius-sm);
+    background: var(--white);
+    cursor: pointer;
+    transition: var(--transition-normal);
+}
+
+.view-btn.active,
+.view-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.sort-dropdown {
+    min-width: 200px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.product-grid.list-view {
+    grid-template-columns: 1fr;
+}
+
+.product-grid.list-view .product-card {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.product-grid.list-view .product-image {
+    width: 200px;
+    flex-shrink: 0;
+}
+
+.product-grid.list-view .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.quick-filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.quick-filter {
+    padding: 0.5rem 1.5rem;
+    border: 2px solid var(--grey-300);
+    border-radius: var(--radius-lg);
+    background: var(--white);
+    color: var(--dark);
+    text-decoration: none;
+    transition: var(--transition-normal);
+    font-weight: 500;
+}
+
+.quick-filter:hover,
+.quick-filter.active {
+    border-color: var(--primary-color);
+    background: var(--primary-light);
+    color: var(--primary-dark);
+}
+
+.pagination-wrapper {
+    margin-top: 3rem;
+    display: flex;
+    justify-content: center;
+}
+
+.load-more-btn {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.filter-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.filter-tag {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-lg);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-tag .remove {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.filter-tag .remove:hover {
+    color: var(--danger);
+}
+
+@media (max-width: 768px) {
+    .filters-sidebar {
+        position: static;
+        margin-bottom: 2rem;
+    }
+    
+    .products-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .products-meta {
+        justify-content: space-between;
+    }
+    
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Shop Header -->
+<section class="shop-header">
+    <div class="container">
+        <div class="shop-content">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 mb-3">Shop Women's Fashion</h1>
+                    <p class="lead mb-0">
+                        Discover our complete collection of premium leggings, elegant pants, and beautiful dupattas
+                    </p>
+                </div>
+                <div class="col-lg-4">
+                    <div class="text-center">
+                        <i class="fas fa-shopping-bag" style="font-size: 4rem; opacity: 0.3;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Quick Filters -->
+    <div class="quick-filters">
+        <a href="?category=all" class="quick-filter {% if not request.GET.category or request.GET.category == 'all' %}active{% endif %}">
+            <i class="fas fa-th-large me-2"></i>All Products
+        </a>
+        <a href="?category=leggings" class="quick-filter {% if request.GET.category == 'leggings' %}active{% endif %}">
+            <i class="fas fa-female me-2"></i>Leggings
+        </a>
+        <a href="?category=pants" class="quick-filter {% if request.GET.category == 'pants' %}active{% endif %}">
+            <i class="fas fa-tshirt me-2"></i>Pants
+        </a>
+        <a href="?category=dupattas" class="quick-filter {% if request.GET.category == 'dupattas' %}active{% endif %}">
+            <i class="fas fa-scarf me-2"></i>Dupattas
+        </a>
+        <a href="?sale=true" class="quick-filter {% if request.GET.sale %}active{% endif %}">
+            <i class="fas fa-tags me-2"></i>Sale Items
+        </a>
+        <a href="?new=true" class="quick-filter {% if request.GET.new %}active{% endif %}">
+            <i class="fas fa-star me-2"></i>New Arrivals
+        </a>
+    </div>
+
+    <div class="row">
+        <!-- Filters Sidebar -->
+        <div class="col-lg-3">
+            <div class="filters-sidebar">
+                <h5 class="mb-3">
+                    <i class="fas fa-filter me-2"></i>Filters
+                </h5>
+
+                <!-- Active Filters -->
+                <div class="filter-tags" id="activeFilters">
+                    <!-- Dynamic filter tags will appear here -->
+                </div>
+
+                <form method="GET" action="{% url 'shop:shop' %}" id="filterForm">
+                    <!-- Price Range -->
+                    <div class="filter-section">
+                        <div class="filter-title">
+                            <i class="fas fa-rupee-sign"></i>
+                            Price Range
+                        </div>
+                        <div class="price-inputs">
+                            <input type="number" 
+                                   class="form-control" 
+                                   name="min_price" 
+                                   placeholder="Min"
+                                   value="{{ request.GET.min_price }}">
+                            <input type="number" 
+                                   class="form-control" 
+                                   name="max_price" 
+                                   placeholder="Max"
+                                   value="{{ request.GET.max_price }}">
+                        </div>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="filter-section">
+                        <div class="filter-title">
+                            <i class="fas fa-list"></i>
+                            Category
+                        </div>
+                        <div class="filter-options">
+                            <div class="filter-option">
+                                <input type="radio" name="category" value="all" id="cat_all" 
+                                       {% if not request.GET.category or request.GET.category == 'all' %}checked{% endif %}>
+                                <label for="cat_all">All Categories</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="radio" name="category" value="leggings" id="cat_leggings"
+                                       {% if request.GET.category == 'leggings' %}checked{% endif %}>
+                                <label for="cat_leggings">Leggings</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="radio" name="category" value="pants" id="cat_pants"
+                                       {% if request.GET.category == 'pants' %}checked{% endif %}>
+                                <label for="cat_pants">Pants</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="radio" name="category" value="dupattas" id="cat_dupattas"
+                                       {% if request.GET.category == 'dupattas' %}checked{% endif %}>
+                                <label for="cat_dupattas">Dupattas</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Size -->
+                    <div class="filter-section">
+                        <div class="filter-title">
+                            <i class="fas fa-ruler"></i>
+                            Size
+                        </div>
+                        <div class="size-grid">
+                            <div class="size-option" data-size="XS">XS</div>
+                            <div class="size-option" data-size="S">S</div>
+                            <div class="size-option" data-size="M">M</div>
+                            <div class="size-option" data-size="L">L</div>
+                            <div class="size-option" data-size="XL">XL</div>
+                            <div class="size-option" data-size="XXL">XXL</div>
+                        </div>
+                        <input type="hidden" name="size" id="selectedSize" value="{{ request.GET.size }}">
+                    </div>
+
+                    <!-- Colors -->
+                    <div class="filter-section">
+                        <div class="filter-title">
+                            <i class="fas fa-palette"></i>
+                            Colors
+                        </div>
+                        <div class="color-swatches">
+                            <div class="color-swatch" style="background: #000;" data-color="black" title="Black"></div>
+                            <div class="color-swatch" style="background: #fff; border-color: #ddd;" data-color="white" title="White"></div>
+                            <div class="color-swatch" style="background: #dc3545;" data-color="red" title="Red"></div>
+                            <div class="color-swatch" style="background: #007bff;" data-color="blue" title="Blue"></div>
+                            <div class="color-swatch" style="background: #28a745;" data-color="green" title="Green"></div>
+                            <div class="color-swatch" style="background: #ffc107;" data-color="yellow" title="Yellow"></div>
+                            <div class="color-swatch" style="background: #e91e63;" data-color="pink" title="Pink"></div>
+                            <div class="color-swatch" style="background: #673ab7;" data-color="purple" title="Purple"></div>
+                            <div class="color-swatch" style="background: #ff9800;" data-color="orange" title="Orange"></div>
+                            <div class="color-swatch" style="background: #795548;" data-color="brown" title="Brown"></div>
+                        </div>
+                        <input type="hidden" name="color" id="selectedColor" value="{{ request.GET.color }}">
+                    </div>
+
+                    <!-- Fabric -->
+                    <div class="filter-section">
+                        <div class="filter-title">
+                            <i class="fas fa-tshirt"></i>
+                            Fabric
+                        </div>
+                        <div class="filter-options">
+                            <div class="filter-option">
+                                <input type="checkbox" name="fabric" value="cotton" id="fabric_cotton"
+                                       {% if 'cotton' in request.GET.fabric %}checked{% endif %}>
+                                <label for="fabric_cotton">Cotton</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" name="fabric" value="silk" id="fabric_silk"
+                                       {% if 'silk' in request.GET.fabric %}checked{% endif %}>
+                                <label for="fabric_silk">Silk</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" name="fabric" value="polyester" id="fabric_polyester"
+                                       {% if 'polyester' in request.GET.fabric %}checked{% endif %}>
+                                <label for="fabric_polyester">Polyester</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" name="fabric" value="viscose" id="fabric_viscose"
+                                       {% if 'viscose' in request.GET.fabric %}checked{% endif %}>
+                                <label for="fabric_viscose">Viscose</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" name="fabric" value="net" id="fabric_net"
+                                       {% if 'net' in request.GET.fabric %}checked{% endif %}>
+                                <label for="fabric_net">Net</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Occasion -->
+                    <div class="filter-section">
+                        <div class="filter-title">
+                            <i class="fas fa-calendar"></i>
+                            Occasion
+                        </div>
+                        <div class="filter-options">
+                            <div class="filter-option">
+                                <input type="checkbox" name="occasion" value="casual" id="occasion_casual"
+                                       {% if 'casual' in request.GET.occasion %}checked{% endif %}>
+                                <label for="occasion_casual">Casual</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" name="occasion" value="formal" id="occasion_formal"
+                                       {% if 'formal' in request.GET.occasion %}checked{% endif %}>
+                                <label for="occasion_formal">Formal</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" name="occasion" value="party" id="occasion_party"
+                                       {% if 'party' in request.GET.occasion %}checked{% endif %}>
+                                <label for="occasion_party">Party</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" name="occasion" value="traditional" id="occasion_traditional"
+                                       {% if 'traditional' in request.GET.occasion %}checked{% endif %}>
+                                <label for="occasion_traditional">Traditional</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-filter me-2"></i>Apply Filters
+                        </button>
+                        <a href="{% url 'shop:shop' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-2"></i>Clear All
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Products Area -->
+        <div class="col-lg-9">
+            <!-- Products Header -->
+            <div class="products-header">
+                <div class="products-meta">
+                    <span class="results-count">
+                        Showing <strong>24</strong> of <strong>156</strong> products
+                    </span>
+                    <div class="view-options">
+                        <button class="view-btn active" data-view="grid" title="Grid View">
+                            <i class="fas fa-th-large"></i>
+                        </button>
+                        <button class="view-btn" data-view="list" title="List View">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <select class="form-control sort-dropdown" name="sort">
+                        <option value="featured">Sort by: Featured</option>
+                        <option value="newest">Newest First</option>
+                        <option value="price_low">Price: Low to High</option>
+                        <option value="price_high">Price: High to Low</option>
+                        <option value="rating">Customer Rating</option>
+                        <option value="popularity">Most Popular</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="product-grid" id="productGrid">
+                <!-- Sample Products -->
+                {% for i in "123456789012" %}
+                <div class="product-card card h-100 border-0 shadow-sm">
+                    <div class="position-relative product-image">
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                             class="card-img-top" 
+                             alt="Premium Women's Product"
+                             style="height: 280px; object-fit: cover;">
+                        
+                        <div class="position-absolute top-0 end-0 m-2">
+                            {% if forloop.counter|divisibleby:3 %}
+                            <span class="badge bg-danger">25% OFF</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="product-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" 
+                             style="background: rgba(0,0,0,0.7); opacity: 0; transition: all 0.3s ease;">
+                            <div class="text-center">
+                                <button class="btn btn-light btn-sm me-2 quick-view-btn" data-product-id="{{ forloop.counter }}">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm wishlist-btn" data-product-id="{{ forloop.counter }}">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button class="wishlist-btn position-absolute" style="top: 10px; left: 10px; background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 35px; height: 35px;">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="card-body p-3">
+                        <h6 class="card-title mb-2">
+                            <a href="#" class="text-decoration-none text-dark">
+                                Premium Women's {% cycle 'Leggings' 'Palazzo Pants' 'Silk Dupatta' 'Cotton Top' %}
+                            </a>
+                        </h6>
+                        
+                        <div class="mb-2">
+                            {% for star in "12345" %}
+                                <i class="fas fa-star text-warning"></i>
+                            {% endfor %}
+                            <small class="text-muted ms-1">({{ forloop.counter }}5 reviews)</small>
+                        </div>
+                        
+                        <div class="price mb-3">
+                            <span class="h6 text-primary">₹{{ forloop.counter }}99</span>
+                            {% if forloop.counter|divisibleby:3 %}
+                            <span class="text-muted text-decoration-line-through ms-2">₹{{ forloop.counter }}999</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button class="btn btn-outline-primary add-to-cart-btn" data-product-id="{{ forloop.counter }}">
+                                <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Load More -->
+            <div class="load-more-btn">
+                <button class="btn btn-primary btn-lg" id="loadMoreBtn">
+                    <i class="fas fa-plus me-2"></i>Load More Products
+                </button>
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Product pagination" class="pagination-wrapper">
+                <ul class="pagination">
+                    <li class="page-item disabled">
+                        <span class="page-link">Previous</span>
+                    </li>
+                    <li class="page-item active">
+                        <span class="page-link">1</span>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=2">2</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=3">3</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=2">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize shop functionality
+    initializeShop();
+});
+
+function initializeShop() {
+    // View toggle functionality
+    initializeViewToggle();
+    
+    // Filter functionality
+    initializeFilters();
+    
+    // Product interactions
+    initializeProductInteractions();
+    
+    // Load more functionality
+    initializeLoadMore();
+    
+    // Sort functionality
+    initializeSorting();
+}
+
+function initializeViewToggle() {
+    const viewBtns = document.querySelectorAll('.view-btn');
+    const productGrid = document.getElementById('productGrid');
+    
+    viewBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            viewBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const view = btn.dataset.view;
+            if (view === 'list') {
+                productGrid.classList.add('list-view');
+            } else {
+                productGrid.classList.remove('list-view');
+            }
+        });
+    });
+}
+
+function initializeFilters() {
+    // Size selection
+    const sizeOptions = document.querySelectorAll('.size-option');
+    const sizeInput = document.getElementById('selectedSize');
+    
+    sizeOptions.forEach(option => {
+        if (option.dataset.size === sizeInput.value) {
+            option.classList.add('selected');
+        }
+        
+        option.addEventListener('click', () => {
+            sizeOptions.forEach(o => o.classList.remove('selected'));
+            option.classList.add('selected');
+            sizeInput.value = option.dataset.size;
+        });
+    });
+    
+    // Color selection
+    const colorSwatches = document.querySelectorAll('.color-swatch');
+    const colorInput = document.getElementById('selectedColor');
+    
+    colorSwatches.forEach(swatch => {
+        if (swatch.dataset.color === colorInput.value) {
+            swatch.classList.add('selected');
+        }
+        
+        swatch.addEventListener('click', () => {
+            colorSwatches.forEach(s => s.classList.remove('selected'));
+            swatch.classList.add('selected');
+            colorInput.value = swatch.dataset.color;
+        });
+    });
+    
+    // Auto-submit filters
+    const filterInputs = document.querySelectorAll('#filterForm input, #filterForm select');
+    filterInputs.forEach(input => {
+        if (input.type !== 'submit') {
+            input.addEventListener('change', () => {
+                // Auto-submit after a short delay
+                setTimeout(() => {
+                    document.getElementById('filterForm').submit();
+                }, 300);
+            });
+        }
+    });
+    
+    // Update active filters display
+    updateActiveFilters();
+}
+
+function updateActiveFilters() {
+    const activeFiltersContainer = document.getElementById('activeFilters');
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    activeFiltersContainer.innerHTML = '';
+    
+    urlParams.forEach((value, key) => {
+        if (value && key !== 'page' && key !== 'sort') {
+            const tag = document.createElement('div');
+            tag.className = 'filter-tag';
+            tag.innerHTML = `
+                ${key}: ${value}
+                <span class="remove" data-filter="${key}">×</span>
+            `;
+            activeFiltersContainer.appendChild(tag);
+        }
+    });
+    
+    // Add remove functionality
+    document.querySelectorAll('.filter-tag .remove').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const filterKey = btn.dataset.filter;
+            const currentUrl = new URL(window.location);
+            currentUrl.searchParams.delete(filterKey);
+            window.location.href = currentUrl.toString();
+        });
+    });
+}
+
+function initializeProductInteractions() {
+    // Product card hover effects
+    document.querySelectorAll('.product-card').forEach(card => {
+        const overlay = card.querySelector('.product-overlay');
+        
+        card.addEventListener('mouseenter', () => {
+            if (overlay) overlay.style.opacity = '1';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            if (overlay) overlay.style.opacity = '0';
+        });
+    });
+    
+    // Wishlist functionality
+    document.querySelectorAll('.wishlist-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            this.classList.toggle('active');
+            
+            const icon = this.querySelector('i');
+            if (this.classList.contains('active')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                icon.style.color = '#e91e63';
+                showNotification('Added to wishlist!', 'success');
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                icon.style.color = '';
+                showNotification('Removed from wishlist', 'info');
+            }
+        });
+    });
+    
+    // Add to cart functionality
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Add loading state
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Adding...';
+            this.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-check me-2"></i>Added!';
+                this.classList.remove('btn-outline-primary');
+                this.classList.add('btn-success');
+                
+                showNotification('Product added to cart!', 'success');
+                updateCartCounter();
+                
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.classList.remove('btn-success');
+                    this.classList.add('btn-outline-primary');
+                    this.disabled = false;
+                }, 2000);
+            }, 1000);
+        });
+    });
+    
+    // Quick view functionality
+    document.querySelectorAll('.quick-view-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const productId = this.dataset.productId;
+            showQuickView(productId);
+        });
+    });
+}
+
+function initializeLoadMore() {
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    
+    loadMoreBtn.addEventListener('click', function() {
+        const originalText = this.innerHTML;
+        this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Loading...';
+        this.disabled = true;
+        
+        // Simulate loading more products
+        setTimeout(() => {
+            // Add more product cards here
+            showNotification('More products loaded!', 'success');
+            
+            this.innerHTML = originalText;
+            this.disabled = false;
+        }, 1500);
+    });
+}
+
+function initializeSorting() {
+    const sortDropdown = document.querySelector('.sort-dropdown');
+    
+    sortDropdown.addEventListener('change', function() {
+        const currentUrl = new URL(window.location);
+        currentUrl.searchParams.set('sort', this.value);
+        window.location.href = currentUrl.toString();
+    });
+}
+
+// Quick view modal function
+function showQuickView(productId) {
+    // Create and show modal (simplified version)
+    const modal = document.createElement('div');
+    modal.className = 'modal fade';
+    modal.innerHTML = `
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Quick View - Product ${productId}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                                 class="img-fluid rounded" alt="Product">
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Premium Women's Product ${productId}</h4>
+                            <div class="stars mb-2">
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <small class="text-muted ms-1">(125 reviews)</small>
+                            </div>
+                            <div class="price mb-3">
+                                <span class="h4 text-primary">₹${productId}99</span>
+                                <span class="text-muted text-decoration-line-through ms-2">₹${productId}999</span>
+                                <span class="badge bg-success ms-2">38% OFF</span>
+                            </div>
+                            <p class="text-muted">Premium quality fabric with perfect fit guarantee. Comfortable for all-day wear.</p>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                </button>
+                                <button class="btn btn-outline-primary">
+                                    <i class="far fa-heart me-2"></i>Add to Wishlist
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    const bsModal = new bootstrap.Modal(modal);
+    bsModal.show();
+    
+    modal.addEventListener('hidden.bs.modal', () => {
+        modal.remove();
+    });
+}
+
+// Utility functions
+function updateCartCounter() {
+    const counter = document.querySelector('.cart-badge');
+    if (counter) {
+        const current = parseInt(counter.textContent) || 0;
+        counter.textContent = current + 1;
+        
+        // Add animation
+        counter.style.transform = 'scale(1.3)';
+        setTimeout(() => {
+            counter.style.transform = 'scale(1)';
+        }, 200);
+    }
+}
+
+function showNotification(message, type = 'info') {
+    // Create notification toast
+    const notification = document.createElement('div');
+    notification.className = `toast position-fixed top-0 end-0 m-3 bg-${type} text-white`;
+    notification.style.zIndex = '9999';
+    notification.innerHTML = `
+        <div class="toast-body d-flex align-items-center">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'} me-2"></i>
+            ${message}
+            <button type="button" class="btn-close btn-close-white ms-auto" onclick="this.closest('.toast').remove()"></button>
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+</script>
+{% endblock %}

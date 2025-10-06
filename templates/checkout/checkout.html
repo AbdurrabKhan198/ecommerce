@@ -1,0 +1,896 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Secure Checkout - Women's Wear Store{% endblock %}
+
+{% block extra_css %}
+<style>
+.checkout-container {
+    padding: 3rem 0;
+    background: var(--grey-100);
+    min-height: 70vh;
+}
+
+.checkout-header {
+    background: var(--gradient-primary);
+    color: var(--white);
+    padding: 2rem 0;
+    margin-bottom: 3rem;
+    border-radius: var(--radius-lg);
+}
+
+.checkout-steps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    color: var(--grey-500);
+    font-weight: 500;
+}
+
+.step.active {
+    color: var(--primary-color);
+}
+
+.step.completed {
+    color: var(--success);
+}
+
+.step-number {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--grey-300);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.5rem;
+    font-weight: 600;
+}
+
+.step.active .step-number {
+    background: var(--primary-color);
+}
+
+.step.completed .step-number {
+    background: var(--success);
+}
+
+.step-connector {
+    width: 50px;
+    height: 2px;
+    background: var(--grey-300);
+    margin: 0 1rem;
+}
+
+.checkout-section {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--grey-200);
+    display: flex;
+    align-items: center;
+}
+
+.section-title i {
+    margin-right: 0.5rem;
+    color: var(--primary-color);
+}
+
+.form-floating {
+    margin-bottom: 1rem;
+}
+
+.address-card {
+    border: 2px solid var(--grey-300);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    transition: var(--transition-normal);
+}
+
+.address-card:hover,
+.address-card.selected {
+    border-color: var(--primary-color);
+    background: var(--primary-light);
+}
+
+.address-card.selected {
+    box-shadow: var(--shadow-md);
+}
+
+.payment-method {
+    border: 2px solid var(--grey-300);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    display: flex;
+    align-items: center;
+}
+
+.payment-method:hover,
+.payment-method.selected {
+    border-color: var(--primary-color);
+    background: var(--primary-light);
+}
+
+.payment-icon {
+    width: 50px;
+    height: 30px;
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--grey-100);
+    border-radius: var(--radius-sm);
+}
+
+.order-summary {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 2rem;
+    position: sticky;
+    top: 2rem;
+}
+
+.summary-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--grey-200);
+}
+
+.item-image {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-sm);
+    margin-right: 1rem;
+    overflow: hidden;
+}
+
+.item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.item-details {
+    flex: 1;
+}
+
+.item-name {
+    font-weight: 600;
+    color: var(--dark);
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.item-meta {
+    font-size: 0.8rem;
+    color: var(--grey-600);
+}
+
+.item-price {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+}
+
+.summary-row.total {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    border-top: 2px solid var(--grey-200);
+    margin-top: 1rem;
+    padding-top: 1rem;
+}
+
+.place-order-btn {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+}
+
+.security-info {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--grey-200);
+}
+
+.security-badges {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.security-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--grey-600);
+    font-size: 0.8rem;
+}
+
+.coupon-section {
+    background: var(--warning-light);
+    border-left: 4px solid var(--warning);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 1.5rem;
+}
+
+.delivery-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.delivery-option {
+    border: 2px solid var(--grey-300);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition-normal);
+}
+
+.delivery-option:hover,
+.delivery-option.selected {
+    border-color: var(--primary-color);
+    background: var(--primary-light);
+}
+
+.delivery-option i {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.delivery-option h6 {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.delivery-option .price {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--success);
+}
+
+@media (max-width: 768px) {
+    .checkout-steps {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .step-connector {
+        width: 2px;
+        height: 30px;
+        margin: 0.5rem 0;
+    }
+    
+    .delivery-options {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="checkout-container">
+    <div class="container">
+        <!-- Checkout Header -->
+        <div class="checkout-header text-center">
+            <h1 class="display-5 mb-3">Secure Checkout</h1>
+            <p class="lead mb-0">Complete your order safely and securely</p>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="checkout-steps">
+            <div class="step completed">
+                <div class="step-number">1</div>
+                <span>Cart</span>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step active">
+                <div class="step-number">2</div>
+                <span>Checkout</span>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <span>Payment</span>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <span>Confirmation</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Checkout Form -->
+            <div class="col-lg-8">
+                <!-- Customer Information -->
+                <div class="checkout-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-user"></i>Customer Information
+                    </h3>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="firstName" placeholder="First Name" value="Priya">
+                                <label for="firstName">First Name *</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="lastName" placeholder="Last Name" value="Sharma">
+                                <label for="lastName">Last Name *</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="email" class="form-control" id="email" placeholder="Email" value="priya.sharma@example.com">
+                                <label for="email">Email Address *</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="tel" class="form-control" id="phone" placeholder="Phone" value="+91 9876543210">
+                                <label for="phone">Phone Number *</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping Address -->
+                <div class="checkout-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-map-marker-alt"></i>Shipping Address
+                    </h3>
+                    
+                    <!-- Saved Addresses -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="address-card selected">
+                                <h6 class="fw-bold mb-2">Home Address</h6>
+                                <p class="mb-1">123 MG Road, Sector 14</p>
+                                <p class="mb-1">Gurgaon, Haryana 122001</p>
+                                <p class="mb-0 text-muted">India</p>
+                                <small class="text-success">
+                                    <i class="fas fa-check-circle me-1"></i>Default Address
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="address-card">
+                                <h6 class="fw-bold mb-2">Office Address</h6>
+                                <p class="mb-1">Tower B, Cyber City</p>
+                                <p class="mb-1">Gurgaon, Haryana 122002</p>
+                                <p class="mb-0 text-muted">India</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-outline-primary">
+                        <i class="fas fa-plus me-2"></i>Add New Address
+                    </button>
+                </div>
+
+                <!-- Delivery Options -->
+                <div class="checkout-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-shipping-fast"></i>Delivery Options
+                    </h3>
+                    
+                    <div class="delivery-options">
+                        <div class="delivery-option selected">
+                            <i class="fas fa-truck"></i>
+                            <h6>Standard Delivery</h6>
+                            <p class="small text-muted mb-2">5-7 business days</p>
+                            <div class="price">Free</div>
+                        </div>
+                        <div class="delivery-option">
+                            <i class="fas fa-shipping-fast"></i>
+                            <h6>Express Delivery</h6>
+                            <p class="small text-muted mb-2">2-3 business days</p>
+                            <div class="price">₹99</div>
+                        </div>
+                        <div class="delivery-option">
+                            <i class="fas fa-clock"></i>
+                            <h6>Same Day Delivery</h6>
+                            <p class="small text-muted mb-2">Within 24 hours</p>
+                            <div class="price">₹199</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="checkout-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-credit-card"></i>Payment Method
+                    </h3>
+                    
+                    <div class="payment-method selected">
+                        <div class="payment-icon">
+                            <i class="fab fa-cc-visa"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">Credit/Debit Card</h6>
+                            <small class="text-muted">Visa, Mastercard, Rupay accepted</small>
+                        </div>
+                        <i class="fas fa-shield-alt text-success"></i>
+                    </div>
+                    
+                    <div class="payment-method">
+                        <div class="payment-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">UPI Payment</h6>
+                            <small class="text-muted">GooglePay, PhonePe, Paytm</small>
+                        </div>
+                        <i class="fas fa-zap text-warning"></i>
+                    </div>
+                    
+                    <div class="payment-method">
+                        <div class="payment-icon">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">Net Banking</h6>
+                            <small class="text-muted">All major banks supported</small>
+                        </div>
+                        <i class="fas fa-lock text-primary"></i>
+                    </div>
+                    
+                    <div class="payment-method">
+                        <div class="payment-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">Wallet Payment</h6>
+                            <small class="text-muted">Paytm, Amazon Pay, JioMoney</small>
+                        </div>
+                        <i class="fas fa-flash text-danger"></i>
+                    </div>
+                    
+                    <div class="payment-method">
+                        <div class="payment-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">Cash on Delivery</h6>
+                            <small class="text-muted">Pay when you receive</small>
+                        </div>
+                        <span class="badge bg-success">Available</span>
+                    </div>
+                </div>
+
+                <!-- Special Instructions -->
+                <div class="checkout-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-comment"></i>Special Instructions
+                    </h3>
+                    
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="Any special delivery instructions..." id="instructions" style="height: 100px"></textarea>
+                        <label for="instructions">Delivery Instructions (Optional)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-lg-4">
+                <div class="order-summary">
+                    <h3 class="section-title">
+                        <i class="fas fa-receipt"></i>Order Summary
+                    </h3>
+
+                    <!-- Cart Items -->
+                    <div class="summary-item">
+                        <div class="item-image">
+                            <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Product">
+                        </div>
+                        <div class="item-details">
+                            <div class="item-name">Cotton Leggings</div>
+                            <div class="item-meta">Black • Size M • Qty: 2</div>
+                        </div>
+                        <div class="item-price">₹799</div>
+                    </div>
+
+                    <div class="summary-item">
+                        <div class="item-image">
+                            <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Product">
+                        </div>
+                        <div class="item-details">
+                            <div class="item-name">Palazzo Pants</div>
+                            <div class="item-meta">Navy • Size L • Qty: 1</div>
+                        </div>
+                        <div class="item-price">₹1,299</div>
+                    </div>
+
+                    <div class="summary-item">
+                        <div class="item-image">
+                            <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Product">
+                        </div>
+                        <div class="item-details">
+                            <div class="item-name">Silk Dupatta</div>
+                            <div class="item-meta">Pink • Floral • Qty: 1</div>
+                        </div>
+                        <div class="item-price">₹599</div>
+                    </div>
+
+                    <!-- Coupon Section -->
+                    <div class="coupon-section">
+                        <h6 class="mb-2">
+                            <i class="fas fa-tag me-2"></i>Have a Coupon?
+                        </h6>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Enter coupon code" id="couponCode">
+                            <button class="btn btn-outline-primary" id="applyCoupon">Apply</button>
+                        </div>
+                        <small class="text-muted mt-1 d-block">
+                            <i class="fas fa-gift me-1"></i>
+                            Try: WELCOME10, SAVE20, FREESHIP
+                        </small>
+                    </div>
+
+                    <!-- Price Breakdown -->
+                    <div class="summary-row">
+                        <span>Subtotal (4 items):</span>
+                        <span>₹2,697</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Discount:</span>
+                        <span class="text-success">-₹1,200</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Shipping:</span>
+                        <span class="text-success">Free</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>GST (18%):</span>
+                        <span>₹269</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total Amount:</span>
+                        <span>₹1,766</span>
+                    </div>
+
+                    <!-- Place Order Button -->
+                    <button class="btn btn-primary place-order-btn" id="placeOrderBtn">
+                        <i class="fas fa-lock me-2"></i>Place Order Securely
+                    </button>
+
+                    <!-- Security Information -->
+                    <div class="security-info">
+                        <small class="text-muted">
+                            <i class="fas fa-shield-alt me-1"></i>
+                            Your payment information is secure and encrypted
+                        </small>
+                        <div class="security-badges">
+                            <div class="security-badge">
+                                <i class="fas fa-lock"></i>
+                                <span>SSL</span>
+                            </div>
+                            <div class="security-badge">
+                                <i class="fab fa-cc-visa"></i>
+                                <span>Visa</span>
+                            </div>
+                            <div class="security-badge">
+                                <i class="fab fa-cc-mastercard"></i>
+                                <span>Mastercard</span>
+                            </div>
+                            <div class="security-badge">
+                                <i class="fas fa-mobile-alt"></i>
+                                <span>UPI</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    initializeCheckout();
+});
+
+function initializeCheckout() {
+    // Initialize address selection
+    initializeAddressSelection();
+    
+    // Initialize delivery options
+    initializeDeliveryOptions();
+    
+    // Initialize payment methods
+    initializePaymentMethods();
+    
+    // Initialize coupon functionality
+    initializeCouponCode();
+    
+    // Initialize place order button
+    initializePlaceOrder();
+}
+
+function initializeAddressSelection() {
+    document.querySelectorAll('.address-card').forEach(card => {
+        card.addEventListener('click', () => {
+            // Remove selected from all cards
+            document.querySelectorAll('.address-card').forEach(c => c.classList.remove('selected'));
+            // Add selected to clicked card
+            card.classList.add('selected');
+            
+            showNotification('Address selected!', 'success');
+        });
+    });
+}
+
+function initializeDeliveryOptions() {
+    document.querySelectorAll('.delivery-option').forEach(option => {
+        option.addEventListener('click', () => {
+            // Remove selected from all options
+            document.querySelectorAll('.delivery-option').forEach(opt => opt.classList.remove('selected'));
+            // Add selected to clicked option
+            option.classList.add('selected');
+            
+            // Update shipping cost
+            updateShippingCost(option);
+            
+            showNotification('Delivery option updated!', 'success');
+        });
+    });
+}
+
+function initializePaymentMethods() {
+    document.querySelectorAll('.payment-method').forEach(method => {
+        method.addEventListener('click', () => {
+            // Remove selected from all methods
+            document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
+            // Add selected to clicked method
+            method.classList.add('selected');
+            
+            const methodName = method.querySelector('h6').textContent;
+            showNotification(`${methodName} selected!`, 'success');
+        });
+    });
+}
+
+function initializeCouponCode() {
+    const applyBtn = document.getElementById('applyCoupon');
+    const couponInput = document.getElementById('couponCode');
+    
+    applyBtn.addEventListener('click', () => {
+        const code = couponInput.value.trim().toUpperCase();
+        
+        if (code === 'WELCOME10') {
+            showNotification('Coupon applied! 10% discount added.', 'success');
+            applyCouponDiscount(10, 'WELCOME10');
+        } else if (code === 'SAVE20') {
+            showNotification('Coupon applied! 20% discount added.', 'success');
+            applyCouponDiscount(20, 'SAVE20');
+        } else if (code === 'FREESHIP') {
+            showNotification('Free shipping coupon applied!', 'success');
+            applyFreeShipping();
+        } else if (code) {
+            showNotification('Invalid coupon code. Please try again.', 'error');
+        } else {
+            showNotification('Please enter a coupon code.', 'warning');
+        }
+    });
+    
+    // Allow Enter key to apply coupon
+    couponInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            applyBtn.click();
+        }
+    });
+}
+
+function initializePlaceOrder() {
+    const placeOrderBtn = document.getElementById('placeOrderBtn');
+    
+    placeOrderBtn.addEventListener('click', () => {
+        // Validate form
+        if (!validateCheckoutForm()) {
+            return;
+        }
+        
+        // Add loading state
+        const originalText = placeOrderBtn.innerHTML;
+        placeOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing Order...';
+        placeOrderBtn.disabled = true;
+        
+        // Simulate order processing
+        setTimeout(() => {
+            // Show success message
+            showNotification('Order placed successfully! Redirecting to confirmation...', 'success');
+            
+            // Redirect to confirmation page
+            setTimeout(() => {
+                window.location.href = '/checkout/confirmation/';
+            }, 2000);
+        }, 3000);
+    });
+}
+
+function validateCheckoutForm() {
+    const requiredFields = ['firstName', 'lastName', 'email', 'phone'];
+    let isValid = true;
+    
+    requiredFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (!field.value.trim()) {
+            field.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            field.classList.remove('is-invalid');
+        }
+    });
+    
+    // Check if address is selected
+    const selectedAddress = document.querySelector('.address-card.selected');
+    if (!selectedAddress) {
+        showNotification('Please select a shipping address.', 'warning');
+        isValid = false;
+    }
+    
+    // Check if payment method is selected
+    const selectedPayment = document.querySelector('.payment-method.selected');
+    if (!selectedPayment) {
+        showNotification('Please select a payment method.', 'warning');
+        isValid = false;
+    }
+    
+    if (!isValid) {
+        showNotification('Please fill in all required fields.', 'error');
+    }
+    
+    return isValid;
+}
+
+function updateShippingCost(selectedOption) {
+    const shippingText = selectedOption.querySelector('.price').textContent;
+    const shippingRow = document.querySelector('.summary-row:nth-child(3) span:last-child');
+    
+    if (shippingText === 'Free') {
+        shippingRow.textContent = 'Free';
+        shippingRow.className = 'text-success';
+    } else {
+        shippingRow.textContent = shippingText;
+        shippingRow.className = '';
+        
+        // Update total with shipping cost
+        updateOrderTotal();
+    }
+}
+
+function applyCouponDiscount(percentage, code) {
+    // Update the discount row
+    const discountRow = document.querySelector('.summary-row:nth-child(2) span:last-child');
+    const currentDiscount = 1200;
+    const additionalDiscount = Math.round(2697 * (percentage / 100));
+    const totalDiscount = currentDiscount + additionalDiscount;
+    
+    discountRow.textContent = `-₹${totalDiscount}`;
+    
+    // Update the coupon input
+    const couponInput = document.getElementById('couponCode');
+    const applyBtn = document.getElementById('applyCoupon');
+    
+    couponInput.value = code;
+    applyBtn.textContent = 'Applied';
+    applyBtn.classList.remove('btn-outline-primary');
+    applyBtn.classList.add('btn-success');
+    applyBtn.disabled = true;
+    
+    updateOrderTotal();
+}
+
+function applyFreeShipping() {
+    const shippingRow = document.querySelector('.summary-row:nth-child(3) span:last-child');
+    shippingRow.textContent = 'Free';
+    shippingRow.className = 'text-success';
+    
+    // Update delivery options to show free
+    document.querySelectorAll('.delivery-option').forEach(option => {
+        option.querySelector('.price').textContent = 'Free';
+        option.querySelector('.price').className = 'price text-success';
+    });
+    
+    updateOrderTotal();
+}
+
+function updateOrderTotal() {
+    // Recalculate total based on current values
+    const subtotal = 2697;
+    const discountText = document.querySelector('.summary-row:nth-child(2) span:last-child').textContent;
+    const discount = parseInt(discountText.replace('-₹', '').replace(',', ''));
+    const gst = 269;
+    
+    const total = subtotal - discount + gst;
+    document.querySelector('.summary-row.total span:last-child').textContent = `₹${total.toLocaleString()}`;
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `toast position-fixed top-0 end-0 m-3 bg-${type} text-white`;
+    notification.style.zIndex = '9999';
+    notification.innerHTML = `
+        <div class="toast-body d-flex align-items-center">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
+            ${message}
+            <button type="button" class="btn-close btn-close-white ms-auto" onclick="this.closest('.toast').remove()"></button>
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto remove after 4 seconds
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 300);
+    }, 4000);
+}
+
+// Form validation styling
+document.querySelectorAll('input, textarea').forEach(input => {
+    input.addEventListener('blur', () => {
+        if (input.hasAttribute('required') || input.id === 'firstName' || input.id === 'lastName' || input.id === 'email' || input.id === 'phone') {
+            if (!input.value.trim()) {
+                input.classList.add('is-invalid');
+            } else {
+                input.classList.remove('is-invalid');
+            }
+        }
+    });
+    
+    input.addEventListener('input', () => {
+        if (input.classList.contains('is-invalid') && input.value.trim()) {
+            input.classList.remove('is-invalid');
+        }
+    });
+});
+</script>
+{% endblock %}
