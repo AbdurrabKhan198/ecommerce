@@ -37,4 +37,12 @@ def site_settings(request):
         'support_phone': '+91 7860247786',
         'support_email': 'Kingdupattahouse@gmail.com',
         'support_whatsapp': '+91 7499099900',
+        'store_address': 'Akbari Gate, Near Nakhas, Victoria Street, Nakhas-226003, Lucknow, Uttar Pradesh',
+        'store_city': 'Lucknow',
+        'store_state': 'Uttar Pradesh',
+        'store_pincode': '226003',
+        'established_year': '2013',
+        'years_in_business': '10+',
+        'business_rating': '4.0',
+        'business_reviews': '14+',
     }
