@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Secure Checkout - Women's Wear Store{% endblock %}
+{% block title %}Secure Checkout - King Dupatta House{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -372,7 +372,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input type="tel" class="form-control" id="phone" placeholder="Phone" value="+91 9876543210">
+                                <input type="tel" class="form-control" id="phone" placeholder="Phone" value="+91 7860247786">
                                 <label for="phone">Phone Number *</label>
                             </div>
                         </div>
@@ -632,12 +632,13 @@
 {% endblock %}
 
 {% block extra_js %}
+<!-- Checkout specific JavaScript -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    initializeCheckout();
+    initializeCheckoutSpecific();
 });
 
-function initializeCheckout() {
+function initializeCheckoutSpecific() {
     // Initialize address selection
     initializeAddressSelection();
     

@@ -33,8 +33,8 @@ def cart_context(request):
 def site_settings(request):
     """Add site-wide settings to template context"""
     return {
-        'site_name': 'Women\'s Wear Store',
-        'support_phone': '1800-XXX-XXXX',
-        'support_email': 'support@yourstore.com',
-        'support_whatsapp': '+91-XXXXX-XXXXX',
+        'site_name': 'King Dupatta House',
+        'support_phone': '+91 7860247786',
+        'support_email': 'Kingdupattahouse@gmail.com',
+        'support_whatsapp': '+91 7499099900',
     }

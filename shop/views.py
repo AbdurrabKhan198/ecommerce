@@ -25,13 +25,13 @@ def homepage(request):
         'categories': [],
         'featured_products': [],
         'recent_products': [],
-        'page_title': 'Premium Women\'s Wear - Leggings, Pants & Dupattas',
-        'meta_description': 'Shop premium women\'s leggings, pants & dupattas online. High-quality fabrics, perfect fit guarantee, free shipping above ₹999.',
+        'page_title': 'King Dupatta House - Premium Dupattas, Leggings & Pants',
+        'meta_description': 'Shop premium dupattas, leggings & pants at King Dupatta House. High-quality fabrics, perfect fit guarantee, free shipping above ₹999.',
         'currency_symbol': '₹',
         'free_shipping_threshold': '999',
-        'site_name': 'Women\'s Wear Store',
-        'support_phone': '+91 9876543210',
-        'support_email': 'hello@womenswear.com',
+        'site_name': 'King Dupatta House',
+        'support_phone': '+91 7860247786',
+        'support_email': 'Kingdupattahouse@gmail.com',
     }
     
     return render(request, 'shop/homepage.html', context)

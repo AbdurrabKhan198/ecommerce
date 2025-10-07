@@ -144,8 +144,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Custom user model
 AUTH_USER_MODEL = 'accounts.User'
 
-# Email configuration (for development)
+# Email configuration
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'Kingdupattahouse@gmail.com'
+EMAIL_HOST_PASSWORD = ''  # Add your app password here
+DEFAULT_FROM_EMAIL = 'King Dupatta House <Kingdupattahouse@gmail.com>'
+ADMINS = [('King Dupatta House', 'Kingdupattahouse@gmail.com')]
 
 # Session configuration
 SESSION_COOKIE_AGE = 86400  # 24 hours

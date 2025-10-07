@@ -40,9 +40,9 @@
                 <div class="row align-items-center">
                     <div class="col-md-6">
                         <small class="d-flex align-items-center">
-                            <i class="fas fa-phone me-2"></i>{{ support_phone|default:"+91 9876543210" }}
+                            <i class="fas fa-phone me-2"></i>{{ support_phone|default:"+91 7860247786" }}
                             <span class="mx-3">|</span>
-                            <i class="fas fa-envelope me-2"></i>{{ support_email|default:"hello@womenswear.com" }}
+                            <i class="fas fa-envelope me-2"></i>{{ support_email|default:"Kingdupattahouse@gmail.com" }}
                         </small>
                     </div>
                     <div class="col-md-6 text-end">
@@ -63,7 +63,7 @@
             <div class="container">
                 <!-- Brand -->
                 <a class="navbar-brand" href="{% url 'shop:homepage' %}">
-                    <i class="fas fa-gem me-2"></i>{{ site_name|default:"Women's Wear" }}
+                    <i class="fas fa-gem me-2"></i>{{ site_name|default:"King Dupatta House" }}
                 </a>
                 
                 <!-- Mobile Toggle -->
@@ -375,12 +375,14 @@
             <hr class="my-4">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <p class="mb-0">&copy; 2025 {{ site_name }}. All rights reserved.</p>
+                    <p class="mb-0">&copy; 2025 {{ site_name|default:"King Dupatta House" }}. All rights reserved.</p>
                 </div>
                 <div class="col-md-6 text-end">
-                    <img src="https://via.placeholder.com/60x30/333/fff?text=SSL" alt="SSL" class="me-2">
-                    <img src="https://via.placeholder.com/60x30/333/fff?text=VISA" alt="Visa" class="me-2">
-                    <img src="https://via.placeholder.com/60x30/333/fff?text=MC" alt="Mastercard">
+3                    <div class="d-flex align-items-center justify-content-end gap-2">
+                        <span class="badge bg-success">SSL Secured</span>
+                        <span class="badge bg-primary">Visa</span>
+                        <span class="badge bg-warning text-dark">Mastercard</span>
+                    </div>
                 </div>
             </div>
         </div>

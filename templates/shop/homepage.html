@@ -222,8 +222,8 @@
             
             <div class="col-lg-6 hero-image animate-on-scroll">
                 <div class="floating">
-                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" 
-                         alt="Fashion Model" class="img-fluid rounded-custom shadow-custom">
+                    <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                         alt="Beautiful Women's Fashion" class="img-fluid rounded-custom shadow-custom">
                 </div>
             </div>
         </div>
@@ -408,14 +408,13 @@
                 </div>
             </div>
             {% empty %}
-            <!-- Default products with beautiful placeholder -->
-            {% for i in "1234" %}
+            <!-- Default products with beautiful diverse images -->
             <div class="col-lg-3 col-md-6">
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                         alt="Fashion Product" class="card-img-top">
+                    <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                         alt="Premium Leggings" class="card-img-top">
                     
-                    <div class="discount-badge">25% OFF</div>
+                    <div class="discount-badge">30% OFF</div>
                     
                     <div class="product-overlay">
                         <button class="btn btn-light btn-sm rounded-pill">
@@ -427,7 +426,7 @@
                     </div>
                     
                     <div class="card-body p-3">
-                        <h6 class="card-title">Premium Women's Product {{ forloop.counter }}</h6>
+                        <h6 class="card-title">Premium Cotton Leggings</h6>
                         
                         <div class="stars mb-2">
                             <i class="fas fa-star"></i>
@@ -435,12 +434,12 @@
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
-                            <small class="text-muted ms-1">({{ forloop.counter }}5)</small>
+                            <small class="text-muted ms-1">(125)</small>
                         </div>
                         
                         <div class="price mb-3">
-                            <span class="text-primary fw-bold fs-5">₹{{ forloop.counter }}99</span>
-                            <span class="text-muted text-decoration-line-through ms-2">₹{{ forloop.counter }}999</span>
+                            <span class="text-primary fw-bold fs-5">₹599</span>
+                            <span class="text-muted text-decoration-line-through ms-2">₹899</span>
                         </div>
                         
                         <div class="d-grid">
@@ -451,7 +450,132 @@
                     </div>
                 </div>
             </div>
-            {% endfor %}
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                         alt="Elegant Pants" class="card-img-top">
+                    
+                    <div class="discount-badge">20% OFF</div>
+                    
+                    <div class="product-overlay">
+                        <button class="btn btn-light btn-sm rounded-pill">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="wishlist-btn">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="card-body p-3">
+                        <h6 class="card-title">Palazzo Pants Set</h6>
+                        
+                        <div class="stars mb-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <small class="text-muted ms-1">(98)</small>
+                        </div>
+                        
+                        <div class="price mb-3">
+                            <span class="text-primary fw-bold fs-5">₹1,299</span>
+                            <span class="text-muted text-decoration-line-through ms-2">₹1,599</span>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <a href="#" class="btn btn-outline-primary">
+                                <i class="fas fa-shopping-cart me-2"></i>View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                         alt="Beautiful Dupatta" class="card-img-top">
+                    
+                    <div class="discount-badge">15% OFF</div>
+                    
+                    <div class="product-overlay">
+                        <button class="btn btn-light btn-sm rounded-pill">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="wishlist-btn">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="card-body p-3">
+                        <h6 class="card-title">Silk Dupatta Collection</h6>
+                        
+                        <div class="stars mb-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <small class="text-muted ms-1">(87)</small>
+                        </div>
+                        
+                        <div class="price mb-3">
+                            <span class="text-primary fw-bold fs-5">₹799</span>
+                            <span class="text-muted text-decoration-line-through ms-2">₹999</span>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <a href="#" class="btn btn-outline-primary">
+                                <i class="fas fa-shopping-cart me-2"></i>View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                         alt="Churidar Leggings" class="card-img-top">
+                    
+                    <div class="discount-badge">35% OFF</div>
+                    
+                    <div class="product-overlay">
+                        <button class="btn btn-light btn-sm rounded-pill">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="wishlist-btn">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="card-body p-3">
+                        <h6 class="card-title">Churidar Leggings</h6>
+                        
+                        <div class="stars mb-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <small class="text-muted ms-1">(156)</small>
+                        </div>
+                        
+                        <div class="price mb-3">
+                            <span class="text-primary fw-bold fs-5">₹699</span>
+                            <span class="text-muted text-decoration-line-through ms-2">₹1,099</span>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <a href="#" class="btn btn-outline-primary">
+                                <i class="fas fa-shopping-cart me-2"></i>View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {% endfor %}
         </div>
         
@@ -607,17 +731,17 @@
 <section class="py-5 animate-on-scroll">
     <div class="container">
         <div class="section-title">
-            <h2 class="display-5">Follow Us @WomensWearStore</h2>
+            <h2 class="display-5">Follow Us @KingDupattaHouse</h2>
             <p class="lead">Get styling inspiration and see how our customers wear our pieces</p>
         </div>
         
         <div class="instagram-grid">
-            <div class="instagram-post"></div>
-            <div class="instagram-post"></div>
-            <div class="instagram-post"></div>
-            <div class="instagram-post"></div>
-            <div class="instagram-post"></div>
-            <div class="instagram-post"></div>
+            <div class="instagram-post" style="background-image: url('https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'); background-size: cover; background-position: center;"></div>
+            <div class="instagram-post" style="background-image: url('https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'); background-size: cover; background-position: center;"></div>
+            <div class="instagram-post" style="background-image: url('https://images.unsplash.com/photo-1583391733956-6c78276477e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'); background-size: cover; background-position: center;"></div>
+            <div class="instagram-post" style="background-image: url('https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'); background-size: cover; background-position: center;"></div>
+            <div class="instagram-post" style="background-image: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'); background-size: cover; background-position: center;"></div>
+            <div class="instagram-post" style="background-image: url('https://images.unsplash.com/photo-1571513723812-70c0a0a6b4b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'); background-size: cover; background-position: center;"></div>
         </div>
         
         <div class="text-center mt-4">
@@ -635,189 +759,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-// Smooth scrolling and animations
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize animations
-    initializeAnimations();
-    
-    // Counter animation
-    animateCounters();
-    
-    // Scroll to top functionality
-    setupScrollToTop();
-    
-    // Navbar scroll effect
-    setupNavbarScroll();
-    
-    // Smooth scroll for anchor links
-    setupSmoothScroll();
-});
-
-function initializeAnimations() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animated');
-            }
-        });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    });
-    
-    document.querySelectorAll('.animate-on-scroll').forEach(el => {
-        observer.observe(el);
-    });
-}
-
-function animateCounters() {
-    const counters = document.querySelectorAll('.counter');
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const counter = entry.target;
-                const target = parseInt(counter.dataset.target);
-                let count = 0;
-                const increment = target / 100;
-                
-                const updateCounter = () => {
-                    count += increment;
-                    if (count < target) {
-                        counter.textContent = Math.floor(count);
-                        requestAnimationFrame(updateCounter);
-                    } else {
-                        counter.textContent = target;
-                    }
-                };
-                
-                updateCounter();
-                observer.unobserve(counter);
-            }
-        });
-    });
-    
-    counters.forEach(counter => observer.observe(counter));
-}
-
-function setupScrollToTop() {
-    const scrollToTopBtn = document.getElementById('scrollToTop');
-    
-    window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 300) {
-            scrollToTopBtn.classList.add('show');
-        } else {
-            scrollToTopBtn.classList.remove('show');
-        }
-    });
-    
-    scrollToTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-}
-
-function setupNavbarScroll() {
-    const navbar = document.querySelector('.navbar');
-    
-    window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 100) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    });
-}
-
-function setupSmoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
-    });
-}
-
-// Wishlist functionality
-document.addEventListener('click', function(e) {
-    if (e.target.closest('.wishlist-btn')) {
-        const btn = e.target.closest('.wishlist-btn');
-        const icon = btn.querySelector('i');
-        
-        btn.classList.toggle('active');
-        
-        if (btn.classList.contains('active')) {
-            icon.classList.remove('far');
-            icon.classList.add('fas');
-            showToast('Added to wishlist!', 'success');
-        } else {
-            icon.classList.remove('fas');
-            icon.classList.add('far');
-            showToast('Removed from wishlist!', 'info');
-        }
-    }
-});
-
-// Toast notification function
-function showToast(message, type = 'info') {
-    const toast = document.createElement('div');
-    toast.className = `toast position-fixed top-0 end-0 m-3 bg-${type} text-white`;
-    toast.style.zIndex = '9999';
-    toast.innerHTML = `
-        <div class="toast-body d-flex align-items-center">
-            <i class="fas fa-check-circle me-2"></i>
-            ${message}
-            <button type="button" class="btn-close btn-close-white ms-auto" onclick="this.closest('.toast').remove()"></button>
-        </div>
-    `;
-    
-    document.body.appendChild(toast);
-    
-    // Auto remove after 3 seconds
-    setTimeout(() => {
-        if (toast.parentNode) {
-            toast.style.opacity = '0';
-            toast.style.transform = 'translateX(100%)';
-            setTimeout(() => toast.remove(), 300);
-        }
-    }, 3000);
-}
-
-// Newsletter form submission
-document.querySelector('.newsletter form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const email = this.querySelector('input[type="email"]').value;
-    if (email) {
-        showToast('Thank you for subscribing! Check your email for a special discount.', 'success');
-        this.reset();
-    }
-});
-
-// Product card hover effects
-document.querySelectorAll('.product-card').forEach(card => {
-    card.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-8px) scale(1.02)';
-    });
-    
-    card.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0) scale(1)';
-    });
-});
-
-// Instagram post click simulation
-document.querySelectorAll('.instagram-post').forEach(post => {
-    post.addEventListener('click', function() {
-        showToast('Opening Instagram...', 'info');
-    });
-});
-</script>
+<!-- All JavaScript functionality is handled by main.js -->
 {% endblock %}

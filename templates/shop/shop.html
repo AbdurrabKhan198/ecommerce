@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Shop - Women's Wear Store{% endblock %}
+{% block title %}Shop - King Dupatta House{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -571,14 +571,71 @@
 
             <!-- Products Grid -->
             <div class="product-grid" id="productGrid">
-                <!-- Sample Products -->
+                <!-- Sample Products with Diverse Images -->
                 {% for i in "123456789012" %}
                 <div class="product-card card h-100 border-0 shadow-sm">
                     <div class="position-relative product-image">
+                        {% if forloop.counter == 1 %}
+                        <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                             class="card-img-top" 
+                             alt="Premium Leggings"
+                             style="height: 280px; object-fit: cover;">
+                        {% elif forloop.counter == 2 %}
+                        <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                             class="card-img-top" 
+                             alt="Elegant Pants"
+                             style="height: 280px; object-fit: cover;">
+                        {% elif forloop.counter == 3 %}
+                        <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                             class="card-img-top" 
+                             alt="Beautiful Dupatta"
+                             style="height: 280px; object-fit: cover;">
+                        {% elif forloop.counter == 4 %}
+                        <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                             class="card-img-top" 
+                             alt="Churidar Leggings"
+                             style="height: 280px; object-fit: cover;">
+                        {% elif forloop.counter == 5 %}
                         <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
                              class="card-img-top" 
-                             alt="Premium Women's Product"
+                             alt="Fashion Model"
                              style="height: 280px; object-fit: cover;">
+                        {% elif forloop.counter == 6 %}
+                        <img src="https://images.unsplash.com/photo-1571513723812-70c0a0a6b4b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                             class="card-img-top" 
+                             alt="Palazzo Pants"
+                             style="height: 280px; object-fit: cover;">
+                        {% elif forloop.counter == 7 %}
+                        <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                             class="card-img-top" 
+                             alt="Cotton Leggings"
+                             style="height: 280px; object-fit: cover;">
+                        {% elif forloop.counter == 8 %}
+                        <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                             class="card-img-top" 
+                             alt="Formal Trousers"
+                             style="height: 280px; object-fit: cover;">
+                        {% elif forloop.counter == 9 %}
+                        <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                             class="card-img-top" 
+                             alt="Silk Dupatta"
+                             style="height: 280px; object-fit: cover;">
+                        {% elif forloop.counter == 10 %}
+                        <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                             class="card-img-top" 
+                             alt="Printed Leggings"
+                             style="height: 280px; object-fit: cover;">
+                        {% elif forloop.counter == 11 %}
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                             class="card-img-top" 
+                             alt="Jeggings"
+                             style="height: 280px; object-fit: cover;">
+                        {% else %}
+                        <img src="https://images.unsplash.com/photo-1571513723812-70c0a0a6b4b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                             class="card-img-top" 
+                             alt="Wide Leg Pants"
+                             style="height: 280px; object-fit: cover;">
+                        {% endif %}
                         
                         <div class="position-absolute top-0 end-0 m-2">
                             {% if forloop.counter|divisibleby:3 %}
@@ -667,21 +724,19 @@
 {% endblock %}
 
 {% block extra_js %}
+<!-- Shop-specific JavaScript functionality is handled by main.js -->
 <script>
+// Shop-specific functions that don't conflict with main.js
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize shop functionality
-    initializeShop();
+    initializeShopSpecific();
 });
 
-function initializeShop() {
+function initializeShopSpecific() {
     // View toggle functionality
     initializeViewToggle();
     
     // Filter functionality
     initializeFilters();
-    
-    // Product interactions
-    initializeProductInteractions();
     
     // Load more functionality
     initializeLoadMore();
