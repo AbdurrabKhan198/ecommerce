@@ -102,6 +102,7 @@ class Product(models.Model):
     stock_quantity = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
+    is_bestseller = models.BooleanField(default=False, help_text="Show in Bestsellers This Week section")
     
     # SEO
     meta_title = models.CharField(max_length=200, blank=True)

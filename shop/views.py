@@ -20,11 +20,17 @@ def homepage(request):
     """Homepage view"""
     print("Homepage view called!")  # Debug output
     
-    # Get sample data for demonstration
+    # Get actual data from database
+    categories = Category.objects.filter(is_active=True).order_by('sort_order', 'name')[:3]
+    featured_products = Product.objects.filter(is_active=True, is_featured=True).order_by('-created_at')[:4]
+    bestseller_products = Product.objects.filter(is_active=True, is_bestseller=True).order_by('-created_at')[:4]
+    recent_products = Product.objects.filter(is_active=True).order_by('-created_at')[:4]
+    
     context = {
-        'categories': [],
-        'featured_products': [],
-        'recent_products': [],
+        'categories': categories,
+        'featured_products': featured_products,
+        'bestseller_products': bestseller_products,
+        'recent_products': recent_products,
         'page_title': 'King Dupatta House - Premium Dupattas, Leggings & Pants Since 2013',
         'meta_description': 'King Dupatta House - Trusted since 2013 for premium dupattas, leggings & pants. Located in Lucknow, serving customers nationwide with quality fabrics and perfect fit guarantee.',
         'currency_symbol': '₹',

@@ -297,45 +297,51 @@
             {% empty %}
             <!-- Default categories with beautiful images -->
             <div class="col-lg-4 col-md-6">
-                <div class="category-card">
-                    <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
-                         alt="Leggings" class="card-img">
-                    <div class="card-img-overlay">
-                        <h5 class="card-title">Leggings</h5>
+                <a href="{% url 'shop:shop' %}?category=leggings" class="text-decoration-none">
+                    <div class="category-card">
+                    <img src="https://placehold.co/400x300/6366f1/white?text=Leggings" 
+                         alt="Leggings" class="card-img" onerror="this.src='https://via.placeholder.com/400x300/f8f9fa/6c757d?text=Leggings'">
+                        <div class="card-img-overlay">
+                            <h5 class="card-title">Leggings</h5>
                         <p class="card-text">Comfort meets style in our premium leggings collection</p>
-                        <a href="#" class="btn btn-primary">
+                            <div class="btn btn-primary">
                             <i class="fas fa-arrow-right me-2"></i>Shop Leggings
-                        </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             
             <div class="col-lg-4 col-md-6">
-                <div class="category-card">
-                    <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
-                         alt="Pants" class="card-img">
-                    <div class="card-img-overlay">
-                        <h5 class="card-title">Pants</h5>
+                <a href="{% url 'shop:shop' %}?category=pants" class="text-decoration-none">
+                    <div class="category-card">
+                    <img src="https://placehold.co/400x300/6366f1/white?text=Pants" 
+                         alt="Pants" class="card-img" onerror="this.src='https://via.placeholder.com/400x300/f8f9fa/6c757d?text=Pants'">
+                        <div class="card-img-overlay">
+                            <h5 class="card-title">Pants</h5>
                         <p class="card-text">Versatile elegance for every occasion and style</p>
-                        <a href="#" class="btn btn-primary">
+                            <div class="btn btn-primary">
                             <i class="fas fa-arrow-right me-2"></i>Shop Pants
-                        </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             
             <div class="col-lg-4 col-md-6">
+                <a href="{% url 'shop:shop' %}?category=dupattas" class="text-decoration-none">
                 <div class="category-card">
-                    <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
-                         alt="Dupattas" class="card-img">
+                        <img src="https://placehold.co/400x300/6366f1/white?text=Dupattas" 
+                         alt="Dupattas" class="card-img" onerror="this.src='https://via.placeholder.com/400x300/f8f9fa/6c757d?text=Dupattas'">
                     <div class="card-img-overlay">
                         <h5 class="card-title">Dupattas</h5>
                         <p class="card-text">Traditional elegance redefined for modern women</p>
-                        <a href="#" class="btn btn-primary">
+                            <div class="btn btn-primary">
                             <i class="fas fa-arrow-right me-2"></i>Shop Dupattas
-                        </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             {% endfor %}
         </div>
@@ -351,7 +357,7 @@
         </div>
         
         <div class="row g-4">
-            {% for product in featured_products %}
+            {% for product in bestseller_products %}
             <div class="col-lg-3 col-md-6">
                 <div class="product-card">
                     {% with product.images.first as first_image %}
@@ -410,9 +416,10 @@
             {% empty %}
             <!-- Default products with beautiful diverse images -->
             <div class="col-lg-3 col-md-6">
+                <a href="{% url 'shop:shop' %}?category=leggings" class="text-decoration-none">
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                         alt="Premium Leggings" class="card-img-top">
+                        <img src="https://placehold.co/300x300/6366f1/white?text=Premium+Leggings" 
+                             alt="Premium Leggings" class="card-img-top" onerror="this.src='https://via.placeholder.com/300x300/f8f9fa/6c757d?text=Premium+Leggings'">
                     
                     <div class="discount-badge">30% OFF</div>
                     
@@ -443,18 +450,20 @@
                         </div>
                         
                         <div class="d-grid">
-                            <a href="#" class="btn btn-outline-primary">
+                                <div class="btn btn-outline-primary">
                                 <i class="fas fa-shopping-cart me-2"></i>View Details
-                            </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
             
             <div class="col-lg-3 col-md-6">
+                <a href="{% url 'shop:shop' %}?category=pants" class="text-decoration-none">
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                         alt="Elegant Pants" class="card-img-top">
+                        <img src="https://placehold.co/300x300/6366f1/white?text=Palazzo+Pants" 
+                             alt="Elegant Pants" class="card-img-top" onerror="this.src='https://via.placeholder.com/300x300/f8f9fa/6c757d?text=Palazzo+Pants'">
                     
                     <div class="discount-badge">20% OFF</div>
                     
@@ -485,18 +494,20 @@
                         </div>
                         
                         <div class="d-grid">
-                            <a href="#" class="btn btn-outline-primary">
+                                <div class="btn btn-outline-primary">
                                 <i class="fas fa-shopping-cart me-2"></i>View Details
-                            </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
             
             <div class="col-lg-3 col-md-6">
+                <a href="{% url 'shop:shop' %}?category=dupattas" class="text-decoration-none">
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                         alt="Beautiful Dupatta" class="card-img-top">
+                        <img src="https://placehold.co/300x300/6366f1/white?text=Silk+Dupatta" 
+                             alt="Beautiful Dupatta" class="card-img-top" onerror="this.src='https://via.placeholder.com/300x300/f8f9fa/6c757d?text=Silk+Dupatta'">
                     
                     <div class="discount-badge">15% OFF</div>
                     
@@ -527,18 +538,20 @@
                         </div>
                         
                         <div class="d-grid">
-                            <a href="#" class="btn btn-outline-primary">
+                                <div class="btn btn-outline-primary">
                                 <i class="fas fa-shopping-cart me-2"></i>View Details
-                            </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
             
             <div class="col-lg-3 col-md-6">
+                <a href="{% url 'shop:shop' %}?category=leggings" class="text-decoration-none">
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                         alt="Churidar Leggings" class="card-img-top">
+                        <img src="https://placehold.co/300x300/6366f1/white?text=Churidar+Leggings" 
+                             alt="Churidar Leggings" class="card-img-top" onerror="this.src='https://via.placeholder.com/300x300/f8f9fa/6c757d?text=Churidar+Leggings'">
                     
                     <div class="discount-badge">35% OFF</div>
                     
@@ -569,12 +582,13 @@
                         </div>
                         
                         <div class="d-grid">
-                            <a href="#" class="btn btn-outline-primary">
+                                <div class="btn btn-outline-primary">
                                 <i class="fas fa-shopping-cart me-2"></i>View Details
-                            </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
             {% endfor %}
         </div>

@@ -1,1 +1,1 @@
-# This makes Python treat the directory as a package
+# Management commands for shop app

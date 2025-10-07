@@ -41,16 +41,16 @@ class ProductVariantInline(admin.TabularInline):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
-        'name', 'category', 'subcategory', 'selling_price', 
-        'stock_quantity', 'is_active', 'is_featured', 'created_at'
+        'name', 'category', 'subcategory', 'selling_price', 'discount_percentage',
+        'stock_quantity', 'is_active', 'is_featured', 'is_bestseller', 'created_at'
     )
     list_filter = (
         'category', 'subcategory', 'fabric', 'occasion', 
-        'is_active', 'is_featured', 'created_at'
+        'is_active', 'is_featured', 'is_bestseller', 'created_at'
     )
     search_fields = ('name', 'description', 'short_description')
     prepopulated_fields = {'slug': ('name',)}
-    list_editable = ('is_active', 'is_featured', 'selling_price', 'stock_quantity')
+    list_editable = ('is_active', 'is_featured', 'is_bestseller', 'selling_price', 'stock_quantity')
     ordering = ('-created_at',)
     inlines = [ProductImageInline, ProductVariantInline]
     
@@ -65,7 +65,7 @@ class ProductAdmin(admin.ModelAdmin):
             'fields': ('mrp', 'selling_price', 'stock_quantity')
         }),
         ('Status', {
-            'fields': ('is_active', 'is_featured')
+            'fields': ('is_active', 'is_featured', 'is_bestseller')
         }),
         ('SEO', {
             'fields': ('meta_title', 'meta_description'),
@@ -75,6 +75,13 @@ class ProductAdmin(admin.ModelAdmin):
     
     def get_queryset(self, request):
         return super().get_queryset(request).select_related('category', 'subcategory')
+    
+    def discount_percentage(self, obj):
+        if obj.mrp > obj.selling_price:
+            discount = ((obj.mrp - obj.selling_price) / obj.mrp) * 100
+            return f"{discount:.0f}%"
+        return "-"
+    discount_percentage.short_description = "Discount"
 
 
 @admin.register(ProductImage)
