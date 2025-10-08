@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Success Header -->
+            <div class="text-center mb-5">
+                <div class="success-icon mb-4">
+                    <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                </div>
+                <h1 class="display-4 fw-bold text-success mb-3">Order Placed Successfully!</h1>
+                <p class="lead text-muted">Thank you for your purchase. Your order has been confirmed.</p>
+            </div>
+
+            <!-- Order Details Card -->
+            <div class="card shadow-lg border-0 mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-receipt me-2"></i>Order Details
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-muted mb-3">Order Information</h6>
+                            <p><strong>Order Number:</strong> {{ order.order_number }}</p>
+                            <p><strong>Order Date:</strong> {{ order.created_at|date:"F d, Y" }}</p>
+                            <p><strong>Status:</strong> 
+                                <span class="badge bg-warning">{{ order.get_status_display }}</span>
+                            </p>
+                            <p><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-muted mb-3">Shipping Address</h6>
+                            <p class="mb-1"><strong>{{ order.shipping_full_name }}</strong></p>
+                            <p class="mb-1">{{ order.shipping_address_line_1 }}</p>
+                            {% if order.shipping_address_line_2 %}
+                            <p class="mb-1">{{ order.shipping_address_line_2 }}</p>
+                            {% endif %}
+                            <p class="mb-1">{{ order.shipping_city }}, {{ order.shipping_state }} {{ order.shipping_pin_code }}</p>
+                            <p class="mb-0"><strong>Phone:</strong> {{ order.shipping_phone }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Items -->
+            <div class="card shadow-lg border-0 mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-shopping-bag me-2"></i>Order Items
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% for item in order.items.all %}
+                    <div class="row align-items-center py-3 border-bottom">
+                        <div class="col-md-2">
+                            {% with item.product.images.first as first_image %}
+                            <img src="{% if first_image %}{{ first_image.image.url }}{% else %}https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80{% endif %}" 
+                                 alt="{{ item.product_name }}" class="img-fluid rounded">
+                            {% endwith %}
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold mb-1">{{ item.product_name }}</h6>
+                            <p class="text-muted mb-1">{{ item.variant_info }}</p>
+                            <p class="text-muted mb-0">Quantity: {{ item.quantity }}</p>
+                        </div>
+                        <div class="col-md-2">
+                            <p class="mb-0">₹{{ item.product_price }}</p>
+                        </div>
+                        <div class="col-md-2">
+                            <p class="fw-bold mb-0">₹{{ item.total_price }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="card shadow-lg border-0 mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-calculator me-2"></i>Order Summary
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Subtotal:</span>
+                                <span>₹{{ order.subtotal }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Shipping:</span>
+                                <span class="text-success">Free</span>
+                            </div>
+                            {% if order.discount_amount > 0 %}
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Discount:</span>
+                                <span class="text-success">-₹{{ order.discount_amount }}</span>
+                            </div>
+                            {% endif %}
+                            <hr>
+                            <div class="d-flex justify-content-between">
+                                <span class="fw-bold fs-5">Total Amount:</span>
+                                <span class="fw-bold fs-5 text-success">₹{{ order.total_amount }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="card shadow-lg border-0 mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>What's Next?
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-3">
+                            <div class="step-icon mb-2">
+                                <i class="fas fa-envelope text-primary" style="font-size: 2rem;"></i>
+                            </div>
+                            <h6>Order Confirmation</h6>
+                            <p class="text-muted small">You'll receive an email confirmation shortly</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <div class="step-icon mb-2">
+                                <i class="fas fa-truck text-warning" style="font-size: 2rem;"></i>
+                            </div>
+                            <h6>Processing</h6>
+                            <p class="text-muted small">We'll prepare your order for shipment</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <div class="step-icon mb-2">
+                                <i class="fas fa-home text-success" style="font-size: 2rem;"></i>
+                            </div>
+                            <h6>Delivery</h6>
+                            <p class="text-muted small">Your order will be delivered to your address</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="text-center">
+                <a href="{% url 'shop:homepage' %}" class="btn btn-primary btn-lg me-3">
+                    <i class="fas fa-home me-2"></i>Continue Shopping
+                </a>
+                <a href="{% url 'checkout:track_order' order.order_number %}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-search me-2"></i>Track Order
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.success-icon {
+    animation: bounce 1s ease-in-out;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.step-icon {
+    transition: transform 0.3s ease;
+}
+
+.step-icon:hover {
+    transform: scale(1.1);
+}
+
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+</style>
+{% endblock %}
