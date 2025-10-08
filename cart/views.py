@@ -7,17 +7,38 @@ from django.conf import settings
 import json
 
 from .models import Cart, CartItem
-from shop.models import Product, ProductVariant
+from shop.models import Product, ProductVariant, PromoCode, DeliveryOption
 
 
 def cart_detail(request):
     """Cart detail view"""
-    # For demo purposes, show a sample cart
+    cart = None
+    cart_items = []
+    cart_total = 0
+    cart_items_count = 0
+    
+    if request.user.is_authenticated:
+        try:
+            cart = Cart.objects.get(user=request.user)
+            cart_items = cart.items.all().select_related('product', 'variant').prefetch_related('product__images')
+            cart_total = cart.total_amount
+            cart_items_count = cart.total_items
+        except Cart.DoesNotExist:
+            cart = None
+    
+    # Get active promo codes and delivery options
+    promo_codes = PromoCode.objects.filter(is_active=True)
+    delivery_options = DeliveryOption.objects.filter(is_active=True)
+    
     context = {
+        'cart': cart,
+        'cart_items': cart_items,
+        'cart_total': cart_total,
+        'cart_items_count': cart_items_count,
+        'promo_codes': promo_codes,
+        'delivery_options': delivery_options,
         'page_title': 'Shopping Cart - Review Your Items',
         'meta_description': 'Review your items and proceed to checkout',
-        'cart_items_count': 4,
-        'cart_total': 1497,
     }
     return render(request, 'cart/cart_detail.html', context)
 
@@ -53,6 +74,8 @@ def add_to_cart(request):
     
     messages.success(request, f'{product.name} added to cart!')
     return redirect('cart:cart_detail')
+
+
 
 
 @login_required
@@ -127,20 +150,6 @@ def ajax_add_to_cart(request):
         if variant_id:
             variant = get_object_or_404(ProductVariant, id=variant_id, product=product)
         
-        # Check stock
-        if variant:
-            if variant.stock_quantity < quantity:
-                return JsonResponse({
-                    'success': False,
-                    'error': 'Insufficient stock'
-                })
-        else:
-            if product.stock_quantity < quantity:
-                return JsonResponse({
-                    'success': False,
-                    'error': 'Insufficient stock'
-                })
-        
         # Get or create cart
         cart, created = Cart.objects.get_or_create(user=request.user)
         
@@ -186,18 +195,22 @@ def ajax_update_cart(request):
         )
         
         if quantity > 0:
-            # Check stock
+            # Check stock (with more flexible validation)
             if cart_item.variant:
-                if cart_item.variant.stock_quantity < quantity:
+                # If variant has stock, check it; otherwise allow up to 10
+                max_quantity = cart_item.variant.stock_quantity if cart_item.variant.stock_quantity > 0 else 10
+                if max_quantity < quantity:
                     return JsonResponse({
                         'success': False,
-                        'error': 'Insufficient stock'
+                        'error': f'Maximum {max_quantity} items allowed'
                     })
             else:
-                if cart_item.product.stock_quantity < quantity:
+                # If product has stock, check it; otherwise allow up to 10
+                max_quantity = cart_item.product.stock_quantity if cart_item.product.stock_quantity > 0 else 10
+                if max_quantity < quantity:
                     return JsonResponse({
                         'success': False,
-                        'error': 'Insufficient stock'
+                        'error': f'Maximum {max_quantity} items allowed'
                     })
             
             cart_item.quantity = quantity
@@ -209,6 +222,7 @@ def ajax_update_cart(request):
         
         return JsonResponse({
             'success': True,
+            'message': f'Quantity updated to {quantity}' if quantity > 0 else 'Item removed from cart',
             'cart_items_count': cart.total_items,
             'cart_total': float(cart.total_amount),
             'item_total': float(cart_item.get_total_price()) if quantity > 0 else 0
@@ -267,4 +281,89 @@ def ajax_get_cart_count(request):
             'success': True,
             'cart_items_count': 0,
             'cart_total': 0
+        })
+
+
+@login_required
+@require_POST
+def validate_promo_code(request):
+    """Validate promo code via AJAX"""
+    try:
+        data = json.loads(request.body)
+        code = data.get('code', '').strip().upper()
+        
+        if not code:
+            return JsonResponse({
+                'success': False,
+                'error': 'Please enter a promo code'
+            })
+        
+        try:
+            promo = PromoCode.objects.get(code=code)
+        except PromoCode.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'error': 'Invalid promo code'
+            })
+        
+        if not promo.is_valid:
+            return JsonResponse({
+                'success': False,
+                'error': 'Promo code is not valid or has expired'
+            })
+        
+        # Get cart total for validation
+        cart = Cart.objects.get(user=request.user)
+        cart_total = float(cart.total_amount)
+        
+        if cart_total < float(promo.min_order_amount):
+            return JsonResponse({
+                'success': False,
+                'error': f'Minimum order amount of ₹{promo.min_order_amount} required'
+            })
+        
+        # Calculate discount
+        discount_amount = promo.calculate_discount(cart_total)
+        
+        return JsonResponse({
+            'success': True,
+            'discount_amount': float(discount_amount),
+            'description': promo.description,
+            'discount_type': promo.discount_type,
+            'discount_value': float(promo.discount_value)
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': str(e)
+        })
+
+
+@login_required
+@require_POST
+def get_delivery_options(request):
+    """Get delivery options via AJAX"""
+    try:
+        delivery_options = DeliveryOption.objects.filter(is_active=True)
+        
+        options = []
+        for option in delivery_options:
+            options.append({
+                'id': option.id,
+                'name': option.name,
+                'description': option.description,
+                'price': float(option.price),
+                'estimated_days': option.estimated_days
+            })
+        
+        return JsonResponse({
+            'success': True,
+            'options': options
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': str(e)
         })

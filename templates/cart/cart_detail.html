@@ -120,6 +120,13 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
 }
 
 .quantity-controls {
@@ -349,6 +356,44 @@
         margin: 0.5rem 0;
     }
 }
+
+/* Success Animations */
+.success-animation {
+    animation: successPulse 0.6s ease;
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    border: 2px solid #28a745;
+}
+
+@keyframes successPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+/* Loading States */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid var(--primary-color);
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 </style>
 {% endblock %}
 
@@ -386,110 +431,69 @@
     <div class="row">
         <!-- Cart Items -->
         <div class="col-lg-8">
-            <!-- Cart Item 1 -->
-            <div class="cart-item">
-                <div class="d-flex">
-                    <div class="item-image">
-                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                             alt="Premium Cotton Leggings">
-                    </div>
-                    <div class="item-details">
-                        <h5 class="item-title">Premium Cotton Ankle Length Leggings</h5>
-                        <div class="item-meta">
-                            <span class="me-3"><strong>Color:</strong> Black</span>
-                            <span class="me-3"><strong>Size:</strong> M</span>
-                            <span><strong>SKU:</strong> WW-LEG-001</span>
+            {% if cart_items %}
+                {% for item in cart_items %}
+                <div class="cart-item" data-item="{{ item.id }}">
+                    <div class="d-flex">
+                        <div class="item-image">
+                            {% with item.product.images.first as first_image %}
+                            <img src="{% if first_image %}{{ first_image.image.url }}{% else %}https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80{% endif %}" 
+                                 alt="{{ item.product.name }}">
+                            {% endwith %}
                         </div>
-                        <div class="item-price">
-                            ₹799 <span class="text-muted text-decoration-line-through fs-6">₹1,299</span>
-                            <span class="badge bg-success ms-2">38% OFF</span>
-                        </div>
-                        <div class="item-actions">
-                            <div class="quantity-controls">
-                                <button class="qty-btn decrease-qty" data-item="1">-</button>
-                                <input type="number" class="qty-input" value="2" min="1" max="10" data-item="1">
-                                <button class="qty-btn increase-qty" data-item="1">+</button>
+                        <div class="item-details">
+                            <h5 class="item-title">{{ item.product.name }}</h5>
+                            <div class="item-meta">
+                                {% if item.variant %}
+                                    <span class="me-3"><strong>Color:</strong> {{ item.variant.color }}</span>
+                                    <span class="me-3"><strong>Size:</strong> {{ item.variant.size }}</span>
+                                {% else %}
+                                    <span class="me-3"><strong>Color:</strong> Default</span>
+                                    <span class="me-3"><strong>Size:</strong> One Size</span>
+                                {% endif %}
+                                <span><strong>SKU:</strong> {{ item.product.sku|default:"N/A" }}</span>
                             </div>
-                            <button class="wishlist-btn" data-item="1">
-                                <i class="far fa-heart me-1"></i>Save for Later
-                            </button>
-                            <button class="remove-btn" data-item="1">
-                                <i class="fas fa-trash me-1"></i>Remove
-                            </button>
+                            <div class="item-price">
+                                {{ currency_symbol }}{{ item.product.selling_price }}
+                                {% if item.product.mrp > item.product.selling_price %}
+                                <span class="text-muted text-decoration-line-through fs-6">{{ currency_symbol }}{{ item.product.mrp }}</span>
+                                <span class="badge bg-success ms-2">{{ item.product.discount_percentage }}% OFF</span>
+                                {% endif %}
+                            </div>
+                            <div class="item-actions">
+                                <div class="quantity-controls">
+                                    <button class="qty-btn decrease-qty" data-item="{{ item.id }}" title="Decrease quantity">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <input type="number" class="qty-input" value="{{ item.quantity }}" min="1" max="25" data-item="{{ item.id }}" title="Quantity">
+                                    <button class="qty-btn increase-qty" data-item="{{ item.id }}" title="Increase quantity">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="wishlist-btn" data-product-id="{{ item.product.id }}" title="Save for later">
+                                        <i class="far fa-heart me-1"></i>Save for Later
+                                    </button>
+                                    <button class="remove-btn" data-item="{{ item.id }}" title="Remove from cart">
+                                        <i class="fas fa-trash me-1"></i>Remove
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>Your cart is empty</h3>
+                    <p>Looks like you haven't added any items to your cart yet. Start shopping to fill it up!</p>
+                    <a href="{% url 'shop:shop' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+                    </a>
+                </div>
+            {% endif %}
 
-            <!-- Cart Item 2 -->
-            <div class="cart-item">
-                <div class="d-flex">
-                    <div class="item-image">
-                        <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                             alt="Palazzo Pants">
-                    </div>
-                    <div class="item-details">
-                        <h5 class="item-title">Designer Palazzo Pants</h5>
-                        <div class="item-meta">
-                            <span class="me-3"><strong>Color:</strong> Navy Blue</span>
-                            <span class="me-3"><strong>Size:</strong> L</span>
-                            <span><strong>SKU:</strong> WW-PAN-002</span>
-                        </div>
-                        <div class="item-price">
-                            ₹1,299 <span class="text-muted text-decoration-line-through fs-6">₹1,899</span>
-                            <span class="badge bg-success ms-2">32% OFF</span>
-                        </div>
-                        <div class="item-actions">
-                            <div class="quantity-controls">
-                                <button class="qty-btn decrease-qty" data-item="2">-</button>
-                                <input type="number" class="qty-input" value="1" min="1" max="10" data-item="2">
-                                <button class="qty-btn increase-qty" data-item="2">+</button>
-                            </div>
-                            <button class="wishlist-btn" data-item="2">
-                                <i class="far fa-heart me-1"></i>Save for Later
-                            </button>
-                            <button class="remove-btn" data-item="2">
-                                <i class="fas fa-trash me-1"></i>Remove
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cart Item 3 -->
-            <div class="cart-item">
-                <div class="d-flex">
-                    <div class="item-image">
-                        <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                             alt="Silk Dupatta">
-                    </div>
-                    <div class="item-details">
-                        <h5 class="item-title">Embroidered Silk Dupatta</h5>
-                        <div class="item-meta">
-                            <span class="me-3"><strong>Color:</strong> Pink</span>
-                            <span class="me-3"><strong>Pattern:</strong> Floral</span>
-                            <span><strong>SKU:</strong> WW-DUP-003</span>
-                        </div>
-                        <div class="item-price">
-                            ₹599 <span class="text-muted text-decoration-line-through fs-6">₹899</span>
-                            <span class="badge bg-success ms-2">33% OFF</span>
-                        </div>
-                        <div class="item-actions">
-                            <div class="quantity-controls">
-                                <button class="qty-btn decrease-qty" data-item="3">-</button>
-                                <input type="number" class="qty-input" value="1" min="1" max="10" data-item="3">
-                                <button class="qty-btn increase-qty" data-item="3">+</button>
-                            </div>
-                            <button class="wishlist-btn" data-item="3">
-                                <i class="far fa-heart me-1"></i>Save for Later
-                            </button>
-                            <button class="remove-btn" data-item="3">
-                                <i class="fas fa-trash me-1"></i>Remove
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- Cart Summary -->
@@ -500,17 +504,19 @@
                 </h3>
 
                 <div class="summary-row">
-                    <span>Items (4):</span>
-                    <span>₹2,697</span>
+                    <span>Items ({{ cart_items_count }}):</span>
+                    <span>{{ currency_symbol }}{{ cart_total }}</span>
                 </div>
+                {% if cart_total > 0 %}
                 <div class="summary-row">
                     <span>Discount:</span>
-                    <span class="text-success">-₹1,200</span>
+                    <span class="text-success">-{{ currency_symbol }}0</span>
                 </div>
                 <div class="summary-row">
                     <span>Delivery:</span>
                     <span class="text-success">Free</span>
                 </div>
+                {% endif %}
 
                 <!-- Promo Code -->
                 <div class="promo-code">
@@ -521,10 +527,18 @@
                         <input type="text" class="form-control" placeholder="Enter promo code" id="promoCode">
                         <button class="btn btn-outline-primary" id="applyPromo">Apply</button>
                     </div>
-                    <small class="text-muted mt-1 d-block">
-                        <i class="fas fa-info-circle me-1"></i>
-                        Use code WELCOME10 for 10% off
-                    </small>
+                    <div class="promo-message mt-2" id="promoMessage"></div>
+                    
+                    <!-- Available Promo Codes -->
+                    <div class="available-promos mt-3">
+                        <small class="text-muted">Available codes:</small>
+                        {% for promo in promo_codes %}
+                        <div class="promo-item d-flex align-items-center mb-1">
+                            <span class="badge bg-light text-dark me-2">{{ promo.code }}</span>
+                            <small class="text-muted">{{ promo.description }}</small>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
 
                 <!-- Shipping Options -->
@@ -532,25 +546,22 @@
                     <h6 class="mb-2">
                         <i class="fas fa-shipping-fast me-2"></i>Delivery Options
                     </h6>
-                    <div class="shipping-option selected">
+                    {% for delivery in delivery_options %}
+                    <div class="shipping-option {% if forloop.first %}selected{% endif %}" data-delivery-id="{{ delivery.id }}" data-delivery-price="{{ delivery.price }}">
                         <div>
-                            <strong>Standard Delivery</strong>
-                            <div class="small text-muted">5-7 business days</div>
+                            <strong>{{ delivery.name }}</strong>
+                            <div class="small text-muted">{{ delivery.description }} - {{ delivery.estimated_days }}</div>
                         </div>
-                        <span class="text-success">Free</span>
+                        <span class="{% if delivery.price == 0 %}text-success{% endif %}">
+                            {% if delivery.price == 0 %}Free{% else %}₹{{ delivery.price }}{% endif %}
+                        </span>
                     </div>
-                    <div class="shipping-option">
-                        <div>
-                            <strong>Express Delivery</strong>
-                            <div class="small text-muted">2-3 business days</div>
-                        </div>
-                        <span>₹99</span>
-                    </div>
+                    {% endfor %}
                 </div>
 
                 <div class="summary-row total">
                     <span>Total Amount:</span>
-                    <span>₹1,497</span>
+                    <span>{{ currency_symbol }}{{ cart_total }}</span>
                 </div>
 
                 <div class="d-grid gap-2 mt-3">
@@ -619,9 +630,23 @@
 
 {% block extra_js %}
 <script>
+// Store the original cart total for calculations
+let originalCartTotal = 0;
+
 document.addEventListener('DOMContentLoaded', function() {
     initializeCart();
+    initializeDeliveryOptions();
+    storeOriginalCartTotal();
 });
+
+function storeOriginalCartTotal() {
+    // Store the original cart total when page loads
+    const totalRow = document.querySelector('.summary-row.total span:last-child');
+    if (totalRow) {
+        originalCartTotal = parseFloat(totalRow.textContent.replace('₹', ''));
+        console.log('Original cart total stored:', originalCartTotal);
+    }
+}
 
 function initializeCart() {
     // Quantity controls
@@ -652,8 +677,7 @@ function initializeQuantityControls() {
             const currentValue = parseInt(input.value);
             
             if (currentValue > 1) {
-                input.value = currentValue - 1;
-                updateItemTotal(itemId);
+                updateCartItemQuantity(itemId, currentValue - 1);
             }
         });
     });
@@ -667,8 +691,18 @@ function initializeQuantityControls() {
             const maxValue = parseInt(input.max) || 10;
             
             if (currentValue < maxValue) {
-                input.value = currentValue + 1;
-                updateItemTotal(itemId);
+                updateCartItemQuantity(itemId, currentValue + 1);
+            }
+        });
+    });
+    
+    // Direct input change
+    document.querySelectorAll('.qty-input').forEach(input => {
+        input.addEventListener('change', () => {
+            const itemId = input.dataset.item;
+            const quantity = parseInt(input.value);
+            if (quantity > 0) {
+                updateCartItemQuantity(itemId, quantity);
             }
         });
     });
@@ -695,7 +729,7 @@ function initializeRemoveButtons() {
             
             // Show confirmation
             if (confirm('Are you sure you want to remove this item from your cart?')) {
-                removeItem(itemId);
+                removeCartItem(itemId);
             }
         });
     });
@@ -729,27 +763,73 @@ function initializePromoCode() {
     const applyBtn = document.getElementById('applyPromo');
     const promoInput = document.getElementById('promoCode');
     
-    applyBtn.addEventListener('click', () => {
-        const code = promoInput.value.trim().toUpperCase();
+    applyBtn.addEventListener('click', async () => {
+        const code = promoInput.value.trim();
         
-        if (code === 'WELCOME10') {
-            showNotification('Promo code applied! 10% discount added.', 'success');
-            applyPromoDiscount(10);
-            applyBtn.textContent = 'Applied';
-            applyBtn.classList.remove('btn-outline-primary');
-            applyBtn.classList.add('btn-success');
-            applyBtn.disabled = true;
-        } else if (code === 'SAVE20') {
-            showNotification('Promo code applied! 20% discount added.', 'success');
-            applyPromoDiscount(20);
-            applyBtn.textContent = 'Applied';
-            applyBtn.classList.remove('btn-outline-primary');
-            applyBtn.classList.add('btn-success');
-            applyBtn.disabled = true;
-        } else if (code) {
-            showNotification('Invalid promo code. Please try again.', 'error');
-        } else {
+        if (!code) {
             showNotification('Please enter a promo code.', 'warning');
+            return;
+        }
+        
+        try {
+            applyBtn.disabled = true;
+            applyBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Validating...';
+            
+            const response = await fetch('/cart/ajax/validate-promo/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ code: code })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                const discountAmount = data.discount_amount;
+                const description = data.description;
+                
+                showNotification(`Promo code applied! ${description} - ₹${discountAmount} discount.`, 'success');
+                
+                // Update UI
+                applyBtn.textContent = 'Applied';
+                applyBtn.classList.remove('btn-outline-primary');
+                applyBtn.classList.add('btn-success');
+                applyBtn.disabled = true;
+                
+                // Show discount in summary
+                updateCartSummaryWithDiscount(discountAmount);
+                
+                // Show promo message
+                const promoMessage = document.getElementById('promoMessage');
+                if (promoMessage) {
+                    promoMessage.innerHTML = `
+                        <div class="alert alert-success alert-sm">
+                            <i class="fas fa-check-circle me-1"></i>
+                            ${description} - ₹${discountAmount} discount applied
+                        </div>
+                    `;
+                }
+            } else {
+                showNotification(data.error || 'Invalid promo code', 'error');
+                const promoMessage = document.getElementById('promoMessage');
+                if (promoMessage) {
+                    promoMessage.innerHTML = `
+                        <div class="alert alert-danger alert-sm">
+                            <i class="fas fa-exclamation-circle me-1"></i>
+                            ${data.error}
+                        </div>
+                    `;
+                }
+            }
+        } catch (error) {
+            console.error('Promo validation error:', error);
+            showNotification('Network error. Please try again.', 'error');
+        } finally {
+            if (!applyBtn.disabled) {
+                applyBtn.innerHTML = 'Apply';
+            }
         }
     });
     
@@ -874,24 +954,34 @@ function showEmptyCart() {
     document.getElementById('emptyCartState').classList.remove('d-none');
 }
 
+// Notification function for cart
 function showNotification(message, type = 'info') {
+    // Create notification container if it doesn't exist
+    let container = document.querySelector('.notification-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.className = 'notification-container position-fixed top-0 end-0 m-3';
+        container.style.zIndex = '9999';
+        document.body.appendChild(container);
+    }
+    
     const notification = document.createElement('div');
-    notification.className = `toast position-fixed top-0 end-0 m-3 bg-${type} text-white`;
-    notification.style.zIndex = '9999';
+    notification.className = `alert alert-${type === 'success' ? 'success' : type === 'error' ? 'danger' : type === 'warning' ? 'warning' : 'info'} alert-dismissible fade show`;
+    notification.style.minWidth = '300px';
     notification.innerHTML = `
-        <div class="toast-body d-flex align-items-center">
-            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
-            ${message}
-            <button type="button" class="btn-close btn-close-white ms-auto" onclick="this.closest('.toast').remove()"></button>
-        </div>
+        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     `;
     
-    document.body.appendChild(notification);
+    container.appendChild(notification);
     
     // Auto remove after 3 seconds
     setTimeout(() => {
-        notification.style.opacity = '0';
-        setTimeout(() => notification.remove(), 300);
+        if (notification.parentNode) {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }
     }, 3000);
 }
 
@@ -912,5 +1002,269 @@ document.querySelectorAll('.suggested-grid .btn').forEach(btn => {
         }, 2000);
     });
 });
+
+// AJAX Cart Functions
+function updateCartItemQuantity(itemId, quantity) {
+    // Add loading state to quantity controls
+    const cartItem = document.querySelector(`[data-item="${itemId}"]`);
+    const qtyControls = cartItem?.querySelector('.quantity-controls');
+    if (qtyControls) {
+        qtyControls.style.opacity = '0.6';
+        qtyControls.style.pointerEvents = 'none';
+    }
+    
+    fetch('/cart/ajax/update/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({ 
+            item_id: itemId,
+            quantity: quantity
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update quantity input
+            const qtyInput = document.querySelector(`input[data-item="${itemId}"]`);
+            if (qtyInput) {
+                qtyInput.value = quantity;
+            }
+            
+            // Update cart summary
+            updateCartSummary(data.cart_items_count, data.cart_total);
+            
+            // Add success animation
+            if (cartItem) {
+                cartItem.classList.add('success-animation');
+                setTimeout(() => cartItem.classList.remove('success-animation'), 600);
+            }
+            
+            showNotification(data.message, 'success');
+        } else {
+            showNotification(data.error || 'Failed to update quantity', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error updating quantity:', error);
+        showNotification('Network error. Please try again.', 'error');
+    })
+    .finally(() => {
+        // Remove loading state
+        if (qtyControls) {
+            qtyControls.style.opacity = '1';
+            qtyControls.style.pointerEvents = 'auto';
+        }
+    });
+}
+
+function removeCartItem(itemId) {
+    fetch('/cart/ajax/remove/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({ item_id: itemId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Remove the item from DOM
+            const cartItem = document.querySelector(`[data-item="${itemId}"]`);
+            if (cartItem) {
+                cartItem.remove();
+            }
+            
+            // Update cart summary
+            updateCartSummary(data.cart_items_count, data.cart_total);
+            
+            // Show success message
+            showNotification(data.message, 'success');
+            
+            // If cart is empty, show empty state
+            if (data.cart_items_count === 0) {
+                showEmptyCartState();
+            }
+        } else {
+            showNotification(data.error || 'Failed to remove item', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error removing item:', error);
+        showNotification('Network error. Please try again.', 'error');
+    });
+}
+
+function updateCartSummary(itemsCount, total) {
+    // Update cart counter in navbar
+    const cartCounter = document.querySelector('.cart-badge');
+    if (cartCounter) {
+        cartCounter.textContent = itemsCount;
+    }
+    
+    // Update cart summary in sidebar
+    const summaryItems = document.querySelector('.summary-row span:last-child');
+    const summaryTotal = document.querySelector('.summary-row.total span:last-child');
+    
+    if (summaryItems) {
+        summaryItems.textContent = `₹${total}`;
+    }
+    if (summaryTotal) {
+        summaryTotal.textContent = `₹${total}`;
+    }
+}
+
+function showEmptyCartState() {
+    const cartItemsContainer = document.querySelector('.col-lg-8');
+    if (cartItemsContainer) {
+        cartItemsContainer.innerHTML = `
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <h3>Your cart is empty</h3>
+                <p>Looks like you haven't added any items to your cart yet. Start shopping to fill it up!</p>
+                <a href="/shop/" class="btn btn-primary btn-lg">
+                    <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+                </a>
+            </div>
+        `;
+    }
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Additional functions for dynamic promo and delivery
+function updateCartSummaryWithDiscount(discountAmount) {
+    // Add discount row to summary
+    const summaryContainer = document.querySelector('.cart-summary');
+    let discountRow = document.querySelector('.discount-row');
+    
+    if (!discountRow) {
+        discountRow = document.createElement('div');
+        discountRow.className = 'summary-row discount-row';
+        discountRow.innerHTML = `
+            <span>Discount:</span>
+            <span class="text-success">-₹${discountAmount}</span>
+        `;
+        
+        // Insert before total row
+        const totalRow = document.querySelector('.summary-row.total');
+        if (totalRow) {
+            totalRow.parentNode.insertBefore(discountRow, totalRow);
+        }
+    } else {
+        discountRow.innerHTML = `
+            <span>Discount:</span>
+            <span class="text-success">-₹${discountAmount}</span>
+        `;
+    }
+    
+    // Update total amount considering delivery costs
+    updateTotalWithDiscountAndDelivery(discountAmount);
+}
+
+function updateTotalWithDiscountAndDelivery(discountAmount) {
+    // Start with original cart total
+    let newTotal = originalCartTotal;
+    
+    // Subtract discount
+    newTotal = Math.max(0, newTotal - discountAmount);
+    
+    // Add delivery cost if any
+    const deliveryRow = document.querySelector('.delivery-row span:last-child');
+    if (deliveryRow) {
+        const deliveryText = deliveryRow.textContent;
+        const deliveryPrice = deliveryText === 'Free' ? 0 : parseFloat(deliveryText.replace('₹', ''));
+        newTotal = newTotal + deliveryPrice;
+    }
+    
+    // Update the total amount display
+    const summaryTotal = document.querySelector('.summary-row.total span:last-child');
+    if (summaryTotal) {
+        summaryTotal.textContent = `₹${newTotal}`;
+    }
+}
+
+// Delivery option selection
+function initializeDeliveryOptions() {
+    const deliveryOptions = document.querySelectorAll('.shipping-option');
+    
+    deliveryOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            // Remove selected class from all options
+            deliveryOptions.forEach(opt => opt.classList.remove('selected'));
+            
+            // Add selected class to clicked option
+            option.classList.add('selected');
+            
+            // Update delivery price in summary
+            const deliveryPrice = parseFloat(option.dataset.deliveryPrice);
+            updateDeliveryPrice(deliveryPrice);
+        });
+    });
+}
+
+function updateDeliveryPrice(price) {
+    let deliveryRow = document.querySelector('.delivery-row');
+    
+    if (!deliveryRow) {
+        deliveryRow = document.createElement('div');
+        deliveryRow.className = 'summary-row delivery-row';
+        
+        // Insert before total row
+        const totalRow = document.querySelector('.summary-row.total');
+        if (totalRow) {
+            totalRow.parentNode.insertBefore(deliveryRow, totalRow);
+        }
+    }
+    
+    deliveryRow.innerHTML = `
+        <span>Delivery:</span>
+        <span class="${price === 0 ? 'text-success' : ''}">${price === 0 ? 'Free' : `₹${price}`}</span>
+    `;
+    
+    // Update the total amount with delivery price
+    updateTotalWithDelivery(price);
+}
+
+function updateTotalWithDelivery(deliveryPrice) {
+    // Start with original cart total
+    let newTotal = originalCartTotal;
+    console.log('Base total:', newTotal, 'Delivery price:', deliveryPrice);
+    
+    // Check if there's a discount applied and subtract it
+    const discountRow = document.querySelector('.discount-row span:last-child');
+    if (discountRow) {
+        const discountText = discountRow.textContent;
+        const discountAmount = parseFloat(discountText.replace('-₹', ''));
+        newTotal = Math.max(0, newTotal - discountAmount);
+        console.log('After discount:', newTotal);
+    }
+    
+    // Add delivery cost
+    newTotal = newTotal + deliveryPrice;
+    console.log('Final total with delivery:', newTotal);
+    
+    // Update the total amount display
+    const summaryTotal = document.querySelector('.summary-row.total span:last-child');
+    if (summaryTotal) {
+        summaryTotal.textContent = `₹${newTotal}`;
+    }
+}
 </script>
 {% endblock %}

@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.utils.html import format_html
 from .models import (
     Category, SubCategory, Product, ProductImage, 
-    ProductVariant, Review, Wishlist, RecentlyViewed, WhatsAppSubscription
+    ProductVariant, Review, Wishlist, RecentlyViewed, WhatsAppSubscription,
+    PromoCode, DeliveryOption
 )
 
 
@@ -186,3 +187,48 @@ class RecentlyViewedAdmin(admin.ModelAdmin):
     list_filter = ('viewed_at', 'product__category')
     search_fields = ('user__email', 'product__name')
     ordering = ('-viewed_at',)
+
+
+@admin.register(PromoCode)
+class PromoCodeAdmin(admin.ModelAdmin):
+    list_display = ('code', 'description', 'discount_type', 'discount_value', 'is_active', 'valid_until', 'used_count')
+    list_filter = ('is_active', 'discount_type', 'valid_from', 'valid_until')
+    search_fields = ('code', 'description')
+    readonly_fields = ('used_count', 'created_at')
+    ordering = ('-created_at',)
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('code', 'description', 'is_active')
+        }),
+        ('Discount Settings', {
+            'fields': ('discount_type', 'discount_value', 'min_order_amount', 'max_discount')
+        }),
+        ('Usage Limits', {
+            'fields': ('usage_limit', 'used_count')
+        }),
+        ('Validity Period', {
+            'fields': ('valid_from', 'valid_until')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at',),
+            'classes': ('collapse',)
+        })
+    )
+
+
+@admin.register(DeliveryOption)
+class DeliveryOptionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price', 'estimated_days', 'is_active', 'sort_order')
+    list_filter = ('is_active', 'price')
+    search_fields = ('name', 'description')
+    ordering = ('sort_order', 'name')
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('name', 'description', 'is_active')
+        }),
+        ('Pricing & Delivery', {
+            'fields': ('price', 'estimated_days', 'sort_order')
+        })
+    )

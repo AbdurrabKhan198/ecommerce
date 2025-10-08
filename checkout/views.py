@@ -12,10 +12,52 @@ from accounts.models import Address
 from .forms import ShippingAddressForm, PaymentForm
 
 
+@login_required
 def checkout(request):
-    """Main checkout page"""
-    # For demo purposes, show sample checkout
+    """Main checkout page with dynamic data"""
+    # Get user's cart
+    try:
+        cart = Cart.objects.get(user=request.user)
+        cart_items = cart.items.all().select_related('product', 'variant').prefetch_related('product__images')
+    except Cart.DoesNotExist:
+        cart = None
+        cart_items = []
+    
+    # Get user's saved addresses
+    addresses = Address.objects.filter(user=request.user).order_by('-is_default', '-created_at')
+    
+    # Get delivery options from shop models
+    from shop.models import DeliveryOption
+    delivery_options = DeliveryOption.objects.filter(is_active=True).order_by('sort_order')
+    
+    # Get available promo codes
+    from shop.models import PromoCode
+    promo_codes = PromoCode.objects.filter(is_active=True).order_by('-discount_value')
+    
+    # Calculate totals
+    cart_total = cart.total_amount if cart else 0
+    cart_items_count = cart.total_items if cart else 0
+    
+    # Check for applied coupon in session
+    applied_coupon = request.session.get('applied_coupon', None)
+    discount_amount = 0
+    if applied_coupon:
+        discount_amount = applied_coupon.get('discount', 0)
+    
+    # Calculate final total
+    final_total = cart_total - discount_amount
+    
     context = {
+        'cart': cart,
+        'cart_items': cart_items,
+        'cart_total': cart_total,
+        'cart_items_count': cart_items_count,
+        'addresses': addresses,
+        'delivery_options': delivery_options,
+        'promo_codes': promo_codes,
+        'applied_coupon': applied_coupon,
+        'discount_amount': discount_amount,
+        'final_total': final_total,
         'page_title': 'Checkout - Complete Your Order',
         'meta_description': 'Complete your order safely and securely',
     }
@@ -188,7 +230,9 @@ def apply_coupon(request):
         coupon_code = data.get('coupon_code', '').upper()
         
         try:
-            coupon = Coupon.objects.get(code=coupon_code)
+            # Try PromoCode first (new model)
+            from shop.models import PromoCode
+            coupon = PromoCode.objects.get(code=coupon_code)
             
             if not coupon.is_valid:
                 return JsonResponse({
@@ -212,7 +256,7 @@ def apply_coupon(request):
             if discount == 0:
                 return JsonResponse({
                     'success': False,
-                    'error': f'Minimum order amount is ₹{coupon.minimum_order_amount}'
+                    'error': f'Minimum order amount is ₹{coupon.min_order_amount}'
                 })
             
             # Store in session
@@ -230,11 +274,56 @@ def apply_coupon(request):
                 'message': f'Coupon applied! You saved ₹{discount}'
             })
             
-        except Coupon.DoesNotExist:
-            return JsonResponse({
-                'success': False,
-                'error': 'Invalid coupon code.'
-            })
+        except PromoCode.DoesNotExist:
+            # Fallback to old Coupon model
+            try:
+                coupon = Coupon.objects.get(code=coupon_code)
+                
+                if not coupon.is_valid:
+                    return JsonResponse({
+                        'success': False,
+                        'error': 'This coupon is not valid or has expired.'
+                    })
+                
+                # Get cart total
+                try:
+                    cart = Cart.objects.get(user=request.user)
+                    cart_total = cart.total_amount
+                except Cart.DoesNotExist:
+                    return JsonResponse({
+                        'success': False,
+                        'error': 'Your cart is empty.'
+                    })
+                
+                # Calculate discount
+                discount = coupon.calculate_discount(cart_total)
+                
+                if discount == 0:
+                    return JsonResponse({
+                        'success': False,
+                        'error': f'Minimum order amount is ₹{coupon.minimum_order_amount}'
+                    })
+                
+                # Store in session
+                request.session['applied_coupon'] = {
+                    'code': coupon.code,
+                    'discount': float(discount),
+                    'type': coupon.discount_type,
+                    'value': float(coupon.discount_value)
+                }
+                
+                return JsonResponse({
+                    'success': True,
+                    'discount': discount,
+                    'new_total': cart_total - discount,
+                    'message': f'Coupon applied! You saved ₹{discount}'
+                })
+                
+            except Coupon.DoesNotExist:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Invalid coupon code.'
+                })
             
     except Exception as e:
         return JsonResponse({
@@ -268,4 +357,107 @@ def remove_coupon(request):
         return JsonResponse({
             'success': False,
             'error': 'Something went wrong. Please try again.'
+        })
+
+
+@login_required
+@require_POST
+def place_order(request):
+    """Place order via AJAX"""
+    try:
+        data = json.loads(request.body)
+        
+        # Get user's cart
+        try:
+            cart = Cart.objects.get(user=request.user)
+            cart_items = cart.items.all()
+        except Cart.DoesNotExist:
+            return JsonResponse({
+                'success': False,
+                'error': 'Your cart is empty.'
+            })
+        
+        if not cart_items.exists():
+            return JsonResponse({
+                'success': False,
+                'error': 'Your cart is empty.'
+            })
+        
+        # Get selected address
+        address_id = data.get('selected_address')
+        if address_id:
+            try:
+                from accounts.models import Address
+                address = Address.objects.get(id=address_id, user=request.user)
+            except Address.DoesNotExist:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Selected address not found.'
+                })
+        else:
+            return JsonResponse({
+                'success': False,
+                'error': 'Please select a shipping address.'
+            })
+        
+        # Get applied coupon
+        applied_coupon = request.session.get('applied_coupon', None)
+        discount_amount = applied_coupon.get('discount', 0) if applied_coupon else 0
+        
+        # Calculate totals
+        subtotal = cart.total_amount
+        shipping_cost = 0  # Free shipping for now
+        total_amount = subtotal - discount_amount + shipping_cost
+        
+        # Create order
+        order = Order.objects.create(
+            user=request.user,
+            # Shipping address
+            shipping_full_name=f"{data.get('first_name', '')} {data.get('last_name', '')}".strip(),
+            shipping_phone=data.get('phone', ''),
+            shipping_address_line_1=address.address_line_1,
+            shipping_address_line_2=address.address_line_2 or '',
+            shipping_city=address.city,
+            shipping_state=address.state,
+            shipping_pin_code=address.pin_code,
+            # Payment info
+            payment_method='cod',  # Default to COD for now
+            # Totals
+            subtotal=subtotal,
+            shipping_cost=shipping_cost,
+            discount_amount=discount_amount,
+            total_amount=total_amount,
+        )
+        
+        # Create order items
+        for cart_item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                product=cart_item.product,
+                variant=cart_item.variant,
+                product_name=cart_item.product.name,
+                product_price=cart_item.product.selling_price,
+                variant_info=f"{cart_item.variant.size} - {cart_item.variant.color}" if cart_item.variant else "Default",
+                quantity=cart_item.quantity,
+                total_price=cart_item.get_total_price(),
+            )
+        
+        # Clear cart
+        cart.items.all().delete()
+        
+        # Clear applied coupon
+        if 'applied_coupon' in request.session:
+            del request.session['applied_coupon']
+        
+        return JsonResponse({
+            'success': True,
+            'order_number': order.order_number,
+            'redirect_url': f'/checkout/confirmation/{order.order_number}/',
+            'message': 'Order placed successfully!'
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': f'Something went wrong: {str(e)}'
         })

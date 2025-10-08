@@ -263,3 +263,65 @@ class WhatsAppSubscription(models.Model):
 
     def __str__(self):
         return f"{self.phone_number} - {'Active' if self.is_active else 'Inactive'}"
+
+
+class PromoCode(models.Model):
+    """Promo code model for discounts"""
+    code = models.CharField(max_length=20, unique=True)
+    description = models.CharField(max_length=100)
+    discount_type = models.CharField(max_length=10, choices=[
+        ('percentage', 'Percentage'),
+        ('fixed', 'Fixed Amount'),
+    ])
+    discount_value = models.DecimalField(max_digits=10, decimal_places=2)
+    min_order_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    max_discount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    usage_limit = models.PositiveIntegerField(null=True, blank=True)
+    used_count = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    valid_from = models.DateTimeField()
+    valid_until = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.code} - {self.description}"
+    
+    @property
+    def is_valid(self):
+        from django.utils import timezone
+        now = timezone.now()
+        return (
+            self.is_active and
+            self.valid_from <= now <= self.valid_until and
+            (self.usage_limit is None or self.used_count < self.usage_limit)
+        )
+    
+    def calculate_discount(self, order_amount):
+        """Calculate discount amount for given order amount"""
+        if not self.is_valid or order_amount < self.min_order_amount:
+            return 0
+        
+        if self.discount_type == 'percentage':
+            discount = (order_amount * self.discount_value) / 100
+            if self.max_discount:
+                discount = min(discount, self.max_discount)
+        else:  # fixed
+            discount = self.discount_value
+        
+        return min(discount, order_amount)
+
+
+class DeliveryOption(models.Model):
+    """Delivery options model"""
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=200)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    estimated_days = models.CharField(max_length=20)  # e.g., "2-3 days", "1 week"
+    is_active = models.BooleanField(default=True)
+    sort_order = models.PositiveIntegerField(default=0)
+    
+    class Meta:
+        ordering = ['sort_order', 'name']
+    
+    def __str__(self):
+        return f"{self.name} - {self.estimated_days}"

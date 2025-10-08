@@ -120,17 +120,62 @@ function initializeCartFeatures() {
         // Remove existing listeners to prevent duplicates
         btn.removeEventListener('click', btn._clickHandler);
         
-        btn._clickHandler = (e) => {
+        btn._clickHandler = async (e) => {
             e.preventDefault();
-            btn.innerHTML = '<i class="fas fa-check me-2"></i>Added!';
-            btn.classList.add('btn-success');
-            updateCartCounter();
-            showNotification('Product added to cart!', 'success');
+            const productId = btn.dataset.productId;
+            if (!productId) return;
             
-            setTimeout(() => {
-                btn.innerHTML = '<i class="fas fa-shopping-cart me-2"></i>Add to Cart';
-                btn.classList.remove('btn-success');
-            }, 2000);
+            // Check if user is authenticated
+            const isAuthenticated = document.body.classList.contains('authenticated') || 
+                                   document.querySelector('meta[name="user-authenticated"]');
+            
+            if (!isAuthenticated) {
+                showNotification('Please login to add items to cart', 'warning');
+                return;
+            }
+            
+            try {
+                // Show loading state
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Adding...';
+                btn.disabled = true;
+                
+                const response = await fetch('/cart/ajax/add/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ 
+                        product_id: productId,
+                        quantity: 1
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    btn.innerHTML = '<i class="fas fa-check me-2"></i>Added!';
+                    btn.classList.add('btn-success');
+                    updateCartCounter();
+                    showNotification(data.message, 'success');
+                    
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.classList.remove('btn-success');
+                        btn.disabled = false;
+                    }, 2000);
+                } else {
+                    showNotification(data.error || 'Failed to add to cart', 'error');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Cart error:', error);
+                showNotification('Network error. Please try again.', 'error');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
         };
         
         btn.addEventListener('click', btn._clickHandler);

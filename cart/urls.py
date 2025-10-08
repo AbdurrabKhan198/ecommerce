@@ -16,4 +16,6 @@ urlpatterns = [
     path('ajax/update/', views.ajax_update_cart, name='ajax_update_cart'),
     path('ajax/remove/', views.ajax_remove_from_cart, name='ajax_remove_from_cart'),
     path('ajax/get-count/', views.ajax_get_cart_count, name='ajax_get_cart_count'),
+    path('ajax/validate-promo/', views.validate_promo_code, name='validate_promo_code'),
+    path('ajax/delivery-options/', views.get_delivery_options, name='get_delivery_options'),
 ]

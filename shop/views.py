@@ -492,3 +492,5 @@ def whatsapp_subscribe(request):
             'success': False,
             'message': form.errors.get('phone_number', ['Invalid WhatsApp number'])[0]
         })
+
+

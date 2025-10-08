@@ -19,6 +19,10 @@ urlpatterns = [
     path('payment-failed/', views.payment_failed, name='payment_failed'),
     
     # Coupons
-    path('ajax/apply-coupon/', views.apply_coupon, name='apply_coupon'),
+    path('apply-coupon/', views.apply_coupon, name='apply_coupon'),
+    path('ajax/apply-coupon/', views.apply_coupon, name='apply_coupon_ajax'),
     path('ajax/remove-coupon/', views.remove_coupon, name='remove_coupon'),
+    
+    # Order placement
+    path('place-order/', views.place_order, name='place_order'),
 ]

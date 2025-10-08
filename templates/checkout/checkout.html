@@ -351,13 +351,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input type="text" class="form-control" id="firstName" placeholder="First Name" value="Priya">
+                                <input type="text" class="form-control" id="firstName" placeholder="First Name" value="{{ user.first_name|default:'' }}">
                                 <label for="firstName">First Name *</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input type="text" class="form-control" id="lastName" placeholder="Last Name" value="Sharma">
+                                <input type="text" class="form-control" id="lastName" placeholder="Last Name" value="{{ user.last_name|default:'' }}">
                                 <label for="lastName">Last Name *</label>
                             </div>
                         </div>
@@ -366,13 +366,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input type="email" class="form-control" id="email" placeholder="Email" value="priya.sharma@example.com">
+                                <input type="email" class="form-control" id="email" placeholder="Email" value="{{ user.email|default:'' }}">
                                 <label for="email">Email Address *</label>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating">
-                                <input type="tel" class="form-control" id="phone" placeholder="Phone" value="+91 7860247786">
+                                <input type="tel" class="form-control" id="phone" placeholder="Phone" value="">
                                 <label for="phone">Phone Number *</label>
                             </div>
                         </div>
@@ -386,27 +386,33 @@
                     </h3>
                     
                     <!-- Saved Addresses -->
+                    {% if addresses %}
                     <div class="row mb-3">
+                        {% for address in addresses %}
                         <div class="col-md-6">
-                            <div class="address-card selected">
-                                <h6 class="fw-bold mb-2">Home Address</h6>
-                                <p class="mb-1">123 MG Road, Sector 14</p>
-                                <p class="mb-1">Gurgaon, Haryana 122001</p>
-                                <p class="mb-0 text-muted">India</p>
+                            <div class="address-card {% if address.is_default or forloop.first %}selected{% endif %}" data-address-id="{{ address.id }}">
+                                <h6 class="fw-bold mb-2">{{ address.full_name }}</h6>
+                                <p class="mb-1">{{ address.address_line_1 }}</p>
+                                {% if address.address_line_2 %}
+                                <p class="mb-1">{{ address.address_line_2 }}</p>
+                                {% endif %}
+                                <p class="mb-1">{{ address.city }}, {{ address.state }} {{ address.pin_code }}</p>
+                                <p class="mb-0 text-muted">{{ address.country|default:"India" }}</p>
+                                {% if address.is_default %}
                                 <small class="text-success">
                                     <i class="fas fa-check-circle me-1"></i>Default Address
                                 </small>
+                                {% endif %}
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="address-card">
-                                <h6 class="fw-bold mb-2">Office Address</h6>
-                                <p class="mb-1">Tower B, Cyber City</p>
-                                <p class="mb-1">Gurgaon, Haryana 122002</p>
-                                <p class="mb-0 text-muted">India</p>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
+                    {% else %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        No saved addresses found. Please add a new address.
+                    </div>
+                    {% endif %}
                     
                     <button class="btn btn-outline-primary">
                         <i class="fas fa-plus me-2"></i>Add New Address
@@ -420,24 +426,21 @@
                     </h3>
                     
                     <div class="delivery-options">
-                        <div class="delivery-option selected">
-                            <i class="fas fa-truck"></i>
-                            <h6>Standard Delivery</h6>
-                            <p class="small text-muted mb-2">5-7 business days</p>
-                            <div class="price">Free</div>
+                        {% for delivery in delivery_options %}
+                        <div class="delivery-option {% if forloop.first %}selected{% endif %}" data-delivery-id="{{ delivery.id }}" data-delivery-price="{{ delivery.price }}">
+                            <i class="fas fa-{% if 'standard' in delivery.name.lower %}truck{% elif 'express' in delivery.name.lower %}shipping-fast{% elif 'same' in delivery.name.lower %}clock{% else %}truck{% endif %}"></i>
+                            <h6>{{ delivery.name }}</h6>
+                            <p class="small text-muted mb-2">{{ delivery.description }}</p>
+                            <div class="price {% if delivery.price == 0 %}text-success{% endif %}">
+                                {% if delivery.price == 0 %}Free{% else %}₹{{ delivery.price }}{% endif %}
+                            </div>
                         </div>
-                        <div class="delivery-option">
-                            <i class="fas fa-shipping-fast"></i>
-                            <h6>Express Delivery</h6>
-                            <p class="small text-muted mb-2">2-3 business days</p>
-                            <div class="price">₹99</div>
+                        {% empty %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            No delivery options available at the moment.
                         </div>
-                        <div class="delivery-option">
-                            <i class="fas fa-clock"></i>
-                            <h6>Same Day Delivery</h6>
-                            <p class="small text-muted mb-2">Within 24 hours</p>
-                            <div class="price">₹199</div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
 
@@ -524,38 +527,33 @@
                     </h3>
 
                     <!-- Cart Items -->
-                    <div class="summary-item">
-                        <div class="item-image">
-                            <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Product">
+                    {% if cart_items %}
+                        {% for item in cart_items %}
+                        <div class="summary-item">
+                            <div class="item-image">
+                                {% with item.product.images.first as first_image %}
+                                <img src="{% if first_image %}{{ first_image.image.url }}{% else %}https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80{% endif %}" alt="{{ item.product.name }}">
+                                {% endwith %}
+                            </div>
+                            <div class="item-details">
+                                <div class="item-name">{{ item.product.name }}</div>
+                                <div class="item-meta">
+                                    {% if item.variant %}
+                                        {{ item.variant.color }} • {{ item.variant.size }} • Qty: {{ item.quantity }}
+                                    {% else %}
+                                        Default • One Size • Qty: {{ item.quantity }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="item-price">₹{{ item.get_total_price }}</div>
                         </div>
-                        <div class="item-details">
-                            <div class="item-name">Cotton Leggings</div>
-                            <div class="item-meta">Black • Size M • Qty: 2</div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="alert alert-warning text-center">
+                            <i class="fas fa-shopping-cart fa-2x mb-2"></i>
+                            <p class="mb-0">Your cart is empty</p>
                         </div>
-                        <div class="item-price">₹799</div>
-                    </div>
-
-                    <div class="summary-item">
-                        <div class="item-image">
-                            <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Product">
-                        </div>
-                        <div class="item-details">
-                            <div class="item-name">Palazzo Pants</div>
-                            <div class="item-meta">Navy • Size L • Qty: 1</div>
-                        </div>
-                        <div class="item-price">₹1,299</div>
-                    </div>
-
-                    <div class="summary-item">
-                        <div class="item-image">
-                            <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Product">
-                        </div>
-                        <div class="item-details">
-                            <div class="item-name">Silk Dupatta</div>
-                            <div class="item-meta">Pink • Floral • Qty: 1</div>
-                        </div>
-                        <div class="item-price">₹599</div>
-                    </div>
+                    {% endif %}
 
                     <!-- Coupon Section -->
                     <div class="coupon-section">
@@ -568,30 +566,37 @@
                         </div>
                         <small class="text-muted mt-1 d-block">
                             <i class="fas fa-gift me-1"></i>
-                            Try: WELCOME10, SAVE20, FREESHIP
+                            Available codes: 
+                            {% for promo in promo_codes %}
+                                {{ promo.code }}{% if not forloop.last %}, {% endif %}
+                            {% empty %}
+                                No active promo codes
+                            {% endfor %}
                         </small>
                     </div>
 
                     <!-- Price Breakdown -->
                     <div class="summary-row">
-                        <span>Subtotal (4 items):</span>
-                        <span>₹2,697</span>
+                        <span>Subtotal ({{ cart_items_count }} items):</span>
+                        <span>₹{{ cart_total }}</span>
                     </div>
+                    {% if applied_coupon %}
                     <div class="summary-row">
-                        <span>Discount:</span>
-                        <span class="text-success">-₹1,200</span>
+                        <span>Discount ({{ applied_coupon.code }}):</span>
+                        <span class="text-success">-₹{{ discount_amount }}</span>
                     </div>
+                    {% endif %}
                     <div class="summary-row">
                         <span>Shipping:</span>
                         <span class="text-success">Free</span>
                     </div>
                     <div class="summary-row">
                         <span>GST (18%):</span>
-                        <span>₹269</span>
+                        <span>₹{{ final_total|floatformat:0|add:0|mul:0.18|floatformat:0 }}</span>
                     </div>
                     <div class="summary-row total">
                         <span>Total Amount:</span>
-                        <span>₹1,766</span>
+                        <span>₹{{ final_total }}</span>
                     </div>
 
                     <!-- Place Order Button -->
@@ -684,6 +689,21 @@ function initializeDeliveryOptions() {
     });
 }
 
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 function initializePaymentMethods() {
     document.querySelectorAll('.payment-method').forEach(method => {
         method.addEventListener('click', () => {
@@ -702,22 +722,42 @@ function initializeCouponCode() {
     const applyBtn = document.getElementById('applyCoupon');
     const couponInput = document.getElementById('couponCode');
     
-    applyBtn.addEventListener('click', () => {
+    applyBtn.addEventListener('click', async () => {
         const code = couponInput.value.trim().toUpperCase();
         
-        if (code === 'WELCOME10') {
-            showNotification('Coupon applied! 10% discount added.', 'success');
-            applyCouponDiscount(10, 'WELCOME10');
-        } else if (code === 'SAVE20') {
-            showNotification('Coupon applied! 20% discount added.', 'success');
-            applyCouponDiscount(20, 'SAVE20');
-        } else if (code === 'FREESHIP') {
-            showNotification('Free shipping coupon applied!', 'success');
-            applyFreeShipping();
-        } else if (code) {
-            showNotification('Invalid coupon code. Please try again.', 'error');
-        } else {
+        if (!code) {
             showNotification('Please enter a coupon code.', 'warning');
+            return;
+        }
+        
+        try {
+            applyBtn.disabled = true;
+            applyBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Validating...';
+            
+            const response = await fetch('/checkout/apply-coupon/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ coupon_code: code })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                showNotification(data.message, 'success');
+                applyCouponDiscount(data.discount, code);
+                location.reload(); // Reload to show updated totals
+            } else {
+                showNotification(data.error, 'error');
+            }
+        } catch (error) {
+            console.error('Coupon error:', error);
+            showNotification('Network error. Please try again.', 'error');
+        } finally {
+            applyBtn.disabled = false;
+            applyBtn.innerHTML = 'Apply';
         }
     });
     
@@ -732,7 +772,7 @@ function initializeCouponCode() {
 function initializePlaceOrder() {
     const placeOrderBtn = document.getElementById('placeOrderBtn');
     
-    placeOrderBtn.addEventListener('click', () => {
+    placeOrderBtn.addEventListener('click', async () => {
         // Validate form
         if (!validateCheckoutForm()) {
             return;
@@ -743,16 +783,48 @@ function initializePlaceOrder() {
         placeOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing Order...';
         placeOrderBtn.disabled = true;
         
-        // Simulate order processing
-        setTimeout(() => {
-            // Show success message
-            showNotification('Order placed successfully! Redirecting to confirmation...', 'success');
+        try {
+            // Collect form data
+            const orderData = {
+                first_name: document.getElementById('firstName').value,
+                last_name: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                selected_address: document.querySelector('.address-card.selected')?.dataset.addressId,
+                selected_delivery: document.querySelector('.delivery-option.selected')?.dataset.deliveryId,
+                selected_payment: document.querySelector('.payment-method.selected')?.querySelector('h6')?.textContent,
+                instructions: document.getElementById('instructions')?.value || ''
+            };
             
-            // Redirect to confirmation page
-            setTimeout(() => {
-                window.location.href = '/checkout/confirmation/';
-            }, 2000);
-        }, 3000);
+            const response = await fetch('/checkout/place-order/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(orderData)
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                showNotification('Order placed successfully! Redirecting to confirmation...', 'success');
+                
+                // Redirect to confirmation page
+                setTimeout(() => {
+                    window.location.href = data.redirect_url;
+                }, 2000);
+            } else {
+                showNotification(data.error || 'Failed to place order. Please try again.', 'error');
+                placeOrderBtn.innerHTML = originalText;
+                placeOrderBtn.disabled = false;
+            }
+        } catch (error) {
+            console.error('Order placement error:', error);
+            showNotification('Network error. Please try again.', 'error');
+            placeOrderBtn.innerHTML = originalText;
+            placeOrderBtn.disabled = false;
+        }
     });
 }
 

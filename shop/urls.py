@@ -26,6 +26,7 @@ urlpatterns = [
     # AJAX endpoints
     path('ajax/add-to-wishlist/', views.add_to_wishlist, name='add_to_wishlist'),
     path('ajax/remove-from-wishlist/', views.remove_from_wishlist, name='remove_from_wishlist'),
+    
     path('ajax/product-quick-view/', views.product_quick_view, name='product_quick_view'),
     path('ajax/whatsapp-subscribe/', views.whatsapp_subscribe, name='whatsapp_subscribe'),
 ]
