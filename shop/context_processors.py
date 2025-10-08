@@ -1,12 +1,26 @@
 from django.conf import settings
-from .models import Category
+from .models import Category, SubCategory, Wishlist
 from cart.models import Cart
 
 
 def categories_context(request):
-    """Add categories to template context"""
-    categories = Category.objects.filter(is_active=True).order_by('sort_order')
-    return {'categories': categories}
+    """Add categories and subcategories to template context"""
+    categories = Category.objects.filter(is_active=True).order_by('sort_order', 'name')
+    
+    # Get subcategories grouped by category for navbar dropdown
+    subcategories_by_category = {}
+    for category in categories:
+        subcategories = SubCategory.objects.filter(
+            category=category, 
+            is_active=True
+        ).order_by('sort_order', 'name')
+        if subcategories.exists():
+            subcategories_by_category[category] = subcategories
+    
+    return {
+        'categories': categories,
+        'subcategories_by_category': subcategories_by_category
+    }
 
 
 def cart_context(request):
@@ -27,6 +41,21 @@ def cart_context(request):
         'cart_total': cart_total,
         'free_shipping_threshold': settings.FREE_SHIPPING_THRESHOLD,
         'currency_symbol': settings.CURRENCY_SYMBOL,
+    }
+
+
+def wishlist_context(request):
+    """Add wishlist information to template context"""
+    wishlist_count = 0
+    
+    if request.user.is_authenticated:
+        try:
+            wishlist_count = Wishlist.objects.filter(user=request.user).count()
+        except:
+            pass
+    
+    return {
+        'wishlist_count': wishlist_count,
     }
 
 

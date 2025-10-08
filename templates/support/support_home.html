@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'shop:homepage' %}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Support</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 fw-bold text-primary mb-3">Customer Support</h1>
+            <p class="lead text-muted">We're here to help you with any questions or concerns about King Dupatta House</p>
+        </div>
+    </div>
+
+    <!-- Quick Help Cards -->
+    <div class="row mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="fas fa-question-circle fa-3x text-primary"></i>
+                    </div>
+                    <h5 class="card-title">FAQ</h5>
+                    <p class="card-text text-muted">Find answers to frequently asked questions</p>
+                    <a href="{% url 'support:faq' %}" class="btn btn-primary">View FAQ</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="fas fa-ruler fa-3x text-success"></i>
+                    </div>
+                    <h5 class="card-title">Size Guide</h5>
+                    <p class="card-text text-muted">Find your perfect fit with our size guide</p>
+                    <a href="{% url 'support:size_guide' %}" class="btn btn-success">View Size Guide</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="fas fa-shipping-fast fa-3x text-warning"></i>
+                    </div>
+                    <h5 class="card-title">Shipping Info</h5>
+                    <p class="card-text text-muted">Learn about delivery times and options</p>
+                    <a href="{% url 'support:shipping_info' %}" class="btn btn-warning">View Shipping</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Options -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-headset me-2"></i>Get in Touch</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="me-3">
+                                    <i class="fas fa-phone fa-2x text-success"></i>
+                                </div>
+                                <div>
+                                    <h5>Call Us</h5>
+                                    <p class="text-muted mb-2">Speak directly with our support team</p>
+                                    <p class="mb-1"><strong>+91 7860247786</strong></p>
+                                    <p class="mb-0"><strong>+91 7499099900</strong></p>
+                                    <small class="text-muted">Mon-Sat: 10 AM - 8 PM</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="me-3">
+                                    <i class="fab fa-whatsapp fa-2x text-success"></i>
+                                </div>
+                                <div>
+                                    <h5>WhatsApp</h5>
+                                    <p class="text-muted mb-2">Quick support via WhatsApp</p>
+                                    <p class="mb-1"><strong>+91 7499099900</strong></p>
+                                    <small class="text-muted">Available 24/7</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="me-3">
+                                    <i class="fas fa-envelope fa-2x text-primary"></i>
+                                </div>
+                                <div>
+                                    <h5>Email Us</h5>
+                                    <p class="text-muted mb-2">Send us a detailed message</p>
+                                    <p class="mb-0"><strong>Kingdupattahouse@gmail.com</strong></p>
+                                    <small class="text-muted">Response within 24 hours</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="me-3">
+                                    <i class="fas fa-comments fa-2x text-info"></i>
+                                </div>
+                                <div>
+                                    <h5>Live Chat</h5>
+                                    <p class="text-muted mb-2">Chat with us instantly</p>
+                                    <a href="{% url 'support:live_chat' %}" class="btn btn-info btn-sm">Start Chat</a>
+                                    <small class="text-muted d-block">Available during business hours</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Store Information -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0"><i class="fas fa-store me-2"></i>Visit Our Store</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5>King Dupatta House</h5>
+                            <p class="text-muted mb-3">
+                                Akbari Gate, Near Nakhas<br>
+                                Victoria Street, Nakhas-226003<br>
+                                Lucknow, Uttar Pradesh, India
+                            </p>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h6>Store Hours:</h6>
+                                    <p class="mb-1">Monday - Saturday</p>
+                                    <p class="mb-0">10:00 AM - 8:00 PM</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <h6>Established:</h6>
+                                    <p class="mb-0">2013 (10+ years of trusted service)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-star fa-2x text-warning"></i>
+                                <div class="h4 mb-0">4.0/5</div>
+                                <small class="text-muted">14+ Reviews on Justdial</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Topics -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h3 class="text-center mb-4">Popular Help Topics</h3>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="list-group">
+                        <a href="{% url 'support:shipping_info' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-shipping-fast me-2 text-primary"></i>
+                            Shipping Information
+                        </a>
+                        <a href="{% url 'support:returns_policy' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-undo me-2 text-success"></i>
+                            Returns & Exchange Policy
+                        </a>
+                        <a href="{% url 'support:care_guide' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-tshirt me-2 text-warning"></i>
+                            Care Guide
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="list-group">
+                        <a href="{% url 'support:privacy_policy' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-shield-alt me-2 text-info"></i>
+                            Privacy Policy
+                        </a>
+                        <a href="{% url 'support:terms_conditions' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-file-contract me-2 text-secondary"></i>
+                            Terms & Conditions
+                        </a>
+                        <a href="{% url 'support:refund_policy' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-money-bill-wave me-2 text-danger"></i>
+                            Refund Policy
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

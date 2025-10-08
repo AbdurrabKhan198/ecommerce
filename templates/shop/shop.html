@@ -341,18 +341,14 @@
 <div class="container">
     <!-- Quick Filters -->
     <div class="quick-filters">
-        <a href="?category=all" class="quick-filter {% if not request.GET.category or request.GET.category == 'all' %}active{% endif %}">
+        <a href="{% url 'shop:shop' %}" class="quick-filter {% if not request.GET.category %}active{% endif %}">
             <i class="fas fa-th-large me-2"></i>All Products
         </a>
-        <a href="?category=leggings" class="quick-filter {% if request.GET.category == 'leggings' %}active{% endif %}">
-            <i class="fas fa-female me-2"></i>Leggings
+        {% for category in categories %}
+        <a href="?category={{ category.slug }}" class="quick-filter {% if request.GET.category == category.slug %}active{% endif %}">
+            <i class="fas fa-{% if 'leggings' in category.name.lower %}female{% elif 'pants' in category.name.lower or 'trousers' in category.name.lower %}tshirt{% elif 'dupatta' in category.name.lower %}scarf{% else %}tag{% endif %} me-2"></i>{{ category.name }}
         </a>
-        <a href="?category=pants" class="quick-filter {% if request.GET.category == 'pants' %}active{% endif %}">
-            <i class="fas fa-tshirt me-2"></i>Pants
-        </a>
-        <a href="?category=dupattas" class="quick-filter {% if request.GET.category == 'dupattas' %}active{% endif %}">
-            <i class="fas fa-scarf me-2"></i>Dupattas
-        </a>
+        {% endfor %}
         <a href="?sale=true" class="quick-filter {% if request.GET.sale %}active{% endif %}">
             <i class="fas fa-tags me-2"></i>Sale Items
         </a>
@@ -403,25 +399,17 @@
                         </div>
                         <div class="filter-options">
                             <div class="filter-option">
-                                <input type="radio" name="category" value="all" id="cat_all" 
-                                       {% if not request.GET.category or request.GET.category == 'all' %}checked{% endif %}>
+                                <input type="radio" name="category" value="" id="cat_all" 
+                                       {% if not request.GET.category %}checked{% endif %}>
                                 <label for="cat_all">All Categories</label>
                             </div>
+                            {% for category in categories %}
                             <div class="filter-option">
-                                <input type="radio" name="category" value="leggings" id="cat_leggings"
-                                       {% if request.GET.category == 'leggings' %}checked{% endif %}>
-                                <label for="cat_leggings">Leggings</label>
+                                <input type="radio" name="category" value="{{ category.slug }}" id="cat_{{ category.slug }}"
+                                       {% if request.GET.category == category.slug %}checked{% endif %}>
+                                <label for="cat_{{ category.slug }}">{{ category.name }}</label>
                             </div>
-                            <div class="filter-option">
-                                <input type="radio" name="category" value="pants" id="cat_pants"
-                                       {% if request.GET.category == 'pants' %}checked{% endif %}>
-                                <label for="cat_pants">Pants</label>
-                            </div>
-                            <div class="filter-option">
-                                <input type="radio" name="category" value="dupattas" id="cat_dupattas"
-                                       {% if request.GET.category == 'dupattas' %}checked{% endif %}>
-                                <label for="cat_dupattas">Dupattas</label>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
 
@@ -470,31 +458,13 @@
                             Fabric
                         </div>
                         <div class="filter-options">
+                            {% for fabric_value, fabric_label in fabric_choices %}
                             <div class="filter-option">
-                                <input type="checkbox" name="fabric" value="cotton" id="fabric_cotton"
-                                       {% if 'cotton' in request.GET.fabric %}checked{% endif %}>
-                                <label for="fabric_cotton">Cotton</label>
+                                <input type="checkbox" name="fabric" value="{{ fabric_value }}" id="fabric_{{ fabric_value }}"
+                                       {% if fabric_value in request.GET.fabric %}checked{% endif %}>
+                                <label for="fabric_{{ fabric_value }}">{{ fabric_label }}</label>
                             </div>
-                            <div class="filter-option">
-                                <input type="checkbox" name="fabric" value="silk" id="fabric_silk"
-                                       {% if 'silk' in request.GET.fabric %}checked{% endif %}>
-                                <label for="fabric_silk">Silk</label>
-                            </div>
-                            <div class="filter-option">
-                                <input type="checkbox" name="fabric" value="polyester" id="fabric_polyester"
-                                       {% if 'polyester' in request.GET.fabric %}checked{% endif %}>
-                                <label for="fabric_polyester">Polyester</label>
-                            </div>
-                            <div class="filter-option">
-                                <input type="checkbox" name="fabric" value="viscose" id="fabric_viscose"
-                                       {% if 'viscose' in request.GET.fabric %}checked{% endif %}>
-                                <label for="fabric_viscose">Viscose</label>
-                            </div>
-                            <div class="filter-option">
-                                <input type="checkbox" name="fabric" value="net" id="fabric_net"
-                                       {% if 'net' in request.GET.fabric %}checked{% endif %}>
-                                <label for="fabric_net">Net</label>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
 
@@ -505,26 +475,13 @@
                             Occasion
                         </div>
                         <div class="filter-options">
+                            {% for occasion_value, occasion_label in occasion_choices %}
                             <div class="filter-option">
-                                <input type="checkbox" name="occasion" value="casual" id="occasion_casual"
-                                       {% if 'casual' in request.GET.occasion %}checked{% endif %}>
-                                <label for="occasion_casual">Casual</label>
+                                <input type="checkbox" name="occasion" value="{{ occasion_value }}" id="occasion_{{ occasion_value }}"
+                                       {% if occasion_value in request.GET.occasion %}checked{% endif %}>
+                                <label for="occasion_{{ occasion_value }}">{{ occasion_label }}</label>
                             </div>
-                            <div class="filter-option">
-                                <input type="checkbox" name="occasion" value="formal" id="occasion_formal"
-                                       {% if 'formal' in request.GET.occasion %}checked{% endif %}>
-                                <label for="occasion_formal">Formal</label>
-                            </div>
-                            <div class="filter-option">
-                                <input type="checkbox" name="occasion" value="party" id="occasion_party"
-                                       {% if 'party' in request.GET.occasion %}checked{% endif %}>
-                                <label for="occasion_party">Party</label>
-                            </div>
-                            <div class="filter-option">
-                                <input type="checkbox" name="occasion" value="traditional" id="occasion_traditional"
-                                       {% if 'traditional' in request.GET.occasion %}checked{% endif %}>
-                                <label for="occasion_traditional">Traditional</label>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
 
@@ -546,7 +503,7 @@
             <div class="products-header">
                 <div class="products-meta">
                     <span class="results-count">
-                        Showing <strong>24</strong> of <strong>156</strong> products
+                        Showing <strong>{{ page_obj.start_index }}-{{ page_obj.end_index }}</strong> of <strong>{{ page_obj.paginator.count }}</strong> products
                     </span>
                     <div class="view-options">
                         <button class="view-btn active" data-view="grid" title="Grid View">
@@ -558,134 +515,102 @@
                     </div>
                 </div>
                 <div>
-                    <select class="form-control sort-dropdown" name="sort">
-                        <option value="featured">Sort by: Featured</option>
-                        <option value="newest">Newest First</option>
-                        <option value="price_low">Price: Low to High</option>
-                        <option value="price_high">Price: High to Low</option>
-                        <option value="rating">Customer Rating</option>
-                        <option value="popularity">Most Popular</option>
+                    <select class="form-control sort-dropdown" name="sort" onchange="this.form.submit()">
+                        <option value="featured" {% if request.GET.sort == 'featured' or not request.GET.sort %}selected{% endif %}>Sort by: Featured</option>
+                        <option value="newest" {% if request.GET.sort == 'newest' %}selected{% endif %}>Newest First</option>
+                        <option value="price_low" {% if request.GET.sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                        <option value="price_high" {% if request.GET.sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                        <option value="rating" {% if request.GET.sort == 'rating' %}selected{% endif %}>Customer Rating</option>
+                        <option value="popularity" {% if request.GET.sort == 'popularity' %}selected{% endif %}>Most Popular</option>
                     </select>
+                    <!-- Hidden inputs to maintain current filters -->
+                    {% for key, value in request.GET.items %}
+                        {% if key != 'sort' and key != 'page' %}
+                        <input type="hidden" name="{{ key }}" value="{{ value }}">
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
 
             <!-- Products Grid -->
             <div class="product-grid" id="productGrid">
-                <!-- Sample Products with Diverse Images -->
-                {% for i in "123456789012" %}
+                {% for product in products %}
                 <div class="product-card card h-100 border-0 shadow-sm">
                     <div class="position-relative product-image">
-                        {% if forloop.counter == 1 %}
-                        <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
+                        {% with product.images.first as first_image %}
+                        <img src="{% if first_image %}{{ first_image.image.url }}{% else %}https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80{% endif %}" 
                              class="card-img-top" 
-                             alt="Premium Leggings"
+                             alt="{{ product.name }}"
                              style="height: 280px; object-fit: cover;">
-                        {% elif forloop.counter == 2 %}
-                        <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                             class="card-img-top" 
-                             alt="Elegant Pants"
-                             style="height: 280px; object-fit: cover;">
-                        {% elif forloop.counter == 3 %}
-                        <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                             class="card-img-top" 
-                             alt="Beautiful Dupatta"
-                             style="height: 280px; object-fit: cover;">
-                        {% elif forloop.counter == 4 %}
-                        <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                             class="card-img-top" 
-                             alt="Churidar Leggings"
-                             style="height: 280px; object-fit: cover;">
-                        {% elif forloop.counter == 5 %}
-                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                             class="card-img-top" 
-                             alt="Fashion Model"
-                             style="height: 280px; object-fit: cover;">
-                        {% elif forloop.counter == 6 %}
-                        <img src="https://images.unsplash.com/photo-1571513723812-70c0a0a6b4b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                             class="card-img-top" 
-                             alt="Palazzo Pants"
-                             style="height: 280px; object-fit: cover;">
-                        {% elif forloop.counter == 7 %}
-                        <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                             class="card-img-top" 
-                             alt="Cotton Leggings"
-                             style="height: 280px; object-fit: cover;">
-                        {% elif forloop.counter == 8 %}
-                        <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                             class="card-img-top" 
-                             alt="Formal Trousers"
-                             style="height: 280px; object-fit: cover;">
-                        {% elif forloop.counter == 9 %}
-                        <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                             class="card-img-top" 
-                             alt="Silk Dupatta"
-                             style="height: 280px; object-fit: cover;">
-                        {% elif forloop.counter == 10 %}
-                        <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                             class="card-img-top" 
-                             alt="Printed Leggings"
-                             style="height: 280px; object-fit: cover;">
-                        {% elif forloop.counter == 11 %}
-                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                             class="card-img-top" 
-                             alt="Jeggings"
-                             style="height: 280px; object-fit: cover;">
-                        {% else %}
-                        <img src="https://images.unsplash.com/photo-1571513723812-70c0a0a6b4b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
-                             class="card-img-top" 
-                             alt="Wide Leg Pants"
-                             style="height: 280px; object-fit: cover;">
-                        {% endif %}
+                        {% endwith %}
                         
+                        {% if product.discount_percentage > 0 %}
                         <div class="position-absolute top-0 end-0 m-2">
-                            {% if forloop.counter|divisibleby:3 %}
-                            <span class="badge bg-danger">25% OFF</span>
-                            {% endif %}
+                            <span class="badge bg-danger">{{ product.discount_percentage }}% OFF</span>
                         </div>
+                        {% endif %}
                         
                         <div class="product-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" 
                              style="background: rgba(0,0,0,0.7); opacity: 0; transition: all 0.3s ease;">
                             <div class="text-center">
-                                <button class="btn btn-light btn-sm me-2 quick-view-btn" data-product-id="{{ forloop.counter }}">
+                                <button class="btn btn-light btn-sm me-2 quick-view-btn" data-product-id="{{ product.id }}">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="btn btn-primary btn-sm wishlist-btn" data-product-id="{{ forloop.counter }}">
+                                {% if user.is_authenticated %}
+                                <button class="btn btn-primary btn-sm wishlist-btn" data-product-id="{{ product.id }}" title="Add to Wishlist">
                                     <i class="far fa-heart"></i>
                                 </button>
+                                {% endif %}
                             </div>
                         </div>
 
-                        <button class="wishlist-btn position-absolute" style="top: 10px; left: 10px; background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 35px; height: 35px;">
+                        {% if user.is_authenticated %}
+                        <button class="wishlist-btn position-absolute" data-product-id="{{ product.id }}" title="Add to Wishlist" style="top: 10px; left: 10px; background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 35px; height: 35px;">
                             <i class="far fa-heart"></i>
                         </button>
+                        {% endif %}
                     </div>
                     
                     <div class="card-body p-3">
                         <h6 class="card-title mb-2">
-                            <a href="#" class="text-decoration-none text-dark">
-                                Premium Women's {% cycle 'Leggings' 'Palazzo Pants' 'Silk Dupatta' 'Cotton Top' %}
+                            <a href="{{ product.get_absolute_url }}" class="text-decoration-none text-dark">
+                                {{ product.name|truncatewords:5 }}
                             </a>
                         </h6>
                         
+                        {% if product.average_rating > 0 %}
                         <div class="mb-2">
-                            {% for star in "12345" %}
-                                <i class="fas fa-star text-warning"></i>
+                            {% for i in "12345" %}
+                                <i class="fas fa-star{% if forloop.counter > product.average_rating %} text-muted{% endif %}"></i>
                             {% endfor %}
-                            <small class="text-muted ms-1">({{ forloop.counter }}5 reviews)</small>
+                            <small class="text-muted ms-1">({{ product.review_count }})</small>
                         </div>
+                        {% endif %}
                         
                         <div class="price mb-3">
-                            <span class="h6 text-primary">₹{{ forloop.counter }}99</span>
-                            {% if forloop.counter|divisibleby:3 %}
-                            <span class="text-muted text-decoration-line-through ms-2">₹{{ forloop.counter }}999</span>
+                            <span class="h6 text-primary">{{ currency_symbol }}{{ product.selling_price }}</span>
+                            {% if product.mrp > product.selling_price %}
+                            <span class="text-muted text-decoration-line-through ms-2">{{ currency_symbol }}{{ product.mrp }}</span>
                             {% endif %}
                         </div>
                         
                         <div class="d-grid">
-                            <button class="btn btn-outline-primary add-to-cart-btn" data-product-id="{{ forloop.counter }}">
-                                <i class="fas fa-shopping-cart me-2"></i>Add to Cart
-                            </button>
+                            <a href="{{ product.get_absolute_url }}" class="btn btn-outline-primary">
+                                <i class="fas fa-shopping-cart me-2"></i>View Details
+                            </a>
                         </div>
+                    </div>
+                </div>
+                {% empty %}
+                <!-- No products found -->
+                <div class="col-12 text-center py-5">
+                    <div class="empty-state">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">No products found</h4>
+                        <p class="text-muted">Try adjusting your filters or search terms</p>
+                        <a href="{% url 'shop:shop' %}" class="btn btn-primary">
+                            <i class="fas fa-refresh me-2"></i>Clear Filters
+                        </a>
                     </div>
                 </div>
                 {% endfor %}
@@ -699,25 +624,43 @@
             </div>
 
             <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
             <nav aria-label="Product pagination" class="pagination-wrapper">
                 <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                    {% else %}
                     <li class="page-item disabled">
                         <span class="page-link">Previous</span>
                     </li>
-                    <li class="page-item active">
-                        <span class="page-link">1</span>
-                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ num }}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?page=2">2</a>
+                        <a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}">Next</a>
                     </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page=3">3</a>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Next</span>
                     </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page=2">Next</a>
-                    </li>
+                    {% endif %}
                 </ul>
             </nav>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -778,6 +721,10 @@ function initializeFilters() {
             sizeOptions.forEach(o => o.classList.remove('selected'));
             option.classList.add('selected');
             sizeInput.value = option.dataset.size;
+            // Auto-submit form when size is selected
+            setTimeout(() => {
+                document.getElementById('filterForm').submit();
+            }, 300);
         });
     });
     
@@ -794,6 +741,10 @@ function initializeFilters() {
             colorSwatches.forEach(s => s.classList.remove('selected'));
             swatch.classList.add('selected');
             colorInput.value = swatch.dataset.color;
+            // Auto-submit form when color is selected
+            setTimeout(() => {
+                document.getElementById('filterForm').submit();
+            }, 300);
         });
     });
     
@@ -825,7 +776,7 @@ function updateActiveFilters() {
             const tag = document.createElement('div');
             tag.className = 'filter-tag';
             tag.innerHTML = `
-                ${key}: ${value}
+                ${key.charAt(0).toUpperCase() + key.slice(1)}: ${value}
                 <span class="remove" data-filter="${key}">×</span>
             `;
             activeFiltersContainer.appendChild(tag);
@@ -857,26 +808,7 @@ function initializeProductInteractions() {
         });
     });
     
-    // Wishlist functionality
-    document.querySelectorAll('.wishlist-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            this.classList.toggle('active');
-            
-            const icon = this.querySelector('i');
-            if (this.classList.contains('active')) {
-                icon.classList.remove('far');
-                icon.classList.add('fas');
-                icon.style.color = '#e91e63';
-                showNotification('Added to wishlist!', 'success');
-            } else {
-                icon.classList.remove('fas');
-                icon.classList.add('far');
-                icon.style.color = '';
-                showNotification('Removed from wishlist', 'info');
-            }
-        });
-    });
+    // Wishlist functionality is handled by main.js
     
     // Add to cart functionality
     document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
@@ -1006,40 +938,6 @@ function showQuickView(productId) {
 }
 
 // Utility functions
-function updateCartCounter() {
-    const counter = document.querySelector('.cart-badge');
-    if (counter) {
-        const current = parseInt(counter.textContent) || 0;
-        counter.textContent = current + 1;
-        
-        // Add animation
-        counter.style.transform = 'scale(1.3)';
-        setTimeout(() => {
-            counter.style.transform = 'scale(1)';
-        }, 200);
-    }
-}
-
-function showNotification(message, type = 'info') {
-    // Create notification toast
-    const notification = document.createElement('div');
-    notification.className = `toast position-fixed top-0 end-0 m-3 bg-${type} text-white`;
-    notification.style.zIndex = '9999';
-    notification.innerHTML = `
-        <div class="toast-body d-flex align-items-center">
-            <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'} me-2"></i>
-            ${message}
-            <button type="button" class="btn-close btn-close-white ms-auto" onclick="this.closest('.toast').remove()"></button>
-        </div>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Auto remove after 3 seconds
-    setTimeout(() => {
-        notification.style.opacity = '0';
-        setTimeout(() => notification.remove(), 300);
-    }, 3000);
-}
+// Utility functions are handled by main.js
 </script>
 {% endblock %}

@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'shop:homepage' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'support:support_home' %}">Support</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Returns Policy</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 fw-bold text-primary mb-3">Returns & Exchange Policy</h1>
+            <p class="lead text-muted">Our commitment to your satisfaction with easy returns and exchanges</p>
+        </div>
+    </div>
+
+    <!-- Returns Content -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Return Policy Overview -->
+            <div class="card mb-5">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-undo me-2"></i>Return Policy</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Return Window</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success me-2"></i><strong>7 days</strong> from delivery date</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Items must be unused</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Original tags attached</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Resalable condition</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>What Can Be Returned</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success me-2"></i>Wrong size</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Defective items</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Not as described</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Damaged in transit</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Return Process -->
+            <div class="card mb-5">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0"><i class="fas fa-list-ol me-2"></i>How to Return</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <div class="timeline-marker bg-primary"></div>
+                                    <div class="timeline-content">
+                                        <h5>Step 1: Contact Us</h5>
+                                        <p class="text-muted">Contact us within 7 days of delivery with your order number and reason for return.</p>
+                                        <ul>
+                                            <li>Email: Kingdupattahouse@gmail.com</li>
+                                            <li>Phone: +91 7860247786</li>
+                                            <li>WhatsApp: +91 7499099900</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-marker bg-success"></div>
+                                    <div class="timeline-content">
+                                        <h5>Step 2: Get Return Authorization</h5>
+                                        <p class="text-muted">We'll send you a return authorization number and instructions.</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-marker bg-warning"></div>
+                                    <div class="timeline-content">
+                                        <h5>Step 3: Package Securely</h5>
+                                        <p class="text-muted">Package the item securely with original tags and include the return authorization number.</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-marker bg-info"></div>
+                                    <div class="timeline-content">
+                                        <h5>Step 4: Send Back</h5>
+                                        <p class="text-muted">Send the package back to us using the provided return address.</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-marker bg-danger"></div>
+                                    <div class="timeline-content">
+                                        <h5>Step 5: Receive Refund</h5>
+                                        <p class="text-muted">We'll process your refund within 5-7 business days after receiving the item.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exchange Policy -->
+            <div class="card mb-5">
+                <div class="card-header bg-warning text-dark">
+                    <h3 class="mb-0"><i class="fas fa-exchange-alt me-2"></i>Exchange Policy</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Size Exchange</h5>
+                            <ul>
+                                <li>Free size exchange within 7 days</li>
+                                <li>Item must be unused with tags</li>
+                                <li>We'll arrange free pickup</li>
+                                <li>Send correct size if available</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Exchange Process</h5>
+                            <ol>
+                                <li>Contact us for exchange</li>
+                                <li>We'll verify size availability</li>
+                                <li>Arrange pickup of original item</li>
+                                <li>Send replacement item</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Refund Policy -->
+            <div class="card mb-5">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0"><i class="fas fa-money-bill-wave me-2"></i>Refund Policy</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Refund Timeline</h5>
+                            <ul>
+                                <li><strong>Processing:</strong> 5-7 business days</li>
+                                <li><strong>Bank Transfer:</strong> 3-5 business days</li>
+                                <li><strong>UPI/Cards:</strong> 1-3 business days</li>
+                                <li><strong>Total Time:</strong> 7-14 business days</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Refund Methods</h5>
+                            <ul>
+                                <li>Original payment method</li>
+                                <li>Bank transfer</li>
+                                <li>UPI refund</li>
+                                <li>Store credit (optional)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="alert alert-warning mt-3">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Note:</strong> Refund will be processed to the original payment method. Shipping charges are non-refundable unless the return is due to our error.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Non-Returnable Items -->
+            <div class="card mb-5">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0"><i class="fas fa-times-circle me-2"></i>Non-Returnable Items</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Items We Cannot Accept</h5>
+                            <ul>
+                                <li>Used or worn items</li>
+                                <li>Items without original tags</li>
+                                <li>Damaged by customer</li>
+                                <li>Personalized items</li>
+                                <li>Sale/clearance items</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Special Cases</h5>
+                            <ul>
+                                <li>Underwear (hygiene reasons)</li>
+                                <li>Items damaged by misuse</li>
+                                <li>Items returned after 7 days</li>
+                                <li>Items not in original packaging</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact for Returns -->
+            <div class="text-center mt-5">
+                <h4>Need Help with Returns?</h4>
+                <p class="text-muted">Our customer support team is here to assist you!</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{% url 'shop:contact' %}" class="btn btn-primary">
+                        <i class="fas fa-envelope me-2"></i>Contact Us
+                    </a>
+                    <a href="{% url 'support:live_chat' %}" class="btn btn-success">
+                        <i class="fas fa-comments me-2"></i>Live Chat
+                    </a>
+                    <a href="tel:+917860247786" class="btn btn-outline-primary">
+                        <i class="fas fa-phone me-2"></i>Call Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -35px;
+    top: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 3px #dee2e6;
+}
+
+.timeline-item:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: -30px;
+    top: 15px;
+    width: 2px;
+    height: calc(100% + 15px);
+    background: #dee2e6;
+}
+
+.timeline-content {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+</style>
+{% endblock %}

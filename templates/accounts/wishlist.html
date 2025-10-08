@@ -1,0 +1,422 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Wishlist - King Dupatta House{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'shop:homepage' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'accounts:profile' %}">My Account</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Wishlist</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold text-primary mb-3">
+                <i class="fas fa-heart me-2"></i>My Wishlist
+            </h1>
+            <p class="lead text-muted">Your saved items from King Dupatta House</p>
+        </div>
+    </div>
+
+    <!-- Wishlist Content -->
+    {% if wishlist_items %}
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="mb-0">{{ wishlist_items|length }} item{{ wishlist_items|length|pluralize }} in your wishlist</h4>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-primary" onclick="selectAll()">
+                        <i class="fas fa-check-square me-2"></i>Select All
+                    </button>
+                    <button class="btn btn-outline-danger" onclick="removeSelected()" id="removeSelectedBtn" disabled>
+                        <i class="fas fa-trash me-2"></i>Remove Selected
+                    </button>
+                </div>
+            </div>
+
+            <!-- Wishlist Items -->
+            <div class="row g-4">
+                {% for item in wishlist_items %}
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="card wishlist-item h-100" data-product-id="{{ item.product.id }}">
+                        <div class="position-relative">
+                            {% with item.product.images.first as first_image %}
+                            <img src="{% if first_image %}{{ first_image.image.url }}{% else %}https://placehold.co/300x300/6366f1/white?text=No+Image{% endif %}" 
+                                 alt="{{ item.product.name }}" class="card-img-top">
+                            {% endwith %}
+                            
+                            <!-- Remove from wishlist button -->
+                            <button class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 remove-wishlist-btn" 
+                                    data-product-id="{{ item.product.id }}" title="Remove from wishlist">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            
+                            <!-- Select checkbox -->
+                            <div class="position-absolute top-0 start-0 m-2">
+                                <input type="checkbox" class="form-check-input wishlist-select" 
+                                       data-product-id="{{ item.product.id }}">
+                            </div>
+                            
+                            <!-- Discount badge -->
+                            {% if item.product.discount_percentage > 0 %}
+                            <div class="position-absolute top-0 start-50 translate-middle-x mt-2">
+                                <span class="badge bg-danger">{{ item.product.discount_percentage }}% OFF</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="card-body d-flex flex-column">
+                            <h6 class="card-title">
+                                <a href="{{ item.product.get_absolute_url }}" class="text-decoration-none text-dark">
+                                    {{ item.product.name|truncatewords:6 }}
+                                </a>
+                            </h6>
+                            
+                            <!-- Rating -->
+                            {% if item.product.average_rating > 0 %}
+                            <div class="stars mb-2">
+                                {% for i in "12345" %}
+                                    <i class="fas fa-star{% if forloop.counter > item.product.average_rating %} text-muted{% endif %}"></i>
+                                {% endfor %}
+                                <small class="text-muted ms-1">({{ item.product.review_count }})</small>
+                            </div>
+                            {% endif %}
+                            
+                            <!-- Price -->
+                            <div class="price mb-3">
+                                <span class="text-primary fw-bold fs-5">₹{{ item.product.selling_price }}</span>
+                                {% if item.product.mrp > item.product.selling_price %}
+                                <span class="text-muted text-decoration-line-through ms-2">₹{{ item.product.mrp }}</span>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Stock status -->
+                            <div class="mb-3">
+                                {% if item.product.is_in_stock %}
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check me-1"></i>In Stock
+                                </span>
+                                {% else %}
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-times me-1"></i>Out of Stock
+                                </span>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Actions -->
+                            <div class="mt-auto">
+                                <div class="d-grid gap-2">
+                                    {% if item.product.is_in_stock %}
+                                    <button class="btn btn-primary add-to-cart-btn" data-product-id="{{ item.product.id }}">
+                                        <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                    </button>
+                                    {% else %}
+                                    <button class="btn btn-outline-secondary" disabled>
+                                        <i class="fas fa-bell me-2"></i>Notify When Available
+                                    </button>
+                                    {% endif %}
+                                    <a href="{{ item.product.get_absolute_url }}" class="btn btn-outline-primary">
+                                        <i class="fas fa-eye me-2"></i>View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <nav aria-label="Wishlist pagination" class="mt-5">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">&laquo; First</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                    {% endif %}
+                    
+                    <li class="page-item active">
+                        <span class="page-link">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                        </span>
+                    </li>
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% else %}
+    <!-- Empty Wishlist -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="empty-wishlist">
+                <div class="mb-4">
+                    <i class="fas fa-heart fa-5x text-muted"></i>
+                </div>
+                <h3 class="text-muted mb-3">Your wishlist is empty</h3>
+                <p class="lead text-muted mb-4">
+                    Start adding items to your wishlist by browsing our collection of premium dupattas, leggings, and pants.
+                </p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{% url 'shop:shop' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+                    </a>
+                    <a href="{% url 'shop:homepage' %}" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-home me-2"></i>Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Quick View Modal -->
+<div class="modal fade" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="quickViewModalLabel">Quick View</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="quickViewContent">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.wishlist-item {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.wishlist-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.remove-wishlist-btn {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.wishlist-item:hover .remove-wishlist-btn {
+    opacity: 1;
+}
+
+.wishlist-select {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.wishlist-item:hover .wishlist-select {
+    opacity: 1;
+}
+
+.empty-wishlist {
+    padding: 4rem 2rem;
+    background: #f8f9fa;
+    border-radius: 15px;
+}
+
+.stars {
+    color: #ffc107;
+}
+
+.price {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card-img-top {
+    height: 250px;
+    object-fit: cover;
+}
+
+@media (max-width: 768px) {
+    .wishlist-item:hover {
+        transform: none;
+    }
+    
+    .remove-wishlist-btn,
+    .wishlist-select {
+        opacity: 1;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Remove from wishlist functionality
+    document.querySelectorAll('.remove-wishlist-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const productId = this.dataset.productId;
+            removeFromWishlist(productId);
+        });
+    });
+
+    // Add to cart functionality
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const productId = this.dataset.productId;
+            addToCart(productId);
+        });
+    });
+
+    // Wishlist selection functionality
+    document.querySelectorAll('.wishlist-select').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            updateRemoveButton();
+        });
+    });
+
+    // Select all functionality
+    window.selectAll = function() {
+        const checkboxes = document.querySelectorAll('.wishlist-select');
+        const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+        
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = !allChecked;
+        });
+        
+        updateRemoveButton();
+    };
+
+    // Remove selected functionality
+    window.removeSelected = function() {
+        const selectedItems = document.querySelectorAll('.wishlist-select:checked');
+        if (selectedItems.length === 0) return;
+        
+        if (confirm(`Remove ${selectedItems.length} item(s) from wishlist?`)) {
+            selectedItems.forEach(checkbox => {
+                const productId = checkbox.dataset.productId;
+                removeFromWishlist(productId);
+            });
+        }
+    };
+
+    function updateRemoveButton() {
+        const selectedCount = document.querySelectorAll('.wishlist-select:checked').length;
+        const removeBtn = document.getElementById('removeSelectedBtn');
+        
+        if (selectedCount > 0) {
+            removeBtn.disabled = false;
+            removeBtn.innerHTML = `<i class="fas fa-trash me-2"></i>Remove Selected (${selectedCount})`;
+        } else {
+            removeBtn.disabled = true;
+            removeBtn.innerHTML = '<i class="fas fa-trash me-2"></i>Remove Selected';
+        }
+    }
+
+    function removeFromWishlist(productId) {
+        fetch(`{% url 'shop:remove_from_wishlist' %}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({
+                product_id: productId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Remove the item from the page
+                const item = document.querySelector(`[data-product-id="${productId}"]`);
+                if (item) {
+                    item.closest('.col-lg-3').remove();
+                }
+                
+                // Show success message
+                showNotification('Item removed from wishlist', 'success');
+                
+                // Update remove button
+                updateRemoveButton();
+            } else {
+                showNotification('Error removing item from wishlist', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Something went wrong', 'error');
+        });
+    }
+
+    function addToCart(productId) {
+        fetch(`{% url 'cart:add_to_cart' %}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({
+                product_id: productId,
+                quantity: 1
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification('Item added to cart!', 'success');
+                // Update cart count if you have one
+                updateCartCount();
+            } else {
+                showNotification('Error adding item to cart', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Something went wrong', 'error');
+        });
+    }
+
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show position-fixed`;
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 5000);
+    }
+
+    function updateCartCount() {
+        // Update cart count in header if you have one
+        // This is a placeholder - implement based on your cart system
+    }
+});
+</script>
+{% endblock %}

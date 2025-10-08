@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'shop:homepage' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'support:support_home' %}">Support</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Contact Form</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 fw-bold text-primary mb-3">Contact Form</h1>
+            <p class="lead text-muted">Send us a message and we'll get back to you within 24 hours</p>
+        </div>
+    </div>
+
+    <!-- Contact Form Content -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-envelope me-2"></i>Send us a Message</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'shop:contact' %}">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">Full Name *</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email Address *</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" name="phone">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="subject" class="form-label">Subject *</label>
+                                <select class="form-select" id="subject" name="subject" required>
+                                    <option value="">Select a subject</option>
+                                    <option value="general">General Inquiry</option>
+                                    <option value="order">Order Related</option>
+                                    <option value="size">Size & Fit</option>
+                                    <option value="shipping">Shipping & Delivery</option>
+                                    <option value="returns">Returns & Exchanges</option>
+                                    <option value="complaint">Complaint</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message *</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" required placeholder="Please describe your inquiry in detail..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="newsletter" name="newsletter">
+                                <label class="form-check-label" for="newsletter">
+                                    Subscribe to our WhatsApp updates for new arrivals and exclusive offers
+                                </label>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>Send Message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="row mt-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0"><i class="fas fa-info-circle me-2"></i>Other Ways to Contact Us</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-4">
+                            <div class="mb-3">
+                                <i class="fab fa-whatsapp fa-3x text-success"></i>
+                            </div>
+                            <h5>WhatsApp</h5>
+                            <p class="text-muted">Quick support via WhatsApp</p>
+                            <a href="https://wa.me/917499099900" class="btn btn-success" target="_blank">
+                                <i class="fab fa-whatsapp me-2"></i>Chat Now
+                            </a>
+                        </div>
+                        <div class="col-md-4 text-center mb-4">
+                            <div class="mb-3">
+                                <i class="fas fa-phone fa-3x text-primary"></i>
+                            </div>
+                            <h5>Phone</h5>
+                            <p class="text-muted">Speak directly with our team</p>
+                            <a href="tel:+917860247786" class="btn btn-primary">
+                                <i class="fas fa-phone me-2"></i>Call Us
+                            </a>
+                        </div>
+                        <div class="col-md-4 text-center mb-4">
+                            <div class="mb-3">
+                                <i class="fas fa-envelope fa-3x text-info"></i>
+                            </div>
+                            <h5>Email</h5>
+                            <p class="text-muted">Send us an email</p>
+                            <a href="mailto:Kingdupattahouse@gmail.com" class="btn btn-info">
+                                <i class="fas fa-envelope me-2"></i>Email Us
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Business Information -->
+    <div class="row mt-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h3 class="mb-0"><i class="fas fa-store me-2"></i>Visit Our Store</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5>King Dupatta House</h5>
+                            <address class="mb-3">
+                                Akbari Gate, Near Nakhas<br>
+                                Victoria Street, Nakhas-226003<br>
+                                Lucknow, Uttar Pradesh, India
+                            </address>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h6>Store Hours:</h6>
+                                    <p class="mb-1">Monday - Saturday</p>
+                                    <p class="mb-0">10:00 AM - 8:00 PM</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <h6>Established:</h6>
+                                    <p class="mb-0">2013 (10+ years of trusted service)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="mb-3">
+                                <i class="fas fa-star fa-2x text-warning"></i>
+                                <div class="h4 mb-0">4.0/5</div>
+                                <small class="text-muted">14+ Reviews on Justdial</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

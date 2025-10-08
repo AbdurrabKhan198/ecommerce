@@ -245,3 +245,21 @@ class RecentlyViewed(models.Model):
 
     def __str__(self):
         return f"{self.user.get_full_name()} viewed {self.product.name}"
+
+
+class WhatsAppSubscription(models.Model):
+    """WhatsApp subscription model for Indian customers"""
+    phone_number = models.CharField(max_length=15, unique=True, help_text="WhatsApp number (e.g., +91 9876543210)")
+    name = models.CharField(max_length=100, blank=True, help_text="Customer name (optional)")
+    is_active = models.BooleanField(default=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+    unsubscribed_at = models.DateTimeField(null=True, blank=True)
+    source = models.CharField(max_length=100, default='website', help_text="Where the subscription came from")
+    
+    class Meta:
+        ordering = ['-subscribed_at']
+        verbose_name = 'WhatsApp Subscription'
+        verbose_name_plural = 'WhatsApp Subscriptions'
+
+    def __str__(self):
+        return f"{self.phone_number} - {'Active' if self.is_active else 'Inactive'}"

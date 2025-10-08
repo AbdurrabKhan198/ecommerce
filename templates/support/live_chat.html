@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'shop:homepage' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'support:support_home' %}">Support</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Live Chat</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 fw-bold text-primary mb-3">Live Chat Support</h1>
+            <p class="lead text-muted">Get instant help from our customer support team</p>
+        </div>
+    </div>
+
+    <!-- Live Chat Content -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Chat Status -->
+            <div class="card mb-5">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0"><i class="fas fa-comments me-2"></i>Chat Status</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <i class="fas fa-circle text-success fa-2x"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">Online</h5>
+                                    <p class="text-muted mb-0">Our support team is available</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <i class="fas fa-clock text-info fa-2x"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">Business Hours</h5>
+                                    <p class="text-muted mb-0">Mon-Sat: 10 AM - 8 PM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Options -->
+            <div class="row mb-5">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 text-center border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <i class="fab fa-whatsapp fa-3x text-success"></i>
+                            </div>
+                            <h5 class="card-title">WhatsApp Chat</h5>
+                            <p class="card-text text-muted">Quick support via WhatsApp</p>
+                            <a href="https://wa.me/917499099900" class="btn btn-success" target="_blank">
+                                <i class="fab fa-whatsapp me-2"></i>Start WhatsApp Chat
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 text-center border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <i class="fas fa-phone fa-3x text-primary"></i>
+                            </div>
+                            <h5 class="card-title">Phone Support</h5>
+                            <p class="card-text text-muted">Speak directly with our team</p>
+                            <a href="tel:+917860247786" class="btn btn-primary">
+                                <i class="fas fa-phone me-2"></i>Call Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Features -->
+            <div class="card mb-5">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0"><i class="fas fa-star me-2"></i>Chat Features</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>What We Can Help With</h5>
+                            <ul>
+                                <li><i class="fas fa-check text-success me-2"></i>Order status and tracking</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Size and fit advice</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Product information</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Returns and exchanges</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Shipping questions</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Response Times</h5>
+                            <ul>
+                                <li><i class="fas fa-clock text-info me-2"></i>WhatsApp: Usually within minutes</li>
+                                <li><i class="fas fa-clock text-info me-2"></i>Phone: Immediate during business hours</li>
+                                <li><i class="fas fa-clock text-info me-2"></i>Email: Within 24 hours</li>
+                                <li><i class="fas fa-clock text-info me-2"></i>Live Chat: Usually within 5 minutes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="card mb-5">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-headset me-2"></i>Contact Information</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Primary Contact</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fab fa-whatsapp text-success me-2"></i><strong>WhatsApp:</strong> +91 7499099900</li>
+                                <li><i class="fas fa-phone text-primary me-2"></i><strong>Phone:</strong> +91 7860247786</li>
+                                <li><i class="fas fa-envelope text-info me-2"></i><strong>Email:</strong> Kingdupattahouse@gmail.com</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Business Hours</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-calendar text-warning me-2"></i><strong>Monday - Saturday:</strong> 10:00 AM - 8:00 PM</li>
+                                <li><i class="fas fa-calendar-times text-danger me-2"></i><strong>Sunday:</strong> Closed</li>
+                                <li><i class="fas fa-clock text-info me-2"></i><strong>Response Time:</strong> Usually within minutes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Help Topics -->
+            <div class="card mb-5">
+                <div class="card-header bg-warning text-dark">
+                    <h3 class="mb-0"><i class="fas fa-question-circle me-2"></i>Quick Help Topics</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Common Questions</h5>
+                            <ul>
+                                <li><a href="{% url 'support:faq' %}" class="text-decoration-none">Frequently Asked Questions</a></li>
+                                <li><a href="{% url 'support:size_guide' %}" class="text-decoration-none">Size Guide</a></li>
+                                <li><a href="{% url 'support:shipping_info' %}" class="text-decoration-none">Shipping Information</a></li>
+                                <li><a href="{% url 'support:returns_policy' %}" class="text-decoration-none">Returns Policy</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Product Help</h5>
+                            <ul>
+                                <li><a href="{% url 'support:care_guide' %}" class="text-decoration-none">Care Guide</a></li>
+                                <li><a href="{% url 'shop:contact' %}" class="text-decoration-none">Contact Us</a></li>
+                                <li><a href="{% url 'shop:about' %}" class="text-decoration-none">About Us</a></li>
+                                <li><a href="{% url 'shop:homepage' %}" class="text-decoration-none">Browse Products</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Tips -->
+            <div class="alert alert-info">
+                <h5><i class="fas fa-lightbulb me-2"></i>Chat Tips</h5>
+                <ul class="mb-0">
+                    <li>Have your order number ready for faster assistance</li>
+                    <li>Describe your issue clearly and concisely</li>
+                    <li>Include relevant details like product name, size, etc.</li>
+                    <li>Be patient - our team will respond as quickly as possible</li>
+                </ul>
+            </div>
+
+            <!-- Start Chat Button -->
+            <div class="text-center mt-5">
+                <h4>Ready to Chat?</h4>
+                <p class="text-muted">Choose your preferred way to get in touch with us</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="https://wa.me/917499099900" class="btn btn-success btn-lg" target="_blank">
+                        <i class="fab fa-whatsapp me-2"></i>WhatsApp Chat
+                    </a>
+                    <a href="tel:+917860247786" class="btn btn-primary btn-lg">
+                        <i class="fas fa-phone me-2"></i>Call Us
+                    </a>
+                    <a href="{% url 'shop:contact' %}" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-envelope me-2"></i>Email Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

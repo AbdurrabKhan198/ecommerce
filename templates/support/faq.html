@@ -1,0 +1,284 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'shop:homepage' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'support:support_home' %}">Support</a></li>
+            <li class="breadcrumb-item active" aria-current="page">FAQ</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 fw-bold text-primary mb-3">Frequently Asked Questions</h1>
+            <p class="lead text-muted">Find answers to common questions about King Dupatta House</p>
+        </div>
+    </div>
+
+    <!-- FAQ Content -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- General Questions -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-question-circle me-2"></i>General Questions</h3>
+                </div>
+                <div class="card-body">
+                    <div class="accordion" id="generalAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#general1">
+                                    What is King Dupatta House?
+                                </button>
+                            </h2>
+                            <div id="general1" class="accordion-collapse collapse show" data-bs-parent="#generalAccordion">
+                                <div class="accordion-body">
+                                    King Dupatta House is a premium women's wear brand established in 2013, specializing in high-quality dupattas, leggings, and pants. We've been serving customers for over 10 years with a focus on traditional and contemporary designs.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#general2">
+                                    Where is your physical store located?
+                                </button>
+                            </h2>
+                            <div id="general2" class="accordion-collapse collapse" data-bs-parent="#generalAccordion">
+                                <div class="accordion-body">
+                                    Our physical store is located at Akbari Gate, Near Nakhas, Victoria Street, Nakhas-226003, Lucknow, Uttar Pradesh, India. We're open Monday to Saturday, 10 AM to 8 PM.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#general3">
+                                    How can I contact you?
+                                </button>
+                            </h2>
+                            <div id="general3" class="accordion-collapse collapse" data-bs-parent="#generalAccordion">
+                                <div class="accordion-body">
+                                    You can contact us via:
+                                    <ul>
+                                        <li>Phone: +91 7860247786, +91 7499099900</li>
+                                        <li>Email: Kingdupattahouse@gmail.com</li>
+                                        <li>WhatsApp: +91 7499099900</li>
+                                        <li>Visit our store in Lucknow</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ordering Questions -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0"><i class="fas fa-shopping-cart me-2"></i>Ordering & Payment</h3>
+                </div>
+                <div class="card-body">
+                    <div class="accordion" id="orderingAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#ordering1">
+                                    How do I place an order?
+                                </button>
+                            </h2>
+                            <div id="ordering1" class="accordion-collapse collapse show" data-bs-parent="#orderingAccordion">
+                                <div class="accordion-body">
+                                    Simply browse our products, select your desired items, choose your size, and add them to your cart. Proceed to checkout, enter your details, and complete the payment. You'll receive a confirmation email with your order details.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ordering2">
+                                    What payment methods do you accept?
+                                </button>
+                            </h2>
+                            <div id="ordering2" class="accordion-collapse collapse" data-bs-parent="#orderingAccordion">
+                                <div class="accordion-body">
+                                    We accept all major payment methods including:
+                                    <ul>
+                                        <li>Credit/Debit Cards (Visa, Mastercard)</li>
+                                        <li>Net Banking</li>
+                                        <li>UPI Payments</li>
+                                        <li>Digital Wallets (Paytm, PhonePe, Google Pay)</li>
+                                        <li>Cash on Delivery (COD) for select areas</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ordering3">
+                                    Is my payment information secure?
+                                </button>
+                            </h2>
+                            <div id="ordering3" class="accordion-collapse collapse" data-bs-parent="#orderingAccordion">
+                                <div class="accordion-body">
+                                    Yes, absolutely! We use 256-bit SSL encryption to protect your payment information. All transactions are processed through secure payment gateways, and we never store your card details on our servers.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shipping Questions -->
+            <div class="card mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h3 class="mb-0"><i class="fas fa-shipping-fast me-2"></i>Shipping & Delivery</h3>
+                </div>
+                <div class="card-body">
+                    <div class="accordion" id="shippingAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#shipping1">
+                                    How long does shipping take?
+                                </button>
+                            </h2>
+                            <div id="shipping1" class="accordion-collapse collapse show" data-bs-parent="#shippingAccordion">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li><strong>Lucknow:</strong> 1-2 business days</li>
+                                        <li><strong>Major Cities:</strong> 3-5 business days</li>
+                                        <li><strong>Other Cities:</strong> 5-7 business days</li>
+                                        <li><strong>Remote Areas:</strong> 7-10 business days</li>
+                                    </ul>
+                                    Processing time: 1-2 business days from order confirmation.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#shipping2">
+                                    Do you ship internationally?
+                                </button>
+                            </h2>
+                            <div id="shipping2" class="accordion-collapse collapse" data-bs-parent="#shippingAccordion">
+                                <div class="accordion-body">
+                                    Currently, we only ship within India. We're working on international shipping options and will announce them soon. For international orders, please contact us directly.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#shipping3">
+                                    Can I track my order?
+                                </button>
+                            </h2>
+                            <div id="shipping3" class="accordion-collapse collapse" data-bs-parent="#shippingAccordion">
+                                <div class="accordion-body">
+                                    Yes! Once your order is shipped, you'll receive a tracking number via SMS and email. You can track your order status in real-time through our website or the courier company's website.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Returns & Exchanges -->
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0"><i class="fas fa-undo me-2"></i>Returns & Exchanges</h3>
+                </div>
+                <div class="card-body">
+                    <div class="accordion" id="returnsAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#returns1">
+                                    What is your return policy?
+                                </button>
+                            </h2>
+                            <div id="returns1" class="accordion-collapse collapse show" data-bs-parent="#returnsAccordion">
+                                <div class="accordion-body">
+                                    We offer a 7-day return policy for unused items in original condition with tags attached. Items must be in resalable condition. Return shipping is free for defective items, otherwise, return shipping charges apply.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#returns2">
+                                    How do I return an item?
+                                </button>
+                            </h2>
+                            <div id="returns2" class="accordion-collapse collapse" data-bs-parent="#returnsAccordion">
+                                <div class="accordion-body">
+                                    <ol>
+                                        <li>Contact us within 7 days of delivery</li>
+                                        <li>Provide your order number and reason for return</li>
+                                        <li>We'll send you a return authorization</li>
+                                        <li>Package the item securely with original tags</li>
+                                        <li>Send it back to us</li>
+                                        <li>We'll process your refund within 5-7 business days</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Size & Fit -->
+            <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h3 class="mb-0"><i class="fas fa-ruler me-2"></i>Size & Fit</h3>
+                </div>
+                <div class="card-body">
+                    <div class="accordion" id="sizeAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#size1">
+                                    How do I choose the right size?
+                                </button>
+                            </h2>
+                            <div id="size1" class="accordion-collapse collapse show" data-bs-parent="#sizeAccordion">
+                                <div class="accordion-body">
+                                    Use our detailed size guide available on each product page. Measure yourself and compare with our size charts. When in doubt, size up for comfort. You can also contact us for personalized sizing advice.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#size2">
+                                    What if the size doesn't fit?
+                                </button>
+                            </h2>
+                            <div id="size2" class="accordion-collapse collapse" data-bs-parent="#sizeAccordion">
+                                <div class="accordion-body">
+                                    If the size doesn't fit, you can exchange it for a different size within 7 days of delivery. We'll arrange a free pickup and send you the correct size. If the desired size is not available, we'll provide a full refund.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact for More Help -->
+            <div class="text-center mt-5">
+                <h4>Still Have Questions?</h4>
+                <p class="text-muted">Our customer support team is here to help!</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{% url 'shop:contact' %}" class="btn btn-primary">
+                        <i class="fas fa-envelope me-2"></i>Contact Us
+                    </a>
+                    <a href="{% url 'support:live_chat' %}" class="btn btn-success">
+                        <i class="fas fa-comments me-2"></i>Live Chat
+                    </a>
+                    <a href="tel:+917860247786" class="btn btn-outline-primary">
+                        <i class="fas fa-phone me-2"></i>Call Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

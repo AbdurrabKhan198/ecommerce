@@ -146,21 +146,63 @@ function initializeWishlistFeatures() {
         // Remove existing listeners to prevent duplicates
         btn.removeEventListener('click', btn._wishlistClickHandler);
         
-        btn._wishlistClickHandler = (e) => {
+        btn._wishlistClickHandler = async (e) => {
             e.preventDefault();
+            const productId = btn.dataset.productId;
+            if (!productId) return;
+            
             const icon = btn.querySelector('i');
             if (!icon) return;
             
-            btn.classList.toggle('active');
+            // Check if user is authenticated
+            const isAuthenticated = document.body.classList.contains('authenticated') || 
+                                   document.querySelector('meta[name="user-authenticated"]');
             
-            if (btn.classList.contains('active')) {
-                icon.classList.remove('far');
-                icon.classList.add('fas');
-                showNotification('Added to wishlist!', 'success');
-            } else {
-                icon.classList.remove('fas');
-                icon.classList.add('far');
-                showNotification('Removed from wishlist', 'info');
+            if (!isAuthenticated) {
+                showNotification('Please login to add items to wishlist', 'warning');
+                return;
+            }
+            
+            const isActive = btn.classList.contains('active');
+            const url = isActive ? '/ajax/remove-from-wishlist/' : '/ajax/add-to-wishlist/';
+            
+            try {
+                // Show loading state
+                const originalIcon = icon.className;
+                icon.className = 'fas fa-spinner fa-spin';
+                btn.disabled = true;
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ product_id: productId })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    btn.classList.toggle('active');
+                    
+                    if (btn.classList.contains('active')) {
+                        icon.className = 'fas fa-heart';
+                        showNotification(data.message, 'success');
+                        updateWishlistCounter(1); // Increment counter
+                    } else {
+                        icon.className = 'far fa-heart';
+                        showNotification(data.message, 'info');
+                        updateWishlistCounter(-1); // Decrement counter
+                    }
+                } else {
+                    showNotification(data.error || 'Something went wrong', 'error');
+                }
+            } catch (error) {
+                console.error('Wishlist error:', error);
+                showNotification('Network error. Please try again.', 'error');
+            } finally {
+                btn.disabled = false;
             }
         };
         
@@ -213,6 +255,21 @@ function initializeNotifications() {
 }
 
 // Helper Functions
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 function updateCartCounter() {
     const counter = document.querySelector('.cart-badge');
     if (!counter) return;
@@ -221,6 +278,21 @@ function updateCartCounter() {
     counter.textContent = current + 1;
     counter.style.transform = 'scale(1.3)';
     setTimeout(() => { counter.style.transform = 'scale(1)'; }, 200);
+}
+
+function updateWishlistCounter(change) {
+    // Find wishlist counter in navbar
+    const wishlistCounter = document.querySelector('a[href*="wishlist"] .cart-badge');
+    if (!wishlistCounter) return;
+    
+    const current = parseInt(wishlistCounter.textContent) || 0;
+    const newCount = Math.max(0, current + change);
+    wishlistCounter.textContent = newCount;
+    
+    if (change > 0) {
+        wishlistCounter.style.transform = 'scale(1.3)';
+        setTimeout(() => { wishlistCounter.style.transform = 'scale(1)'; }, 200);
+    }
 }
 
 function showNotification(message, type = 'info') {
@@ -247,17 +319,46 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
-// Newsletter subscription - with duplicate prevention
-if (!window.newsletterHandlerAdded) {
-    window.newsletterHandlerAdded = true;
+// WhatsApp subscription - with duplicate prevention
+if (!window.whatsappHandlerAdded) {
+    window.whatsappHandlerAdded = true;
     document.addEventListener('submit', (e) => {
-        if (e.target.classList.contains('newsletter-form')) {
+        if (e.target.id === 'whatsappForm' || e.target.id === 'whatsappFooterForm') {
             e.preventDefault();
-            const emailInput = e.target.querySelector('input[type="email"]');
-            if (emailInput && emailInput.value) {
-                showNotification('Thank you for subscribing! Check your email for a discount.', 'success');
-                e.target.reset();
-            }
+            
+            const formData = new FormData(e.target);
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            const originalText = submitButton.innerHTML;
+            
+            // Show loading state
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            submitButton.disabled = true;
+            
+            fetch(e.target.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification('Success! ' + data.message, 'success');
+                    e.target.reset();
+                } else {
+                    showNotification('Error: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Something went wrong. Please try again.', 'error');
+            })
+            .finally(() => {
+                // Reset button state
+                submitButton.innerHTML = originalText;
+                submitButton.disabled = false;
+            });
         }
     });
 }

@@ -1,6 +1,6 @@
 from django import forms
 from django.core.validators import EmailValidator
-from .models import Review
+from .models import Review, WhatsAppSubscription
 
 
 class ContactForm(forms.Form):
@@ -192,3 +192,49 @@ class ProductFilterForm(forms.Form):
         initial='featured',
         widget=forms.Select(attrs={'class': 'form-control'})
     )
+
+
+class WhatsAppSubscriptionForm(forms.ModelForm):
+    """WhatsApp subscription form for Indian customers"""
+    class Meta:
+        model = WhatsAppSubscription
+        fields = ['phone_number', 'name']
+        widgets = {
+            'phone_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter your WhatsApp number (e.g., +91 9876543210)',
+                'required': True,
+                'pattern': r'^\+?[1-9]\d{1,14}$'
+            }),
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Your name (optional)',
+                'required': False
+            })
+        }
+    
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        # Basic phone number validation
+        if not phone_number:
+            raise forms.ValidationError('WhatsApp number is required.')
+        
+        # Remove spaces and check if it's a valid Indian number
+        phone_number = phone_number.replace(' ', '').replace('-', '')
+        
+        # Check if it starts with +91 or is a 10-digit number
+        if phone_number.startswith('+91'):
+            if len(phone_number) != 13:  # +91 + 10 digits
+                raise forms.ValidationError('Please enter a valid 10-digit Indian mobile number.')
+        elif phone_number.startswith('91') and len(phone_number) == 12:
+            phone_number = '+' + phone_number
+        elif len(phone_number) == 10:
+            phone_number = '+91' + phone_number
+        else:
+            raise forms.ValidationError('Please enter a valid Indian mobile number (10 digits or +91 format).')
+        
+        # Check for duplicates
+        if WhatsAppSubscription.objects.filter(phone_number=phone_number, is_active=True).exists():
+            raise forms.ValidationError('This WhatsApp number is already subscribed for updates.')
+        
+        return phone_number

@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'shop:homepage' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'support:support_home' %}">Support</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Privacy Policy</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 fw-bold text-primary mb-3">Privacy Policy</h1>
+            <p class="lead text-muted">How we protect and use your personal information</p>
+            <p class="text-muted"><small>Last updated: October 8, 2025</small></p>
+        </div>
+    </div>
+
+    <!-- Privacy Content -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Introduction -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="text-primary">Introduction</h3>
+                    <p>King Dupatta House ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or make a purchase.</p>
+                </div>
+            </div>
+
+            <!-- Information We Collect -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-info-circle me-2"></i>Information We Collect</h3>
+                </div>
+                <div class="card-body">
+                    <h5>Personal Information</h5>
+                    <ul>
+                        <li><strong>Contact Information:</strong> Name, email address, phone number, WhatsApp number</li>
+                        <li><strong>Shipping Information:</strong> Delivery address, billing address</li>
+                        <li><strong>Payment Information:</strong> Payment method details (processed securely)</li>
+                        <li><strong>Account Information:</strong> Username, password, preferences</li>
+                    </ul>
+                    
+                    <h5 class="mt-4">Automatically Collected Information</h5>
+                    <ul>
+                        <li><strong>Device Information:</strong> IP address, browser type, operating system</li>
+                        <li><strong>Usage Data:</strong> Pages visited, time spent, click patterns</li>
+                        <li><strong>Cookies:</strong> To enhance your browsing experience</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- How We Use Information -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0"><i class="fas fa-cogs me-2"></i>How We Use Your Information</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Order Processing</h5>
+                            <ul>
+                                <li>Process and fulfill orders</li>
+                                <li>Send order confirmations</li>
+                                <li>Provide shipping updates</li>
+                                <li>Handle returns and exchanges</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Communication</h5>
+                            <ul>
+                                <li>Send WhatsApp updates</li>
+                                <li>Respond to inquiries</li>
+                                <li>Provide customer support</li>
+                                <li>Send promotional offers</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Information Sharing -->
+            <div class="card mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h3 class="mb-0"><i class="fas fa-share-alt me-2"></i>Information Sharing</h3>
+                </div>
+                <div class="card-body">
+                    <p>We do not sell, trade, or rent your personal information to third parties. We may share your information only in the following circumstances:</p>
+                    <ul>
+                        <li><strong>Service Providers:</strong> With trusted partners who help us operate our business (shipping, payment processing)</li>
+                        <li><strong>Legal Requirements:</strong> When required by law or to protect our rights</li>
+                        <li><strong>Business Transfers:</strong> In case of merger or acquisition</li>
+                        <li><strong>Consent:</strong> When you explicitly consent to sharing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Data Security -->
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Data Security</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Security Measures</h5>
+                            <ul>
+                                <li>256-bit SSL encryption</li>
+                                <li>Secure payment processing</li>
+                                <li>Regular security audits</li>
+                                <li>Access controls and monitoring</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Data Protection</h5>
+                            <ul>
+                                <li>Encrypted data storage</li>
+                                <li>Secure server infrastructure</li>
+                                <li>Regular backups</li>
+                                <li>Staff training on data protection</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Your Rights -->
+            <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h3 class="mb-0"><i class="fas fa-user-shield me-2"></i>Your Rights</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Access & Control</h5>
+                            <ul>
+                                <li>Access your personal data</li>
+                                <li>Update your information</li>
+                                <li>Delete your account</li>
+                                <li>Opt-out of marketing</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Data Portability</h5>
+                            <ul>
+                                <li>Export your data</li>
+                                <li>Transfer to another service</li>
+                                <li>Request data correction</li>
+                                <li>Withdraw consent</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cookies -->
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h3 class="mb-0"><i class="fas fa-cookie-bite me-2"></i>Cookies & Tracking</h3>
+                </div>
+                <div class="card-body">
+                    <p>We use cookies to enhance your browsing experience:</p>
+                    <ul>
+                        <li><strong>Essential Cookies:</strong> Required for website functionality</li>
+                        <li><strong>Analytics Cookies:</strong> Help us understand website usage</li>
+                        <li><strong>Marketing Cookies:</strong> Used for targeted advertising</li>
+                        <li><strong>Preference Cookies:</strong> Remember your settings</li>
+                    </ul>
+                    <p class="mt-3">You can control cookies through your browser settings, but disabling them may affect website functionality.</p>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-envelope me-2"></i>Contact Us</h3>
+                </div>
+                <div class="card-body">
+                    <p>If you have any questions about this Privacy Policy or our data practices, please contact us:</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Contact Information</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-envelope me-2"></i>Email: Kingdupattahouse@gmail.com</li>
+                                <li><i class="fas fa-phone me-2"></i>Phone: +91 7860247786</li>
+                                <li><i class="fab fa-whatsapp me-2"></i>WhatsApp: +91 7499099900</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Business Address</h5>
+                            <address>
+                                King Dupatta House<br>
+                                Akbari Gate, Near Nakhas<br>
+                                Victoria Street, Nakhas-226003<br>
+                                Lucknow, Uttar Pradesh, India
+                            </address>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Policy Updates -->
+            <div class="alert alert-info">
+                <h5><i class="fas fa-info-circle me-2"></i>Policy Updates</h5>
+                <p class="mb-0">We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date. We encourage you to review this Privacy Policy periodically.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

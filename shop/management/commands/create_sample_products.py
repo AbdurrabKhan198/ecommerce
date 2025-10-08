@@ -1,196 +1,185 @@
 from django.core.management.base import BaseCommand
-from shop.models import Category, SubCategory, Product, ProductImage, ProductVariant
+from shop.models import Category, SubCategory, Product, ProductImage
 from decimal import Decimal
+import random
 
 
 class Command(BaseCommand):
-    help = 'Create sample products for King Dupatta House'
+    help = 'Create sample products for testing shop functionality'
 
     def handle(self, *args, **options):
         # Get categories and subcategories
         try:
             leggings_category = Category.objects.get(slug='leggings')
-            pants_category = Category.objects.get(slug='pants')
+            pants_category = Category.objects.get(slug='pants-trousers')
             dupattas_category = Category.objects.get(slug='dupattas')
         except Category.DoesNotExist:
             self.stdout.write(
-                self.style.ERROR('Categories not found. Please run create_sample_categories first.')
+                self.style.ERROR('Categories not found. Please run create_navbar_categories first.')
             )
             return
-
-        # Get subcategories
-        ankle_length = SubCategory.objects.get(slug='ankle-length')
-        full_length = SubCategory.objects.get(slug='full-length')
-        capri = SubCategory.objects.get(slug='capri')
-        palazzo = SubCategory.objects.get(slug='palazzo')
-        straight_fit = SubCategory.objects.get(slug='straight-fit')
-        tapered = SubCategory.objects.get(slug='tapered')
-        silk = SubCategory.objects.get(slug='silk')
-        cotton = SubCategory.objects.get(slug='cotton')
-        georgette = SubCategory.objects.get(slug='georgette')
 
         # Sample products data
         products_data = [
             # Leggings
             {
-                'name': 'Premium Cotton Ankle Length Leggings',
+                'name': 'Premium Cotton Leggings',
                 'category': leggings_category,
-                'subcategory': ankle_length,
-                'description': 'Super comfortable ankle length leggings made from premium cotton blend. Perfect for everyday wear with excellent stretch and durability.',
-                'short_description': 'Comfortable ankle length leggings in premium cotton blend',
+                'subcategory': SubCategory.objects.get(slug='cotton-leggings'),
                 'fabric': 'cotton',
                 'occasion': 'casual',
-                'care_instructions': 'Machine wash cold, tumble dry low, do not bleach',
                 'mrp': Decimal('899.00'),
                 'selling_price': Decimal('599.00'),
-                'stock_quantity': 50,
+                'description': 'Comfortable and stylish cotton leggings perfect for everyday wear.',
+                'short_description': 'Premium cotton leggings with perfect fit',
+                'care_instructions': 'Machine wash cold, tumble dry low',
                 'is_featured': True,
-                'meta_title': 'Premium Cotton Ankle Length Leggings - King Dupatta House',
-                'meta_description': 'Shop premium cotton ankle length leggings at King Dupatta House. Comfortable, durable, and perfect for everyday wear.',
+                'is_bestseller': True,
             },
             {
-                'name': 'Full Length Stretch Leggings',
+                'name': 'Printed Churidar Leggings',
                 'category': leggings_category,
-                'subcategory': full_length,
-                'description': 'Full length leggings with excellent stretch and comfort. Made from high-quality fabric that maintains its shape wash after wash.',
-                'short_description': 'Full length leggings with excellent stretch and comfort',
+                'subcategory': SubCategory.objects.get(slug='churidar-leggings'),
+                'fabric': 'cotton',
+                'occasion': 'traditional',
+                'mrp': Decimal('1299.00'),
+                'selling_price': Decimal('999.00'),
+                'description': 'Beautiful printed churidar leggings with traditional patterns.',
+                'short_description': 'Traditional printed churidar leggings',
+                'care_instructions': 'Hand wash recommended, air dry',
+                'is_featured': True,
+                'is_bestseller': False,
+            },
+            {
+                'name': 'Solid Color Jeggings',
+                'category': leggings_category,
+                'subcategory': SubCategory.objects.get(slug='jeggings'),
                 'fabric': 'cotton_blend',
                 'occasion': 'casual',
-                'care_instructions': 'Machine wash cold, do not bleach, iron on low heat',
                 'mrp': Decimal('799.00'),
-                'selling_price': Decimal('549.00'),
-                'stock_quantity': 35,
-                'is_featured': True,
-            },
-            {
-                'name': 'Capri Length Cotton Leggings',
-                'category': leggings_category,
-                'subcategory': capri,
-                'description': 'Stylish capri length leggings perfect for summer wear. Lightweight and breathable cotton fabric.',
-                'short_description': 'Stylish capri length leggings for summer',
-                'fabric': 'cotton',
-                'occasion': 'casual',
-                'care_instructions': 'Machine wash cold, air dry',
-                'mrp': Decimal('699.00'),
-                'selling_price': Decimal('449.00'),
-                'stock_quantity': 25,
+                'selling_price': Decimal('599.00'),
+                'description': 'Versatile jeggings that combine comfort with style.',
+                'short_description': 'Comfortable jeggings for everyday wear',
+                'care_instructions': 'Machine wash cold, do not bleach',
+                'is_featured': False,
+                'is_bestseller': True,
             },
             
             # Pants
             {
-                'name': 'Elegant Palazzo Pants Set',
+                'name': 'Elegant Palazzo Pants',
                 'category': pants_category,
-                'subcategory': palazzo,
-                'description': 'Beautiful palazzo pants set with matching top. Perfect for parties and special occasions. Premium fabric with elegant drape.',
-                'short_description': 'Elegant palazzo pants set for special occasions',
-                'fabric': 'silk',
+                'subcategory': SubCategory.objects.get(slug='palazzo-pants'),
+                'fabric': 'viscose',
                 'occasion': 'party',
-                'care_instructions': 'Dry clean only',
                 'mrp': Decimal('1599.00'),
                 'selling_price': Decimal('1299.00'),
-                'stock_quantity': 20,
+                'description': 'Flowing palazzo pants perfect for parties and special occasions.',
+                'short_description': 'Elegant palazzo pants for special events',
+                'care_instructions': 'Dry clean recommended',
                 'is_featured': True,
+                'is_bestseller': True,
             },
             {
-                'name': 'Professional Straight Fit Pants',
+                'name': 'Formal Trousers',
                 'category': pants_category,
-                'subcategory': straight_fit,
-                'description': 'Professional straight fit pants perfect for office wear. Comfortable and stylish with a perfect fit.',
-                'short_description': 'Professional straight fit pants for office wear',
+                'subcategory': SubCategory.objects.get(slug='formal-trousers'),
                 'fabric': 'polyester',
-                'occasion': 'work',
-                'care_instructions': 'Machine wash cold, tumble dry low',
+                'occasion': 'formal',
                 'mrp': Decimal('1199.00'),
                 'selling_price': Decimal('899.00'),
-                'stock_quantity': 30,
+                'description': 'Professional formal trousers for office and business wear.',
+                'short_description': 'Professional formal trousers',
+                'care_instructions': 'Machine wash cold, iron on low heat',
+                'is_featured': False,
+                'is_bestseller': False,
             },
             {
-                'name': 'Modern Tapered Pants',
+                'name': 'Wide Leg Cigarette Pants',
                 'category': pants_category,
-                'subcategory': tapered,
-                'description': 'Modern tapered pants with contemporary styling. Perfect for casual and semi-formal occasions.',
-                'short_description': 'Modern tapered pants with contemporary styling',
-                'fabric': 'cotton_blend',
+                'subcategory': SubCategory.objects.get(slug='cigarette-pants'),
+                'fabric': 'cotton',
                 'occasion': 'casual',
-                'care_instructions': 'Machine wash cold, tumble dry low',
                 'mrp': Decimal('999.00'),
                 'selling_price': Decimal('749.00'),
-                'stock_quantity': 40,
+                'description': 'Trendy cigarette pants with wide leg design.',
+                'short_description': 'Trendy wide leg cigarette pants',
+                'care_instructions': 'Machine wash cold, tumble dry low',
+                'is_featured': True,
+                'is_bestseller': False,
             },
             
             # Dupattas
             {
-                'name': 'Luxurious Silk Dupatta',
+                'name': 'Silk Dupatta with Embroidery',
                 'category': dupattas_category,
-                'subcategory': silk,
-                'description': 'Beautiful silk dupatta with intricate work. Perfect for traditional occasions and festivals.',
-                'short_description': 'Luxurious silk dupatta with intricate work',
+                'subcategory': SubCategory.objects.get(slug='silk-dupattas'),
                 'fabric': 'silk',
                 'occasion': 'traditional',
+                'mrp': Decimal('1999.00'),
+                'selling_price': Decimal('1499.00'),
+                'description': 'Luxurious silk dupatta with intricate embroidery work.',
+                'short_description': 'Luxurious silk dupatta with embroidery',
                 'care_instructions': 'Dry clean only',
-                'mrp': Decimal('999.00'),
-                'selling_price': Decimal('799.00'),
-                'stock_quantity': 15,
                 'is_featured': True,
+                'is_bestseller': True,
             },
             {
                 'name': 'Cotton Printed Dupatta',
                 'category': dupattas_category,
-                'subcategory': cotton,
-                'description': 'Comfortable cotton dupatta with beautiful prints. Perfect for daily wear and casual occasions.',
-                'short_description': 'Comfortable cotton dupatta with beautiful prints',
+                'subcategory': SubCategory.objects.get(slug='cotton-dupattas'),
                 'fabric': 'cotton',
                 'occasion': 'casual',
-                'care_instructions': 'Machine wash cold, air dry',
                 'mrp': Decimal('599.00'),
                 'selling_price': Decimal('399.00'),
-                'stock_quantity': 45,
+                'description': 'Comfortable cotton dupatta with beautiful prints.',
+                'short_description': 'Comfortable cotton printed dupatta',
+                'care_instructions': 'Machine wash cold, air dry',
+                'is_featured': False,
+                'is_bestseller': True,
             },
             {
-                'name': 'Elegant Georgette Dupatta',
+                'name': 'Net Dupatta with Sequins',
                 'category': dupattas_category,
-                'subcategory': georgette,
-                'description': 'Elegant georgette dupatta with beautiful drape. Perfect for parties and special events.',
-                'short_description': 'Elegant georgette dupatta with beautiful drape',
-                'fabric': 'viscose',
+                'subcategory': SubCategory.objects.get(slug='net-dupattas'),
+                'fabric': 'net',
                 'occasion': 'party',
-                'care_instructions': 'Dry clean only',
-                'mrp': Decimal('799.00'),
-                'selling_price': Decimal('599.00'),
-                'stock_quantity': 25,
+                'mrp': Decimal('899.00'),
+                'selling_price': Decimal('699.00'),
+                'description': 'Stylish net dupatta with sequin work for parties.',
+                'short_description': 'Stylish net dupatta with sequins',
+                'care_instructions': 'Hand wash, air dry',
+                'is_featured': True,
+                'is_bestseller': False,
             },
         ]
 
-        created_products = []
-        
+        # Create products
+        created_count = 0
         for product_data in products_data:
             product, created = Product.objects.get_or_create(
-                slug=product_data['name'].lower().replace(' ', '-').replace(',', ''),
-                defaults=product_data
+                name=product_data['name'],
+                defaults={
+                    'category': product_data['category'],
+                    'subcategory': product_data['subcategory'],
+                    'fabric': product_data['fabric'],
+                    'occasion': product_data['occasion'],
+                    'mrp': product_data['mrp'],
+                    'selling_price': product_data['selling_price'],
+                    'description': product_data['description'],
+                    'short_description': product_data['short_description'],
+                    'care_instructions': product_data['care_instructions'],
+                    'is_featured': product_data['is_featured'],
+                    'is_bestseller': product_data['is_bestseller'],
+                    'is_active': True,
+                    'slug': product_data['name'].lower().replace(' ', '-').replace(',', ''),
+                }
             )
+            
             if created:
-                created_products.append(product)
+                created_count += 1
                 self.stdout.write(
                     self.style.SUCCESS(f'Created product: {product.name}')
-                )
-                
-                # Create product variants
-                sizes = ['S', 'M', 'L', 'XL']
-                colors = ['Black', 'White', 'Navy', 'Red', 'Pink']
-                
-                for size in sizes:
-                    for color in colors[:3]:  # Limit to 3 colors per product
-                        ProductVariant.objects.create(
-                            product=product,
-                            size=size,
-                            color=color,
-                            color_code='#000000' if color == 'Black' else '#FFFFFF' if color == 'White' else '#000080',
-                            stock_quantity=10,
-                            additional_price=Decimal('0.00')
-                        )
-                
-                self.stdout.write(
-                    self.style.SUCCESS(f'  → Created variants for {product.name}')
                 )
             else:
                 self.stdout.write(
@@ -198,11 +187,5 @@ class Command(BaseCommand):
                 )
 
         self.stdout.write(
-            self.style.SUCCESS(f'\n✅ Successfully created {len(created_products)} products with variants!')
-        )
-        self.stdout.write(
-            self.style.SUCCESS('You can now manage these products from the Django admin panel.')
-        )
-        self.stdout.write(
-            self.style.SUCCESS('Products will automatically appear on your website categories and subcategories.')
+            self.style.SUCCESS(f'Successfully created {created_count} sample products!')
         )

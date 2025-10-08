@@ -11,9 +11,9 @@ import json
 
 from .models import (
     Category, SubCategory, Product, ProductVariant, 
-    Review, Wishlist, RecentlyViewed
+    Review, Wishlist, RecentlyViewed, WhatsAppSubscription
 )
-from .forms import ContactForm, ReviewForm
+from .forms import ContactForm, ReviewForm, WhatsAppSubscriptionForm
 
 
 def homepage(request):
@@ -26,11 +26,16 @@ def homepage(request):
     bestseller_products = Product.objects.filter(is_active=True, is_bestseller=True).order_by('-created_at')[:4]
     recent_products = Product.objects.filter(is_active=True).order_by('-created_at')[:4]
     
+    # Get recent approved reviews
+    from shop.models import Review
+    recent_reviews = Review.objects.filter(is_approved=True).select_related('user', 'product').order_by('-created_at')[:3]
+    
     context = {
         'categories': categories,
         'featured_products': featured_products,
         'bestseller_products': bestseller_products,
         'recent_products': recent_products,
+        'recent_reviews': recent_reviews,
         'page_title': 'King Dupatta House - Premium Dupattas, Leggings & Pants Since 2013',
         'meta_description': 'King Dupatta House - Trusted since 2013 for premium dupattas, leggings & pants. Located in Lucknow, serving customers nationwide with quality fabrics and perfect fit guarantee.',
         'currency_symbol': '₹',
@@ -86,18 +91,43 @@ def shop(request):
     if max_price:
         products = products.filter(selling_price__lte=max_price)
     
-    # Filter by fabric
-    fabric = request.GET.get('fabric')
-    if fabric:
-        products = products.filter(fabric=fabric)
+    # Filter by fabric (multiple selection)
+    fabric_filters = request.GET.getlist('fabric')
+    if fabric_filters:
+        products = products.filter(fabric__in=fabric_filters)
     
-    # Filter by occasion
-    occasion = request.GET.get('occasion')
-    if occasion:
-        products = products.filter(occasion=occasion)
+    # Filter by occasion (multiple selection)
+    occasion_filters = request.GET.getlist('occasion')
+    if occasion_filters:
+        products = products.filter(occasion__in=occasion_filters)
+    
+    # Filter by size
+    size = request.GET.get('size')
+    if size:
+        products = products.filter(variants__size=size, variants__is_active=True)
+    
+    # Filter by color
+    color = request.GET.get('color')
+    if color:
+        products = products.filter(variants__color__icontains=color, variants__is_active=True)
+    
+    # Special filters
+    if request.GET.get('sale') == 'true':
+        products = products.filter(discount_percentage__gt=0)
+    
+    if request.GET.get('new') == 'true':
+        from datetime import datetime, timedelta
+        thirty_days_ago = datetime.now() - timedelta(days=30)
+        products = products.filter(created_at__gte=thirty_days_ago)
+    
+    if request.GET.get('bestseller') == 'true':
+        products = products.filter(is_bestseller=True)
+    
+    if request.GET.get('trending') == 'true':
+        products = products.filter(is_featured=True)
     
     # Search
-    search_query = request.GET.get('search')
+    search_query = request.GET.get('q')
     if search_query:
         products = products.filter(
             Q(name__icontains=search_query) |
@@ -117,11 +147,15 @@ def shop(request):
         products = products.annotate(
             avg_rating=Avg('reviews__rating')
         ).order_by('-avg_rating')
+    elif sort_by == 'popularity':
+        products = products.order_by('-is_bestseller', '-is_featured', '-created_at')
     else:  # featured
         products = products.order_by('-is_featured', '-created_at')
     
     # Pagination
-    paginator = Paginator(products, settings.PRODUCTS_PER_PAGE)
+    from django.conf import settings
+    products_per_page = getattr(settings, 'PRODUCTS_PER_PAGE', 12)
+    paginator = Paginator(products, products_per_page)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
@@ -138,6 +172,7 @@ def shop(request):
         'occasion_choices': occasion_choices,
         'current_filters': request.GET,
         'page_title': 'Shop Women\'s Wear - All Products',
+        'meta_description': 'Shop our complete collection of premium women\'s wear including leggings, pants, and dupattas. Free shipping on orders above ₹999.',
     }
     return render(request, 'shop/shop.html', context)
 
@@ -307,6 +342,46 @@ def contact(request):
     return render(request, 'shop/contact.html', context)
 
 
+def reviews(request):
+    """Customer reviews page"""
+    from django.core.paginator import Paginator
+    from django.db import models
+    
+    # Get all approved reviews
+    reviews_list = Review.objects.filter(is_approved=True).select_related('user', 'product').order_by('-created_at')
+    
+    # Pagination
+    paginator = Paginator(reviews_list, 10)  # 10 reviews per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    # Get review statistics
+    total_reviews = Review.objects.filter(is_approved=True).count()
+    avg_rating = Review.objects.filter(is_approved=True).aggregate(
+        avg_rating=models.Avg('rating')
+    )['avg_rating'] or 0
+    
+    # Rating distribution
+    rating_distribution = {
+        5: Review.objects.filter(is_approved=True, rating=5).count(),
+        4: Review.objects.filter(is_approved=True, rating=4).count(),
+        3: Review.objects.filter(is_approved=True, rating=3).count(),
+        2: Review.objects.filter(is_approved=True, rating=2).count(),
+        1: Review.objects.filter(is_approved=True, rating=1).count(),
+    }
+    
+    context = {
+        'page_obj': page_obj,
+        'reviews': page_obj.object_list,
+        'total_reviews': total_reviews,
+        'avg_rating': round(avg_rating, 1),
+        'rating_distribution': rating_distribution,
+        'page_title': 'Customer Reviews - King Dupatta House',
+        'meta_description': 'Read what our customers say about King Dupatta House. Real reviews from satisfied customers about our premium women\'s wear.',
+    }
+    return render(request, 'shop/reviews.html', context)
+
+
 @login_required
 @require_POST
 def add_to_wishlist(request):
@@ -375,3 +450,45 @@ def product_quick_view(request):
         })
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)})
+
+
+@require_POST
+def whatsapp_subscribe(request):
+    """Handle WhatsApp subscription for Indian customers"""
+    form = WhatsAppSubscriptionForm(request.POST)
+    
+    if form.is_valid():
+        phone_number = form.cleaned_data['phone_number']
+        name = form.cleaned_data.get('name', '')
+        
+        subscription, created = WhatsAppSubscription.objects.get_or_create(
+            phone_number=phone_number,
+            defaults={
+                'name': name,
+                'is_active': True, 
+                'source': 'website'
+            }
+        )
+        
+        if created:
+            messages.success(request, 'Thank you! You\'ll receive WhatsApp updates about new arrivals and exclusive offers.')
+        else:
+            if subscription.is_active:
+                messages.info(request, 'This WhatsApp number is already subscribed for updates.')
+            else:
+                # Reactivate subscription
+                subscription.is_active = True
+                subscription.unsubscribed_at = None
+                subscription.name = name  # Update name if provided
+                subscription.save()
+                messages.success(request, 'Welcome back! Your WhatsApp subscription has been reactivated.')
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Successfully subscribed for WhatsApp updates!'
+        })
+    else:
+        return JsonResponse({
+            'success': False,
+            'message': form.errors.get('phone_number', ['Invalid WhatsApp number'])[0]
+        })

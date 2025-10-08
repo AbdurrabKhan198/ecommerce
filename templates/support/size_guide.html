@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'shop:homepage' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'support:support_home' %}">Support</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Size Guide</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 fw-bold text-primary mb-3">Size Guide</h1>
+            <p class="lead text-muted">Find your perfect fit with our comprehensive size guide for King Dupatta House garments</p>
+        </div>
+    </div>
+
+    <!-- Size Guide Content -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Dupattas Size Guide -->
+            <div class="card mb-5">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-scarf me-2"></i>Dupattas Size Guide</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Size</th>
+                                    <th>Length (inches)</th>
+                                    <th>Width (inches)</th>
+                                    <th>Best For</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Small (S)</strong></td>
+                                    <td>2.5 yards</td>
+                                    <td>45 inches</td>
+                                    <td>Petite frames, casual wear</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Medium (M)</strong></td>
+                                    <td>2.75 yards</td>
+                                    <td>45 inches</td>
+                                    <td>Regular height, daily wear</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Large (L)</strong></td>
+                                    <td>3 yards</td>
+                                    <td>45 inches</td>
+                                    <td>Tall frames, formal occasions</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Extra Large (XL)</strong></td>
+                                    <td>3.25 yards</td>
+                                    <td>45 inches</td>
+                                    <td>Plus size, grand occasions</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Note:</strong> All dupattas are 45 inches wide. Length varies by size for different draping styles.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leggings Size Guide -->
+            <div class="card mb-5">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0"><i class="fas fa-running me-2"></i>Leggings Size Guide</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Size</th>
+                                    <th>Waist (inches)</th>
+                                    <th>Hip (inches)</th>
+                                    <th>Length (inches)</th>
+                                    <th>Best For</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Small (S)</strong></td>
+                                    <td>26-28</td>
+                                    <td>36-38</td>
+                                    <td>38</td>
+                                    <td>Size 4-6</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Medium (M)</strong></td>
+                                    <td>28-30</td>
+                                    <td>38-40</td>
+                                    <td>39</td>
+                                    <td>Size 8-10</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Large (L)</strong></td>
+                                    <td>30-32</td>
+                                    <td>40-42</td>
+                                    <td>40</td>
+                                    <td>Size 12-14</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Extra Large (XL)</strong></td>
+                                    <td>32-34</td>
+                                    <td>42-44</td>
+                                    <td>41</td>
+                                    <td>Size 16-18</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pants Size Guide -->
+            <div class="card mb-5">
+                <div class="card-header bg-warning text-dark">
+                    <h3 class="mb-0"><i class="fas fa-user me-2"></i>Pants Size Guide</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Size</th>
+                                    <th>Waist (inches)</th>
+                                    <th>Hip (inches)</th>
+                                    <th>Length (inches)</th>
+                                    <th>Best For</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Small (S)</strong></td>
+                                    <td>26-28</td>
+                                    <td>36-38</td>
+                                    <td>38</td>
+                                    <td>Size 4-6</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Medium (M)</strong></td>
+                                    <td>28-30</td>
+                                    <td>38-40</td>
+                                    <td>39</td>
+                                    <td>Size 8-10</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Large (L)</strong></td>
+                                    <td>30-32</td>
+                                    <td>40-42</td>
+                                    <td>40</td>
+                                    <td>Size 12-14</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Extra Large (XL)</strong></td>
+                                    <td>32-34</td>
+                                    <td>42-44</td>
+                                    <td>41</td>
+                                    <td>Size 16-18</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How to Measure -->
+            <div class="card mb-5">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0"><i class="fas fa-ruler me-2"></i>How to Measure</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>For Dupattas:</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success me-2"></i>Measure your height</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Consider your frame size</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Think about draping style preference</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>For Leggings & Pants:</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success me-2"></i>Measure waist at narrowest point</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Measure hips at fullest point</li>
+                                <li><i class="fas fa-check text-success me-2"></i>Measure inseam for length</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips -->
+            <div class="alert alert-light border">
+                <h5 class="text-primary"><i class="fas fa-lightbulb me-2"></i>Pro Tips</h5>
+                <ul class="mb-0">
+                    <li>When in doubt, size up for comfort</li>
+                    <li>Consider your body shape, not just measurements</li>
+                    <li>Check our return policy if you need to exchange</li>
+                    <li>Contact us for personalized sizing advice</li>
+                </ul>
+            </div>
+
+            <!-- Contact for Help -->
+            <div class="text-center mt-5">
+                <h4>Still Need Help?</h4>
+                <p class="text-muted">Our team is here to help you find the perfect fit!</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{% url 'shop:contact' %}" class="btn btn-primary">
+                        <i class="fas fa-envelope me-2"></i>Contact Us
+                    </a>
+                    <a href="{% url 'support:live_chat' %}" class="btn btn-success">
+                        <i class="fas fa-comments me-2"></i>Live Chat
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

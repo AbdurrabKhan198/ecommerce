@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'shop:homepage' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'support:support_home' %}">Support</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Shipping Info</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 fw-bold text-primary mb-3">Shipping Information</h1>
+            <p class="lead text-muted">Everything you need to know about our delivery process</p>
+        </div>
+    </div>
+
+    <!-- Shipping Content -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Delivery Times -->
+            <div class="card mb-5">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-clock me-2"></i>Delivery Times</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Location</th>
+                                    <th>Delivery Time</th>
+                                    <th>Shipping Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Lucknow (Local)</strong></td>
+                                    <td>1-2 business days</td>
+                                    <td>FREE</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Major Cities</strong><br><small class="text-muted">Delhi, Mumbai, Bangalore, Chennai, Kolkata, Hyderabad, Pune</small></td>
+                                    <td>3-5 business days</td>
+                                    <td>₹99</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Other Cities</strong></td>
+                                    <td>5-7 business days</td>
+                                    <td>₹149</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Remote Areas</strong></td>
+                                    <td>7-10 business days</td>
+                                    <td>₹199</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Note:</strong> Processing time is 1-2 business days from order confirmation. Delivery times are estimates and may vary due to weather conditions or other factors beyond our control.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shipping Methods -->
+            <div class="card mb-5">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0"><i class="fas fa-truck me-2"></i>Shipping Methods</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="me-3">
+                                    <i class="fas fa-shipping-fast fa-2x text-primary"></i>
+                                </div>
+                                <div>
+                                    <h5>Standard Shipping</h5>
+                                    <p class="text-muted">Regular delivery through our trusted courier partners</p>
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-check text-success me-2"></i>Tracking available</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Insurance included</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Safe packaging</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="me-3">
+                                    <i class="fas fa-rocket fa-2x text-warning"></i>
+                                </div>
+                                <div>
+                                    <h5>Express Shipping</h5>
+                                    <p class="text-muted">Fast delivery for urgent orders (Available for major cities)</p>
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-check text-success me-2"></i>Next day delivery</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Priority handling</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Extra ₹200 charge</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Tracking -->
+            <div class="card mb-5">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0"><i class="fas fa-search me-2"></i>Order Tracking</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5>Track Your Order</h5>
+                            <p class="text-muted">Once your order is shipped, you'll receive:</p>
+                            <ul>
+                                <li>SMS notification with tracking number</li>
+                                <li>Email with tracking details</li>
+                                <li>WhatsApp message (if subscribed)</li>
+                            </ul>
+                            <p class="mb-3">You can track your order status in real-time through our website or the courier company's website.</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="bg-light p-4 rounded">
+                                <i class="fas fa-mobile-alt fa-3x text-primary mb-3"></i>
+                                <h6>Need Help Tracking?</h6>
+                                <p class="small text-muted">Contact us with your order number</p>
+                                <a href="{% url 'shop:contact' %}" class="btn btn-primary btn-sm">Contact Support</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Packaging -->
+            <div class="card mb-5">
+                <div class="card-header bg-warning text-dark">
+                    <h3 class="mb-0"><i class="fas fa-box me-2"></i>Packaging & Care</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Our Packaging</h5>
+                            <ul>
+                                <li>Premium quality packaging materials</li>
+                                <li>Individual garment bags for each item</li>
+                                <li>Protective outer packaging</li>
+                                <li>Branded packaging with care instructions</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Care Instructions</h5>
+                            <ul>
+                                <li>Handle with care during unpacking</li>
+                                <li>Check for any damage before accepting</li>
+                                <li>Follow care labels on garments</li>
+                                <li>Contact us immediately for any issues</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- International Shipping -->
+            <div class="card mb-5">
+                <div class="card-header bg-secondary text-white">
+                    <h3 class="mb-0"><i class="fas fa-globe me-2"></i>International Shipping</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Currently Unavailable:</strong> We currently only ship within India. We're working on international shipping options and will announce them soon.
+                    </div>
+                    <p>For international orders or special requests, please contact us directly:</p>
+                    <ul>
+                        <li>Email: Kingdupattahouse@gmail.com</li>
+                        <li>Phone: +91 7860247786</li>
+                        <li>WhatsApp: +91 7499099900</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Contact for Shipping Issues -->
+            <div class="text-center mt-5">
+                <h4>Shipping Questions?</h4>
+                <p class="text-muted">Our team is here to help with any shipping concerns!</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{% url 'shop:contact' %}" class="btn btn-primary">
+                        <i class="fas fa-envelope me-2"></i>Contact Us
+                    </a>
+                    <a href="{% url 'support:live_chat' %}" class="btn btn-success">
+                        <i class="fas fa-comments me-2"></i>Live Chat
+                    </a>
+                    <a href="tel:+917860247786" class="btn btn-outline-primary">
+                        <i class="fas fa-phone me-2"></i>Call Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
