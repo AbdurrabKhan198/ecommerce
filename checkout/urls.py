@@ -25,4 +25,10 @@ urlpatterns = [
     
     # Order placement
     path('place-order/', views.place_order, name='place_order'),
+    
+    # Address management
+    path('ajax/add-address/', views.add_address, name='add_address'),
+    path('ajax/update-address/<int:address_id>/', views.update_address, name='update_address'),
+    path('ajax/delete-address/<int:address_id>/', views.delete_address, name='delete_address'),
+    path('ajax/get-addresses/', views.get_addresses, name='get_addresses'),
 ]

@@ -47,6 +47,13 @@ def checkout(request):
     # Calculate final total
     final_total = cart_total - discount_amount
     
+    # Calculate GST (18%)
+    from decimal import Decimal
+    gst_amount = round(final_total * Decimal('0.18'), 2)
+    
+    # Calculate total including GST
+    total_with_gst = final_total + gst_amount
+    
     context = {
         'cart': cart,
         'cart_items': cart_items,
@@ -58,6 +65,8 @@ def checkout(request):
         'applied_coupon': applied_coupon,
         'discount_amount': discount_amount,
         'final_total': final_total,
+        'gst_amount': gst_amount,
+        'total_with_gst': total_with_gst,
         'page_title': 'Checkout - Complete Your Order',
         'meta_description': 'Complete your order safely and securely',
     }
@@ -460,4 +469,146 @@ def place_order(request):
         return JsonResponse({
             'success': False,
             'error': f'Something went wrong: {str(e)}'
+        })
+
+
+@login_required
+@require_POST
+def add_address(request):
+    """Add new address via AJAX"""
+    try:
+        data = json.loads(request.body)
+        
+        # Create new address
+        address = Address.objects.create(
+            user=request.user,
+            full_name=data.get('full_name'),
+            phone_number=data.get('phone_number'),
+            address_line_1=data.get('address_line_1'),
+            address_line_2=data.get('address_line_2', ''),
+            city=data.get('city'),
+            state=data.get('state'),
+            pin_code=data.get('pin_code'),
+            address_type=data.get('address_type', 'home'),
+            is_default=data.get('is_default', False)
+        )
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Address added successfully!',
+            'address': {
+                'id': address.id,
+                'full_name': address.full_name,
+                'phone_number': address.phone_number,
+                'address_line_1': address.address_line_1,
+                'address_line_2': address.address_line_2,
+                'city': address.city,
+                'state': address.state,
+                'pin_code': address.pin_code,
+                'address_type': address.address_type,
+                'is_default': address.is_default
+            }
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': f'Failed to add address: {str(e)}'
+        })
+
+
+@login_required
+@require_POST
+def update_address(request, address_id):
+    """Update existing address via AJAX"""
+    try:
+        address = get_object_or_404(Address, id=address_id, user=request.user)
+        data = json.loads(request.body)
+        
+        # Update address fields
+        address.full_name = data.get('full_name', address.full_name)
+        address.phone_number = data.get('phone_number', address.phone_number)
+        address.address_line_1 = data.get('address_line_1', address.address_line_1)
+        address.address_line_2 = data.get('address_line_2', address.address_line_2)
+        address.city = data.get('city', address.city)
+        address.state = data.get('state', address.state)
+        address.pin_code = data.get('pin_code', address.pin_code)
+        address.address_type = data.get('address_type', address.address_type)
+        address.is_default = data.get('is_default', address.is_default)
+        address.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Address updated successfully!',
+            'address': {
+                'id': address.id,
+                'full_name': address.full_name,
+                'phone_number': address.phone_number,
+                'address_line_1': address.address_line_1,
+                'address_line_2': address.address_line_2,
+                'city': address.city,
+                'state': address.state,
+                'pin_code': address.pin_code,
+                'address_type': address.address_type,
+                'is_default': address.is_default
+            }
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': f'Failed to update address: {str(e)}'
+        })
+
+
+@login_required
+@require_POST
+def delete_address(request, address_id):
+    """Delete address via AJAX"""
+    try:
+        address = get_object_or_404(Address, id=address_id, user=request.user)
+        address.delete()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Address deleted successfully!'
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': f'Failed to delete address: {str(e)}'
+        })
+
+
+@login_required
+def get_addresses(request):
+    """Get user addresses via AJAX"""
+    try:
+        addresses = Address.objects.filter(user=request.user).order_by('-is_default', '-created_at')
+        address_list = []
+        
+        for address in addresses:
+            address_list.append({
+                'id': address.id,
+                'full_name': address.full_name,
+                'phone_number': address.phone_number,
+                'address_line_1': address.address_line_1,
+                'address_line_2': address.address_line_2,
+                'city': address.city,
+                'state': address.state,
+                'pin_code': address.pin_code,
+                'address_type': address.address_type,
+                'is_default': address.is_default
+            })
+        
+        return JsonResponse({
+            'success': True,
+            'addresses': address_list
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': f'Failed to get addresses: {str(e)}'
         })
