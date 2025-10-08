@@ -150,7 +150,7 @@ def address_book(request):
 
 @login_required
 def add_address(request):
-    """Add new address"""
+    """Add new address - redirect to checkout"""
     if request.method == 'POST':
         form = AddressForm(request.POST)
         if form.is_valid():
@@ -158,20 +158,17 @@ def add_address(request):
             address.user = request.user
             address.save()
             messages.success(request, 'Address added successfully!')
-            return redirect('accounts:address_book')
+            return redirect('checkout:checkout')
     else:
         form = AddressForm()
     
-    context = {
-        'form': form,
-        'page_title': 'Add New Address',
-    }
-    return render(request, 'accounts/add_address.html', context)
+    # Redirect to checkout page for address management
+    return redirect('checkout:checkout')
 
 
 @login_required
 def edit_address(request, address_id):
-    """Edit address"""
+    """Edit address - redirect to checkout"""
     address = get_object_or_404(Address, id=address_id, user=request.user)
     
     if request.method == 'POST':
@@ -179,33 +176,24 @@ def edit_address(request, address_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Address updated successfully!')
-            return redirect('accounts:address_book')
-    else:
-        form = AddressForm(instance=address)
+            return redirect('checkout:checkout')
     
-    context = {
-        'form': form,
-        'address': address,
-        'page_title': 'Edit Address',
-    }
-    return render(request, 'accounts/edit_address.html', context)
+    # Redirect to checkout page for address management
+    return redirect('checkout:checkout')
 
 
 @login_required
 def delete_address(request, address_id):
-    """Delete address"""
+    """Delete address - redirect to checkout"""
     address = get_object_or_404(Address, id=address_id, user=request.user)
     
     if request.method == 'POST':
         address.delete()
         messages.success(request, 'Address deleted successfully!')
-        return redirect('accounts:address_book')
+        return redirect('checkout:checkout')
     
-    context = {
-        'address': address,
-        'page_title': 'Delete Address',
-    }
-    return render(request, 'accounts/delete_address.html', context)
+    # Redirect to checkout page for address management
+    return redirect('checkout:checkout')
 
 
 @login_required
