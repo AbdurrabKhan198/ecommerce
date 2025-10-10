@@ -260,43 +260,43 @@
             <div class="row">
                 <!-- Quick Links -->
                 <div class="col-md-3 mb-4">
-                    <h5 class="fw-bold mb-3">Quick Links</h5>
+                    <h5 class="fw-bold mb-3 text-white">Quick Links</h5>
                     <ul class="list-unstyled">
-                        <li><a href="{% url 'shop:about' %}" class="text-white-50 text-decoration-none">About Us</a></li>
-                        <li><a href="{% url 'shop:contact' %}" class="text-white-50 text-decoration-none">Contact</a></li>
-                        <li><a href="{% url 'support:size_guide' %}" class="text-white-50 text-decoration-none">Size Guide</a></li>
-                        <li><a href="{% url 'support:faq' %}" class="text-white-50 text-decoration-none">FAQ</a></li>
+                        <li><a href="{% url 'shop:about' %}" class="text-light text-decoration-none">About Us</a></li>
+                        <li><a href="{% url 'shop:contact' %}" class="text-light text-decoration-none">Contact</a></li>
+                        <li><a href="{% url 'support:size_guide' %}" class="text-light text-decoration-none">Size Guide</a></li>
+                        <li><a href="{% url 'support:faq' %}" class="text-light text-decoration-none">FAQ</a></li>
                     </ul>
                 </div>
                 
                 <!-- Customer Service -->
                 <div class="col-md-3 mb-4">
-                    <h5 class="fw-bold mb-3">Customer Service</h5>
+                    <h5 class="fw-bold mb-3 text-white">Customer Service</h5>
                     <ul class="list-unstyled">
-                        <li><a href="{% url 'support:shipping_info' %}" class="text-white-50 text-decoration-none">Shipping Info</a></li>
-                        <li><a href="{% url 'support:returns_policy' %}" class="text-white-50 text-decoration-none">Returns</a></li>
-                        <li><a href="#" class="text-white-50 text-decoration-none">Track Order</a></li>
-                        <li><a href="{% url 'support:support_home' %}" class="text-white-50 text-decoration-none">Support</a></li>
+                        <li><a href="{% url 'support:shipping_info' %}" class="text-light text-decoration-none">Shipping Info</a></li>
+                        <li><a href="{% url 'support:returns_policy' %}" class="text-light text-decoration-none">Returns</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Track Order</a></li>
+                        <li><a href="{% url 'support:support_home' %}" class="text-light text-decoration-none">Support</a></li>
                     </ul>
                 </div>
                 
                 <!-- Legal -->
                 <div class="col-md-3 mb-4">
-                    <h5 class="fw-bold mb-3">Legal</h5>
+                    <h5 class="fw-bold mb-3 text-white">Legal</h5>
                     <ul class="list-unstyled">
-                        <li><a href="{% url 'support:privacy_policy' %}" class="text-white-50 text-decoration-none">Privacy Policy</a></li>
-                        <li><a href="{% url 'support:terms_conditions' %}" class="text-white-50 text-decoration-none">Terms & Conditions</a></li>
-                        <li><a href="{% url 'support:refund_policy' %}" class="text-white-50 text-decoration-none">Refund Policy</a></li>
+                        <li><a href="{% url 'support:privacy_policy' %}" class="text-light text-decoration-none">Privacy Policy</a></li>
+                        <li><a href="{% url 'support:terms_conditions' %}" class="text-light text-decoration-none">Terms & Conditions</a></li>
+                        <li><a href="{% url 'support:refund_policy' %}" class="text-light text-decoration-none">Refund Policy</a></li>
                     </ul>
                 </div>
                 
                 <!-- Connect -->
                 <div class="col-md-3 mb-4">
-                    <h5>Connect With Us</h5>
-                    <p class="text-muted mb-3">Follow us for the latest trends and exclusive offers!</p>
+                    <h5 class="text-white">Connect With Us</h5>
+                    <p class="text-light mb-3">Follow us for the latest trends and exclusive offers!</p>
                     <div class="mb-3">
-                        <h6 class="text-white mb-2">Visit Our Store</h6>
-                        <p class="small text-muted mb-0">
+                        <a href="https://www.google.com/maps/dir//Victoria+Street,+Tulsidas+Marg,+near+Anirudth+Cosmetic,+Lucknow,+Uttar+Pradesh+226004/@26.859498,80.8247374,12z/data=!4m8!4m7!1m0!1m5!1m1!1s0x399bfde7004bb67f:0x84ac1603c93c667c!2m2!1d80.9071362!2d26.8595235?entry=ttu&g_ep=EgoyMDI1MTAwOC4wIKXMDSoASAFQAw%3D%3D"><h6 class="text-white mb-2">Visit Our Store</h6></a>
+                        <p class="small text-light mb-0">
                             Akbari Gate, Near Nakkhas<br>
                             Victoria Street, Nakkhas-226003<br>
                             Lucknow, Uttar Pradesh
@@ -313,7 +313,7 @@
                         <i class="fab fa-whatsapp text-success me-2"></i>
                         WhatsApp Updates
                     </h6>
-                    <p class="small text-muted">Get instant updates & 10% off your first order!</p>
+                    <p class="small text-light">Get instant updates & 10% off your first order!</p>
                     <form class="whatsapp-footer-form" id="whatsappFooterForm" method="post" action="{% url 'shop:whatsapp_subscribe' %}">
                         {% csrf_token %}
                         <div class="input-group mb-2">
@@ -331,13 +331,15 @@
             <hr class="my-4">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <p class="mb-0">&copy; 2025 {{ site_name|default:"King Dupatta House" }}. All rights reserved.</p>
+                    <p class="mb-0 text-light">&copy; 2025 {{ site_name|default:"King Dupatta House" }}. All rights reserved.</p>
                 </div>
                 <div class="col-md-6 text-end">
 3                    <div class="d-flex align-items-center justify-content-end gap-2">
                         <span class="badge bg-success">SSL Secured</span>
                         <span class="badge bg-primary">Visa</span>
-                        <span class="badge bg-warning text-dark">Mastercard</span>
+                        <span class="badge bg-secondary text-dark">Rupay</span>
+                        <span class="badge bg-success text-dark">Mastercard</span>
+                        <span class="badge bg-warning text-dark">UPI</span>
                     </div>
                 </div>
             </div>
