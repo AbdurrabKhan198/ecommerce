@@ -29,6 +29,10 @@ source venv/bin/activate
 pip install --upgrade pip
 pip install Django==5.2.5 gunicorn==21.2.0 whitenoise==6.6.0 psycopg2-binary==2.9.9 Pillow==10.4.0 django-environ==0.11.2
 
+# Create log directory
+sudo mkdir -p /var/log/django
+sudo chown ubuntu:ubuntu /var/log/django
+
 # Create .env file
 cat > .env << EOF
 DEBUG=False
