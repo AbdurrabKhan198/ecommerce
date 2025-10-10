@@ -437,7 +437,7 @@
                     <div class="d-flex">
                         <div class="item-image">
                             {% with item.product.images.first as first_image %}
-                            <img src="{% if first_image %}{{ first_image.image.url }}{% else %}https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80{% endif %}" 
+                            <img src="{% if first_image %}{{ first_image.image.url }}{% else %}https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80{% endif %}" 
                                  alt="{{ item.product.name }}">
                             {% endwith %}
                         </div>
@@ -600,7 +600,7 @@
         <div class="suggested-grid">
             {% for i in "1234" %}
             <div class="card border-0 shadow-sm">
-                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" 
+                <img src="https://images.unsplash.com/photo-{{ forloop.counter|add:1594633312681 }}?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" 
                      class="card-img-top" alt="Suggested Product" style="height: 150px; object-fit: cover;">
                 <div class="card-body p-2">
                     <h6 class="card-title small">Suggested Product {{ forloop.counter }}</h6>

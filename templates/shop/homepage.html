@@ -222,8 +222,15 @@
             
             <div class="col-lg-6 hero-image animate-on-scroll">
                 <div class="floating">
-                    <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                         alt="Beautiful Women's Fashion" class="img-fluid rounded-custom shadow-custom">
+                    {% if bestseller_products %}
+                        {% with bestseller_products.first.images.first as hero_image %}
+                        <img src="{% if hero_image %}{{ hero_image.image.url }}{% else %}https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80{% endif %}" 
+                             alt="Beautiful Women's Fashion" class="img-fluid rounded-custom shadow-custom">
+                        {% endwith %}
+                    {% else %}
+                        <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                             alt="Beautiful Women's Fashion" class="img-fluid rounded-custom shadow-custom">
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -299,7 +306,7 @@
             <div class="col-lg-4 col-md-6">
                 <a href="{% url 'shop:shop' %}?category=leggings" class="text-decoration-none">
                     <div class="category-card">
-                    <img src="https://placehold.co/400x300/6366f1/white?text=Leggings" 
+                    <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
                          alt="Leggings" class="card-img" onerror="this.src='https://via.placeholder.com/400x300/f8f9fa/6c757d?text=Leggings'">
                         <div class="card-img-overlay">
                             <h5 class="card-title">Leggings</h5>
@@ -315,7 +322,7 @@
             <div class="col-lg-4 col-md-6">
                 <a href="{% url 'shop:shop' %}?category=pants" class="text-decoration-none">
                     <div class="category-card">
-                    <img src="https://placehold.co/400x300/6366f1/white?text=Pants" 
+                    <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
                          alt="Pants" class="card-img" onerror="this.src='https://via.placeholder.com/400x300/f8f9fa/6c757d?text=Pants'">
                         <div class="card-img-overlay">
                             <h5 class="card-title">Pants</h5>
@@ -331,7 +338,7 @@
             <div class="col-lg-4 col-md-6">
                 <a href="{% url 'shop:shop' %}?category=dupattas" class="text-decoration-none">
                 <div class="category-card">
-                        <img src="https://placehold.co/400x300/6366f1/white?text=Dupattas" 
+                        <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
                          alt="Dupattas" class="card-img" onerror="this.src='https://via.placeholder.com/400x300/f8f9fa/6c757d?text=Dupattas'">
                     <div class="card-img-overlay">
                         <h5 class="card-title">Dupattas</h5>
@@ -418,7 +425,7 @@
             <div class="col-lg-3 col-md-6">
                 <a href="{% url 'shop:shop' %}?category=leggings" class="text-decoration-none">
                 <div class="product-card">
-                        <img src="https://placehold.co/300x300/6366f1/white?text=Premium+Leggings" 
+                        <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
                              alt="Premium Leggings" class="card-img-top" onerror="this.src='https://via.placeholder.com/300x300/f8f9fa/6c757d?text=Premium+Leggings'">
                     
                     <div class="discount-badge">30% OFF</div>
@@ -445,8 +452,8 @@
                         </div>
                         
                         <div class="price mb-3">
-                            <span class="text-primary fw-bold fs-5">₹599</span>
-                            <span class="text-muted text-decoration-line-through ms-2">₹899</span>
+                            <span class="text-primary fw-bold fs-5">{{ currency_symbol }}599</span>
+                            <span class="text-muted text-decoration-line-through ms-2">{{ currency_symbol }}899</span>
                         </div>
                         
                         <div class="d-grid">
@@ -462,7 +469,7 @@
             <div class="col-lg-3 col-md-6">
                 <a href="{% url 'shop:shop' %}?category=pants" class="text-decoration-none">
                 <div class="product-card">
-                        <img src="https://placehold.co/300x300/6366f1/white?text=Palazzo+Pants" 
+                        <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
                              alt="Elegant Pants" class="card-img-top" onerror="this.src='https://via.placeholder.com/300x300/f8f9fa/6c757d?text=Palazzo+Pants'">
                     
                     <div class="discount-badge">20% OFF</div>
@@ -489,8 +496,8 @@
                         </div>
                         
                         <div class="price mb-3">
-                            <span class="text-primary fw-bold fs-5">₹1,299</span>
-                            <span class="text-muted text-decoration-line-through ms-2">₹1,599</span>
+                            <span class="text-primary fw-bold fs-5">{{ currency_symbol }}1,299</span>
+                            <span class="text-muted text-decoration-line-through ms-2">{{ currency_symbol }}1,599</span>
                         </div>
                         
                         <div class="d-grid">
@@ -506,7 +513,7 @@
             <div class="col-lg-3 col-md-6">
                 <a href="{% url 'shop:shop' %}?category=dupattas" class="text-decoration-none">
                 <div class="product-card">
-                        <img src="https://placehold.co/300x300/6366f1/white?text=Silk+Dupatta" 
+                        <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
                              alt="Beautiful Dupatta" class="card-img-top" onerror="this.src='https://via.placeholder.com/300x300/f8f9fa/6c757d?text=Silk+Dupatta'">
                     
                     <div class="discount-badge">15% OFF</div>
@@ -533,8 +540,8 @@
                         </div>
                         
                         <div class="price mb-3">
-                            <span class="text-primary fw-bold fs-5">₹799</span>
-                            <span class="text-muted text-decoration-line-through ms-2">₹999</span>
+                            <span class="text-primary fw-bold fs-5">{{ currency_symbol }}799</span>
+                            <span class="text-muted text-decoration-line-through ms-2">{{ currency_symbol }}999</span>
                         </div>
                         
                         <div class="d-grid">
@@ -550,7 +557,7 @@
             <div class="col-lg-3 col-md-6">
                 <a href="{% url 'shop:shop' %}?category=leggings" class="text-decoration-none">
                 <div class="product-card">
-                        <img src="https://placehold.co/300x300/6366f1/white?text=Churidar+Leggings" 
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" 
                              alt="Churidar Leggings" class="card-img-top" onerror="this.src='https://via.placeholder.com/300x300/f8f9fa/6c757d?text=Churidar+Leggings'">
                     
                     <div class="discount-badge">35% OFF</div>
@@ -577,8 +584,8 @@
                         </div>
                         
                         <div class="price mb-3">
-                            <span class="text-primary fw-bold fs-5">₹699</span>
-                            <span class="text-muted text-decoration-line-through ms-2">₹1,099</span>
+                            <span class="text-primary fw-bold fs-5">{{ currency_symbol }}699</span>
+                            <span class="text-muted text-decoration-line-through ms-2">{{ currency_symbol }}1,099</span>
                         </div>
                         
                         <div class="d-grid">
@@ -861,12 +868,18 @@
         </div>
         
         <div class="instagram-grid">
-            <div class="instagram-post" style="background-image: url('https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'); background-size: cover; background-position: center;"></div>
-            <div class="instagram-post" style="background-image: url('https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'); background-size: cover; background-position: center;"></div>
-            <div class="instagram-post" style="background-image: url('https://images.unsplash.com/photo-1583391733956-6c78276477e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'); background-size: cover; background-position: center;"></div>
-            <div class="instagram-post" style="background-image: url('https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'); background-size: cover; background-position: center;"></div>
-            <div class="instagram-post" style="background-image: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'); background-size: cover; background-position: center;"></div>
-            <div class="instagram-post" style="background-image: url('https://images.unsplash.com/photo-1571513723812-70c0a0a6b4b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'); background-size: cover; background-position: center;"></div>
+            {% if bestseller_products %}
+                {% for product in bestseller_products|slice:":6" %}
+                <div class="instagram-post" style="background-image: url('{% if product.images.first %}{{ product.images.first.image.url }}{% else %}https://images.unsplash.com/photo-{{ forloop.counter|add:1594633312681 }}?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80{% endif %}'); background-size: cover; background-position: center;"></div>
+                {% endfor %}
+            {% else %}
+                <div class="instagram-post" style="background-image: url('https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'); background-size: cover; background-position: center;"></div>
+                <div class="instagram-post" style="background-image: url('https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'); background-size: cover; background-position: center;"></div>
+                <div class="instagram-post" style="background-image: url('https://images.unsplash.com/photo-1583391733956-6c78276477e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'); background-size: cover; background-position: center;"></div>
+                <div class="instagram-post" style="background-image: url('https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'); background-size: cover; background-position: center;"></div>
+                <div class="instagram-post" style="background-image: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'); background-size: cover; background-position: center;"></div>
+                <div class="instagram-post" style="background-image: url('https://images.unsplash.com/photo-1571513723812-70c0a0a6b4b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'); background-size: cover; background-position: center;"></div>
+            {% endif %}
         </div>
         
         <div class="text-center mt-4">

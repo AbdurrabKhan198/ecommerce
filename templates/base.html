@@ -7,7 +7,7 @@
     
     <!-- SEO Meta Tags -->
     <title>{% block title %}{{ page_title|default:"Premium Women's Wear - Leggings, Pants & Dupattas" }}{% endblock %}</title>
-    <meta name="description" content="{% block meta_description %}{{ meta_description|default:"Shop premium women's leggings, pants & dupattas online. High-quality fabrics, perfect fit guarantee, free shipping above ₹999." }}{% endblock %}">
+    <meta name="description" content="{% block meta_description %}{{ meta_description|default:"Shop premium women's leggings, pants & dupattas online. High-quality fabrics, perfect fit guarantee, free shipping above "|add:currency_symbol|add:free_shipping_threshold|add:"." }}{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}women's wear, leggings, pants, dupattas, online shopping, fashion{% endblock %}">
     
     <!-- Open Graph Meta Tags -->
@@ -142,7 +142,7 @@
                                                     <i class="fas fa-shipping-fast text-primary fs-2 me-3"></i>
                                                     <div>
                                                         <h6 class="mb-1">Free Shipping</h6>
-                                                        <small class="text-muted">On orders above ₹999</small>
+                                                        <small class="text-muted">On orders above {{ currency_symbol }}{{ free_shipping_threshold }}</small>
                                                     </div>
                                                 </div>
                                             </div>

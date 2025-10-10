@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.db import models
 from .models import Category, SubCategory, Wishlist
 from cart.models import Cart
 
@@ -61,6 +62,15 @@ def wishlist_context(request):
 
 def site_settings(request):
     """Add site-wide settings to template context"""
+    from .models import Product, Review
+    
+    # Calculate dynamic stats
+    total_products = Product.objects.filter(is_active=True).count()
+    total_reviews = Review.objects.filter(is_approved=True).count()
+    avg_rating = Review.objects.filter(is_approved=True).aggregate(
+        avg_rating=models.Avg('rating')
+    )['avg_rating'] or 4.0
+    
     return {
         'site_name': 'King Dupatta House',
         'support_phone': '+91 7860247786',
@@ -72,6 +82,11 @@ def site_settings(request):
         'store_pincode': '226003',
         'established_year': '2013',
         'years_in_business': '10+',
-        'business_rating': '4.0',
-        'business_reviews': '14+',
+        'business_rating': round(avg_rating, 1),
+        'business_reviews': f'{total_reviews}+',
+        'total_products': total_products,
+        'free_shipping_threshold': '999',
+        'currency_symbol': '₹',
+        'new_customer_discount': '10',
+        'whatsapp_subscribers': '10000+',
     }
