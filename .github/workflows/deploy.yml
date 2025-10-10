@@ -1,0 +1,36 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements_production.txt
+    
+    - name: Run tests
+      run: |
+        python manage.py test --settings=womens_wear_ecommerce.settings_production
+    
+    - name: Deploy to AWS
+      if: github.ref == 'refs/heads/main'
+      run: |
+        echo "Deploying to AWS server..."
+        # Add your deployment commands here
+        # This would typically involve SSH to your AWS server
+        # and running the deployment script

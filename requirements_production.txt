@@ -1,0 +1,69 @@
+# Production Requirements for AWS Deployment
+# Core Django
+Django==5.2.5
+Pillow==10.4.0
+
+# Database
+psycopg2-binary==2.9.9
+
+# AWS Services
+boto3==1.35.36
+django-storages==1.14.2
+
+# Caching
+django-redis==5.4.0
+redis==5.0.1
+
+# Security
+django-cors-headers==4.3.1
+django-csp==3.7
+
+# Production Server
+gunicorn==21.2.0
+whitenoise==6.6.0
+
+# Environment Variables
+python-decouple==3.8
+
+# Monitoring
+sentry-sdk==1.40.6
+
+# Email
+django-anymail==10.2
+
+# Additional Production Packages
+django-extensions==3.2.3
+django-debug-toolbar==4.2.0
+
+# SSL/TLS
+django-sslserver==0.22
+
+# Image Processing
+Pillow==10.4.0
+
+# HTTP Requests
+requests==2.31.0
+
+# JSON
+simplejson==3.19.2
+
+# Date/Time
+python-dateutil==2.8.2
+
+# File Upload
+django-cleanup==8.0.0
+
+# Performance
+django-compressor==4.4
+
+# API
+djangorestframework==3.14.0
+django-filter==23.5
+
+# Celery for Background Tasks
+celery==5.3.4
+django-celery-beat==2.5.0
+django-celery-results==2.5.1
+
+# Production WSGI
+uwsgi==2.0.23
