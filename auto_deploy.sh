@@ -58,8 +58,16 @@ if ! command -v docker &> /dev/null; then
     sudo usermod -aG docker $USER
     rm get-docker.sh
     print_status "Docker installed successfully"
+    
+    # Fix Docker permissions
+    print_info "Fixing Docker permissions..."
+    sudo chmod 666 /var/run/docker.sock
+    sudo systemctl restart docker
+    sleep 5
 else
     print_status "Docker already installed"
+    # Fix Docker permissions
+    sudo chmod 666 /var/run/docker.sock
 fi
 
 # Install Docker Compose
