@@ -23,7 +23,10 @@ def homepage(request):
     # Get actual data from database
     categories = Category.objects.filter(is_active=True).order_by('sort_order', 'name')[:3]
     featured_products = Product.objects.filter(is_active=True, is_featured=True).order_by('-created_at')[:4]
-    bestseller_products = Product.objects.filter(is_active=True, is_bestseller=True).order_by('-created_at')[:4]
+    # Get bestseller products in specific order
+    bestseller_products = Product.objects.filter(is_active=True, is_bestseller=True).order_by(
+        'name'  # This will show them in alphabetical order as per your request
+    )[:4]
     recent_products = Product.objects.filter(is_active=True).order_by('-created_at')[:4]
     
     # Get recent approved reviews
@@ -36,8 +39,8 @@ def homepage(request):
         'bestseller_products': bestseller_products,
         'recent_products': recent_products,
         'recent_reviews': recent_reviews,
-        'page_title': 'King Dupatta House - Premium Dupattas, Leggings & Pants Since 2013',
-        'meta_description': 'King Dupatta House - Trusted since 2013 for premium dupattas, leggings & pants. Located in Lucknow, serving customers nationwide with quality fabrics and perfect fit guarantee.',
+        'page_title': 'King Dupatta House - Premium Dupattas, Leggings & Pants Since 1982',
+        'meta_description': 'King Dupatta House - Trusted since 1982 for premium dupattas, leggings & pants. Located in Lucknow, serving customers nationwide with quality fabrics and perfect fit guarantee.',
         'currency_symbol': '₹',
         'free_shipping_threshold': '999',
         'site_name': 'King Dupatta House',

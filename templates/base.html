@@ -48,10 +48,10 @@
                     <div class="col-md-6 text-end">
                         <small class="d-flex align-items-center justify-content-end">
                             <i class="fas fa-shipping-fast me-2"></i>
-                            Free shipping on orders above {{ currency_symbol|default:"₹" }}{{ free_shipping_threshold|default:"999" }}
+                            We Exchange, Return & Refund
                             <span class="mx-3">|</span>
                             <i class="fas fa-gift me-2"></i>
-                            New customers get 10% OFF
+                            New customers get 10% OFF on first order
                         </small>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                                             </a>
                                             {% for category in categories %}
                                             <a class="dropdown-item" href="{{ category.get_absolute_url }}">
-                                                <i class="fas fa-{% if 'leggings' in category.name.lower %}female{% elif 'pants' in category.name.lower or 'trousers' in category.name.lower %}tshirt{% elif 'dupatta' in category.name.lower %}scarf{% else %}tag{% endif %} me-2"></i>{{ category.name }}
+                                                <i class="fas fa-{% if 'leggings' in category.name.lower %}female{% elif 'pants' in category.name.lower or 'trousers' in category.name.lower %}tshirt{% elif 'dupatta' in category.name.lower %}scarf{% elif 'scarfs' in category.name.lower or 'stoles' in category.name.lower %}scarf{% else %}tag{% endif %} me-2"></i>{{ category.name }}
                                             </a>
                                             {% endfor %}
                                             <div class="dropdown-divider"></div>
@@ -110,7 +110,7 @@
                                         {% for category, subcategories in subcategories_by_category.items %}
                                         <div class="col-md-3">
                                             <h6 class="dropdown-header">
-                                                <i class="fas fa-{% if 'leggings' in category.name.lower %}female{% elif 'pants' in category.name.lower or 'trousers' in category.name.lower %}tshirt{% elif 'dupatta' in category.name.lower %}scarf{% else %}tag{% endif %} me-2"></i>{{ category.name }}
+                                                <i class="fas fa-{% if 'leggings' in category.name.lower %}female{% elif 'pants' in category.name.lower or 'trousers' in category.name.lower %}tshirt{% elif 'dupatta' in category.name.lower %}scarf{% elif 'scarfs' in category.name.lower or 'stoles' in category.name.lower %}scarf{% else %}tag{% endif %} me-2"></i>{{ category.name }}
                                             </h6>
                                             {% for subcategory in subcategories %}
                                             <a class="dropdown-item" href="{{ subcategory.get_absolute_url }}">
@@ -297,8 +297,8 @@
                     <div class="mb-3">
                         <h6 class="text-white mb-2">Visit Our Store</h6>
                         <p class="small text-muted mb-0">
-                            Akbari Gate, Near Nakhas<br>
-                            Victoria Street, Nakhas-226003<br>
+                            Akbari Gate, Near Nakkhas<br>
+                            Victoria Street, Nakkhas-226003<br>
                             Lucknow, Uttar Pradesh
                         </p>
                     </div>
