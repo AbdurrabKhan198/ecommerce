@@ -52,7 +52,7 @@ sudo apt-get install -y python3 python3-pip python3-venv python3-dev postgresql 
 
 # Install Python packages
 print_info "Installing Python packages..."
-pip3 install --user django pillow psycopg2-binary gunicorn
+sudo apt-get install -y python3-full python3-venv python3-pip
 
 # Create application directory
 print_info "Setting up application directory..."
@@ -77,9 +77,13 @@ print_info "Creating Python virtual environment..."
 python3 -m venv venv
 source venv/bin/activate
 
+# Upgrade pip in virtual environment
+print_info "Upgrading pip in virtual environment..."
+venv/bin/pip install --upgrade pip
+
 # Install requirements
 print_info "Installing Python requirements..."
-pip install -r requirements.txt
+venv/bin/pip install -r requirements.txt
 
 # Create environment file
 print_info "Creating environment file..."
@@ -117,18 +121,18 @@ sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE kingdupattahouse TO p
 # Run Django setup
 print_info "Setting up Django application..."
 export DJANGO_SETTINGS_MODULE=womens_wear_ecommerce.settings_production
-python manage.py migrate
-python manage.py collectstatic --noinput
+venv/bin/python manage.py migrate
+venv/bin/python manage.py collectstatic --noinput
 
 # Create superuser
 print_info "Creating superuser..."
-echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@kingduppatahouse.in', 'admin123') if not User.objects.filter(username='admin').exists() else None" | python manage.py shell
+echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@kingduppatahouse.in', 'admin123') if not User.objects.filter(username='admin').exists() else None" | venv/bin/python manage.py shell
 
 # Load sample data
 print_info "Loading sample data..."
-python manage.py create_sample_categories || true
-python manage.py create_sample_products || true
-python manage.py populate_diverse_images || true
+venv/bin/python manage.py create_sample_categories || true
+venv/bin/python manage.py create_sample_products || true
+venv/bin/python manage.py populate_diverse_images || true
 
 # Create systemd service
 print_info "Creating systemd service..."
