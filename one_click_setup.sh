@@ -30,7 +30,7 @@ source venv/bin/activate
 # Install requirements
 echo "📦 Installing Python packages..."
 venv/bin/pip install --upgrade pip
-venv/bin/pip install Django==5.2.5 gunicorn==21.2.0 whitenoise==6.6.0 psycopg2-binary==2.9.9 Pillow==10.4.0 django-environ==0.11.2
+venv/bin/pip install -r requirements.txt
 
 # Setup database
 echo "🗄️ Setting up database..."
