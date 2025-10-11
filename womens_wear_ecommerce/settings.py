@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add WhiteNoise for static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -134,6 +135,22 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Production static files configuration
+if not DEBUG:
+    # Option 1: Use WhiteNoise for static files (simpler)
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    
+    # Option 2: Use AWS S3 (uncomment if you want to use S3)
+    # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    # AWS_ACCESS_KEY_ID = 'your-access-key'
+    # AWS_SECRET_ACCESS_KEY = 'your-secret-key'
+    # AWS_STORAGE_BUCKET_NAME = 'your-bucket-name'
+    # AWS_S3_REGION_NAME = 'ap-south-1'
+    # AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    # STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+    # MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 
 # Media files
 MEDIA_URL = '/media/'
