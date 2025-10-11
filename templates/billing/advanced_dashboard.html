@@ -1,0 +1,348 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Advanced Billing Dashboard - King Dupatta House{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-card {
+        background: linear-gradient(135deg, #f3e5f5 0%, #fdf2f8 50%, #fef7f0 100%);
+        border: 2px solid rgba(194, 24, 91, 0.3);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(194, 24, 91, 0.15);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 16px 48px rgba(194, 24, 91, 0.25);
+    }
+    
+    .stat-card {
+        background: linear-gradient(135deg, #c2185b 0%, #512da8 50%, #e91e63 100%);
+        color: white;
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        animation: shimmer 3s infinite;
+    }
+    
+    @keyframes shimmer {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    .stat-number {
+        font-size: 3rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .stat-label {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        font-weight: 500;
+    }
+    
+    .chart-container {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    
+    .quick-action-btn {
+        background: linear-gradient(135deg, #ff6b9d 0%, #ffc107 50%, #00bcd4 100%);
+        border: none;
+        border-radius: 25px;
+        padding: 15px 30px;
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    
+    .quick-action-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        color: white;
+    }
+    
+    .recent-activity {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    
+    .activity-item {
+        background: white;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-left: 4px solid #c2185b;
+        transition: all 0.3s ease;
+    }
+    
+    .activity-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    
+    .status-paid { background: #28a745; color: white; }
+    .status-sent { background: #ffc107; color: #212529; }
+    .status-draft { background: #6c757d; color: white; }
+    .status-overdue { background: #dc3545; color: white; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="dashboard-card p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="mb-0 text-primary">🚀 Advanced Billing Dashboard</h1>
+                        <p class="text-muted mb-0">Professional billing system with advanced analytics</p>
+                    </div>
+                    <div>
+                        <a href="{% url 'billing:advanced_invoice_create' %}" class="quick-action-btn me-2">
+                            <i class="fas fa-plus"></i> New Invoice
+                        </a>
+                        <a href="{% url 'billing:advanced_analytics' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-chart-line"></i> Analytics
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Statistics -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stat-card">
+                <div class="stat-number">{{ total_invoices }}</div>
+                <div class="stat-label">Total Invoices</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stat-card">
+                <div class="stat-number">{{ paid_invoices }}</div>
+                <div class="stat-label">Paid Invoices</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stat-card">
+                <div class="stat-number">₹{{ total_revenue|floatformat:0 }}</div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stat-card">
+                <div class="stat-number">{{ overdue_invoices }}</div>
+                <div class="stat-label">Overdue Invoices</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts and Analytics -->
+    <div class="row mb-4">
+        <div class="col-lg-8">
+            <div class="dashboard-card p-4">
+                <h4 class="mb-3">📈 Revenue Trend (Last 6 Months)</h4>
+                <div class="chart-container">
+                    <canvas id="revenueChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="dashboard-card p-4">
+                <h4 class="mb-3">🏆 Top Customers</h4>
+                <div class="recent-activity">
+                    {% for customer in top_customers %}
+                    <div class="activity-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ customer.name }}</strong>
+                                <br>
+                                <small class="text-muted">{{ customer.customer_type|title }}</small>
+                            </div>
+                            <div class="text-end">
+                                <strong>₹{{ customer.total_spent|floatformat:0 }}</strong>
+                                <br>
+                                <small class="text-muted">{{ customer.invoices.count }} invoices</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="dashboard-card p-4">
+                <h4 class="mb-3">⚡ Quick Actions</h4>
+                <div class="row">
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                        <a href="{% url 'billing:advanced_invoice_create' %}" class="btn btn-primary w-100">
+                            <i class="fas fa-file-invoice"></i><br>Create Invoice
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                        <a href="{% url 'billing:advanced_customer_list' %}" class="btn btn-success w-100">
+                            <i class="fas fa-users"></i><br>Customers
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                        <a href="{% url 'billing:advanced_invoice_list' %}" class="btn btn-info w-100">
+                            <i class="fas fa-list"></i><br>All Invoices
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                        <a href="{% url 'billing:advanced_analytics' %}" class="btn btn-warning w-100">
+                            <i class="fas fa-chart-bar"></i><br>Analytics
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                        <a href="#" class="btn btn-secondary w-100">
+                            <i class="fas fa-download"></i><br>Export
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
+                        <a href="#" class="btn btn-dark w-100">
+                            <i class="fas fa-cog"></i><br>Settings
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row">
+        <div class="col-12">
+            <div class="dashboard-card p-4">
+                <h4 class="mb-3">📋 Recent Invoices</h4>
+                {% if recent_invoices %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Invoice #</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for invoice in recent_invoices %}
+                            <tr>
+                                <td><strong>{{ invoice.invoice_number }}</strong></td>
+                                <td>{{ invoice.customer.name }}</td>
+                                <td>{{ invoice.date|date:"M d, Y" }}</td>
+                                <td>
+                                    <span class="status-badge status-{{ invoice.status }}">
+                                        {{ invoice.status|title }}
+                                    </span>
+                                </td>
+                                <td><strong>₹{{ invoice.total_amount|floatformat:2 }}</strong></td>
+                                <td>
+                                    <a href="{% url 'billing:advanced_invoice_detail' invoice.invoice_id %}" 
+                                       class="btn btn-sm btn-outline-primary me-1">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'billing:advanced_invoice_print' invoice.invoice_id %}" 
+                                       class="btn btn-sm btn-outline-success" target="_blank">
+                                        <i class="fas fa-print"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-file-invoice fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">No invoices created yet. Create your first invoice!</p>
+                    <a href="{% url 'billing:advanced_invoice_create' %}" class="quick-action-btn">
+                        <i class="fas fa-plus"></i> Create Invoice
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Revenue Chart
+const ctx = document.getElementById('revenueChart').getContext('2d');
+const revenueChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: {{ monthly_data|safe }},
+        datasets: [{
+            label: 'Revenue (₹)',
+            data: {{ monthly_data|safe }},
+            borderColor: '#c2185b',
+            backgroundColor: 'rgba(194, 24, 91, 0.1)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function(value) {
+                        return '₹' + value.toLocaleString();
+                    }
+                }
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

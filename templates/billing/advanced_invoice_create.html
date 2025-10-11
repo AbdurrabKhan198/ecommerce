@@ -1,0 +1,409 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Advanced Invoice - King Dupatta House{% endblock %}
+
+{% block extra_css %}
+<style>
+    .billing-card {
+        background: linear-gradient(135deg, #f3e5f5 0%, #fdf2f8 50%, #fef7f0 100%);
+        border: 2px solid rgba(194, 24, 91, 0.3);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(194, 24, 91, 0.15);
+        transition: all 0.3s ease;
+    }
+    
+    .item-row {
+        background: white;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 10px;
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+    
+    .item-row:hover {
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+    
+    .remove-item {
+        color: #dc3545;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .remove-item:hover {
+        color: #c82333;
+        transform: scale(1.1);
+    }
+    
+    .totals-card {
+        background: linear-gradient(135deg, #c2185b 0%, #512da8 50%, #e91e63 100%);
+        color: white;
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 20px;
+    }
+    
+    .form-control:focus {
+        border-color: #c2185b;
+        box-shadow: 0 0 0 0.2rem rgba(194, 24, 91, 0.25);
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #c2185b 0%, #512da8 50%, #e91e63 100%);
+        border: none;
+        border-radius: 25px;
+        padding: 12px 30px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(194, 24, 91, 0.4);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="billing-card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="mb-0 text-primary">📝 Create Advanced Invoice</h1>
+                    <a href="{% url 'billing:advanced_dashboard' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+
+                <form method="post" id="invoiceForm">
+                    {% csrf_token %}
+                    
+                    <!-- Invoice Details -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0">📋 Invoice Details</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Customer *</label>
+                                        <select name="customer" class="form-control" required>
+                                            <option value="">Select Customer</option>
+                                            {% for customer in customers %}
+                                            <option value="{{ customer.customer_id }}">{{ customer.name }} ({{ customer.customer_type|title }})</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Invoice Date *</label>
+                                                <input type="date" name="date" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Due Date *</label>
+                                                <input type="date" name="due_date" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Discount Percentage</label>
+                                        <input type="number" name="discount_percentage" class="form-control" step="0.01" min="0" max="100" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-success text-white">
+                                    <h5 class="mb-0">🏢 Company Info</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>{{ company.name }}</strong></p>
+                                    <p class="mb-1">GST: {{ company.gst_number }}</p>
+                                    <p class="mb-1">{{ company.address }}</p>
+                                    <p class="mb-1">Phone: {{ company.phone }}</p>
+                                    <p class="mb-0">Email: {{ company.email }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Invoice Items -->
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">🛍️ Invoice Items</h5>
+                            <button type="button" class="btn btn-success btn-sm" id="addItemBtn">
+                                <i class="fas fa-plus"></i> Add Item
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="itemsContainer">
+                                <!-- Items will be added here dynamically -->
+                            </div>
+                            
+                            <!-- Totals -->
+                            <div class="totals-card">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Subtotal:</span>
+                                            <span id="subtotal">₹0.00</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Discount:</span>
+                                            <span id="discount">₹0.00</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>GST (18%):</span>
+                                            <span id="taxAmount">₹0.00</span>
+                                        </div>
+                                        <hr style="border-color: rgba(255,255,255,0.3);">
+                                        <div class="d-flex justify-content-between">
+                                            <strong>Total:</strong>
+                                            <strong id="totalAmount">₹0.00</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notes and Terms -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">📝 Notes</h5>
+                                </div>
+                                <div class="card-body">
+                                    <textarea name="notes" class="form-control" rows="3" placeholder="Additional notes for the invoice..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">📋 Terms & Conditions</h5>
+                                </div>
+                                <div class="card-body">
+                                    <textarea name="terms" class="form-control" rows="3" placeholder="Terms and conditions...">1. No Exchange On Sunday.
+2. Exchange Within A Week.
+3. No Return Of Money.</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'billing:advanced_dashboard' %}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-save"></i> Create Invoice
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let itemCount = 0;
+
+// Add item button
+document.getElementById('addItemBtn').addEventListener('click', function() {
+    addItemRow();
+});
+
+// Add item row function
+function addItemRow() {
+    itemCount++;
+    const container = document.getElementById('itemsContainer');
+    
+    const itemRow = document.createElement('div');
+    itemRow.className = 'item-row';
+    itemRow.id = `item-${itemCount}`;
+    
+    itemRow.innerHTML = `
+        <div class="row">
+            <div class="col-md-3">
+                <input type="text" class="form-control" name="item_description_${itemCount}" placeholder="Item Description" required>
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" name="item_category_${itemCount}" placeholder="Category">
+            </div>
+            <div class="col-md-1">
+                <input type="number" class="form-control" name="item_quantity_${itemCount}" placeholder="Qty" min="0.001" step="0.001" value="1" required>
+            </div>
+            <div class="col-md-1">
+                <select class="form-control" name="item_unit_${itemCount}">
+                    <option value="pcs">pcs</option>
+                    <option value="kg">kg</option>
+                    <option value="mtr">mtr</option>
+                    <option value="set">set</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <input type="number" class="form-control" name="item_price_${itemCount}" placeholder="Price" step="0.01" min="0" required>
+            </div>
+            <div class="col-md-1">
+                <input type="number" class="form-control" name="item_discount_${itemCount}" placeholder="Disc%" step="0.01" min="0" max="100" value="0">
+            </div>
+            <div class="col-md-1">
+                <input type="number" class="form-control" name="item_tax_${itemCount}" placeholder="Tax%" step="0.01" min="0" value="18">
+            </div>
+            <div class="col-md-1">
+                <button type="button" class="btn btn-danger btn-sm remove-item" onclick="removeItem(${itemCount})">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    `;
+    
+    container.appendChild(itemRow);
+    
+    // Add event listeners for calculations
+    const quantityInput = itemRow.querySelector(`input[name="item_quantity_${itemCount}"]`);
+    const priceInput = itemRow.querySelector(`input[name="item_price_${itemCount}"]`);
+    const discountInput = itemRow.querySelector(`input[name="item_discount_${itemCount}"]`);
+    const taxInput = itemRow.querySelector(`input[name="item_tax_${itemCount}"]`);
+    
+    quantityInput.addEventListener('input', calculateItemTotal);
+    priceInput.addEventListener('input', calculateItemTotal);
+    discountInput.addEventListener('input', calculateItemTotal);
+    taxInput.addEventListener('input', calculateItemTotal);
+    
+    function calculateItemTotal() {
+        calculateTotals();
+    }
+}
+
+// Remove item function
+function removeItem(itemId) {
+    const itemRow = document.getElementById(`item-${itemId}`);
+    if (itemRow) {
+        itemRow.remove();
+        calculateTotals();
+    }
+}
+
+// Calculate totals
+function calculateTotals() {
+    let subtotal = 0;
+    let totalDiscount = 0;
+    let totalTax = 0;
+    
+    // Calculate from all items
+    const itemRows = document.querySelectorAll('.item-row');
+    itemRows.forEach(row => {
+        const quantity = parseFloat(row.querySelector('input[name^="item_quantity_"]').value) || 0;
+        const price = parseFloat(row.querySelector('input[name^="item_price_"]').value) || 0;
+        const discount = parseFloat(row.querySelector('input[name^="item_discount_"]').value) || 0;
+        const tax = parseFloat(row.querySelector('input[name^="item_tax_"]').value) || 0;
+        
+        const itemSubtotal = quantity * price;
+        const itemDiscount = (itemSubtotal * discount) / 100;
+        const itemTaxable = itemSubtotal - itemDiscount;
+        const itemTax = (itemTaxable * tax) / 100;
+        
+        subtotal += itemSubtotal;
+        totalDiscount += itemDiscount;
+        totalTax += itemTax;
+    });
+    
+    // Apply invoice-level discount
+    const invoiceDiscount = parseFloat(document.querySelector('input[name="discount_percentage"]').value) || 0;
+    const invoiceDiscountAmount = (subtotal * invoiceDiscount) / 100;
+    const finalSubtotal = subtotal - invoiceDiscountAmount;
+    
+    const totalAmount = finalSubtotal + totalTax;
+    
+    // Update display
+    document.getElementById('subtotal').textContent = `₹${subtotal.toFixed(2)}`;
+    document.getElementById('discount').textContent = `₹${(totalDiscount + invoiceDiscountAmount).toFixed(2)}`;
+    document.getElementById('taxAmount').textContent = `₹${totalTax.toFixed(2)}`;
+    document.getElementById('totalAmount').textContent = `₹${totalAmount.toFixed(2)}`;
+}
+
+// Form submission
+document.getElementById('invoiceForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Collect items data
+    const items = [];
+    const itemRows = document.querySelectorAll('.item-row');
+    
+    itemRows.forEach(row => {
+        const description = row.querySelector('input[name^="item_description_"]').value;
+        const category = row.querySelector('input[name^="item_category_"]').value;
+        const quantity = row.querySelector('input[name^="item_quantity_"]').value;
+        const unit = row.querySelector('select[name^="item_unit_"]').value;
+        const price = row.querySelector('input[name^="item_price_"]').value;
+        const discount = row.querySelector('input[name^="item_discount_"]').value;
+        const tax = row.querySelector('input[name^="item_tax_"]').value;
+        
+        if (description && quantity && price) {
+            items.push({
+                description: description,
+                category: category,
+                quantity: parseFloat(quantity),
+                unit: unit,
+                unit_price: parseFloat(price),
+                discount_percentage: parseFloat(discount),
+                tax_rate: parseFloat(tax)
+            });
+        }
+    });
+    
+    if (items.length === 0) {
+        alert('Please add at least one item to the invoice.');
+        return;
+    }
+    
+    // Add items as hidden inputs
+    items.forEach(item => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'items';
+        input.value = JSON.stringify(item);
+        this.appendChild(input);
+    });
+    
+    // Submit form
+    this.submit();
+});
+
+// Set default dates
+document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date();
+    const dueDate = new Date(today);
+    dueDate.setDate(dueDate.getDate() + 30);
+    
+    document.querySelector('input[name="date"]').value = today.toISOString().split('T')[0];
+    document.querySelector('input[name="due_date"]').value = dueDate.toISOString().split('T')[0];
+    
+    // Add first item row
+    addItemRow();
+    
+    // Add event listener for invoice discount
+    document.querySelector('input[name="discount_percentage"]').addEventListener('input', calculateTotals);
+});
+</script>
+{% endblock %}

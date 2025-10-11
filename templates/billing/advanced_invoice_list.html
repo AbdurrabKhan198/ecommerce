@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Advanced Invoices - King Dupatta House{% endblock %}
+
+{% block extra_css %}
+<style>
+    .billing-card {
+        background: linear-gradient(135deg, #f3e5f5 0%, #fdf2f8 50%, #fef7f0 100%);
+        border: 2px solid rgba(194, 24, 91, 0.3);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(194, 24, 91, 0.15);
+        transition: all 0.3s ease;
+    }
+    
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    
+    .status-paid { background: #28a745; color: white; }
+    .status-sent { background: #ffc107; color: #212529; }
+    .status-draft { background: #6c757d; color: white; }
+    .status-overdue { background: #dc3545; color: white; }
+    .status-viewed { background: #17a2b8; color: white; }
+    .status-cancelled { background: #6c757d; color: white; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="billing-card p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h1 class="mb-0 text-primary">📄 Advanced Invoices</h1>
+                    <div>
+                        <a href="{% url 'billing:advanced_invoice_create' %}" class="btn btn-primary me-2">
+                            <i class="fas fa-plus"></i> Create Invoice
+                        </a>
+                        <a href="{% url 'billing:advanced_dashboard' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="billing-card p-4">
+                <form method="get" class="row">
+                    <div class="col-md-3">
+                        <select name="status" class="form-control">
+                            <option value="">All Status</option>
+                            <option value="draft" {% if status == 'draft' %}selected{% endif %}>Draft</option>
+                            <option value="sent" {% if status == 'sent' %}selected{% endif %}>Sent</option>
+                            <option value="viewed" {% if status == 'viewed' %}selected{% endif %}>Viewed</option>
+                            <option value="paid" {% if status == 'paid' %}selected{% endif %}>Paid</option>
+                            <option value="overdue" {% if status == 'overdue' %}selected{% endif %}>Overdue</option>
+                            <option value="cancelled" {% if status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="customer" class="form-control" placeholder="Search by customer..." value="{{ customer }}">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="date" name="date_from" class="form-control" value="{{ date_from }}">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="date" name="date_to" class="form-control" value="{{ date_to }}">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-filter"></i> Filter
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invoices List -->
+    <div class="row">
+        <div class="col-12">
+            <div class="billing-card p-4">
+                {% if invoices %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Invoice #</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for invoice in invoices %}
+                            <tr>
+                                <td><strong>{{ invoice.invoice_number }}</strong></td>
+                                <td>{{ invoice.customer.name }}</td>
+                                <td>{{ invoice.date|date:"M d, Y" }}</td>
+                                <td>{{ invoice.due_date|date:"M d, Y" }}</td>
+                                <td>
+                                    <span class="status-badge status-{{ invoice.status }}">
+                                        {{ invoice.status|title }}
+                                    </span>
+                                </td>
+                                <td><strong>₹{{ invoice.total_amount|floatformat:2 }}</strong></td>
+                                <td>
+                                    <a href="{% url 'billing:advanced_invoice_detail' invoice.invoice_id %}" class="btn btn-sm btn-outline-primary me-1">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'billing:advanced_invoice_print' invoice.invoice_id %}" class="btn btn-sm btn-outline-success me-1" target="_blank">
+                                        <i class="fas fa-print"></i>
+                                    </a>
+                                    {% if invoice.status != 'paid' %}
+                                    <a href="{% url 'billing:mark_invoice_paid' invoice.invoice_id %}" class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-check"></i>
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-file-invoice fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">No invoices found</h4>
+                    <p class="text-muted">Create your first invoice to get started!</p>
+                    <a href="{% url 'billing:advanced_invoice_create' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Create Invoice
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

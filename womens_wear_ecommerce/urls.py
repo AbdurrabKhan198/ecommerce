@@ -26,6 +26,7 @@ urlpatterns = [
     path('cart/', include('cart.urls')),
     path('checkout/', include('checkout.urls')),
     path('support/', include('support.urls')),
+    path('bill/', include('billing.advanced_urls')),
 ]
 
 # Serve media files during development

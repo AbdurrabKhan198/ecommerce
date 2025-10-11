@@ -29,6 +29,56 @@
     {% load static %}
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
     
+    <!-- Logo Styling -->
+    <style>
+        .logo-container {
+            position: relative;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        
+        .logo-image {
+            height: 45px;
+            width: auto;
+            border-radius: 50%;
+            padding: 5px;
+            background: linear-gradient(135deg, #c2185b 0%, #512da8 50%, #e91e63 100%);
+            box-shadow: 0 4px 15px rgba(194, 24, 91, 0.3);
+            transition: all 0.3s ease;
+            object-fit: cover;
+        }
+        
+        .logo-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(194, 24, 91, 0.4);
+        }
+        
+        .brand-text {
+            font-weight: 600;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, #c2185b 0%, #512da8 50%, #e91e63 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-left: 5px;
+        }
+        
+        .navbar-brand:hover .logo-image {
+            transform: rotate(5deg) scale(1.05);
+        }
+        
+        .navbar-brand:hover .brand-text {
+            transform: translateX(2px);
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 576px) {
+            .logo-image {
+                height: 35px;
+            }
+        }
+    </style>
+    
     {% block extra_css %}{% endblock %}
 </head>
 <body class="{% if user.is_authenticated %}authenticated{% endif %}">
@@ -62,8 +112,11 @@
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container">
                 <!-- Brand -->
-                <a class="navbar-brand" href="{% url 'shop:homepage' %}">
-                    <i class="fas fa-gem me-2"></i>{{ site_name|default:"King Dupatta House" }}
+                <a class="navbar-brand d-flex align-items-center" href="{% url 'shop:homepage' %}">
+                    <div class="logo-container">
+                        <img src="{% static 'images/logo.jpeg' %}" alt="King Dupatta House" class="logo-image">
+                    </div>
+                    <span class="d-none d-sm-inline brand-text">{{ site_name|default:"King Dupatta House" }}</span>
                 </a>
                 
                 <!-- Mobile Toggle -->

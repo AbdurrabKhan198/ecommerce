@@ -1,0 +1,234 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Invoice {{ invoice.invoice_number }} - King Dupatta House{% endblock %}
+
+{% block extra_css %}
+<style>
+    .billing-card {
+        background: linear-gradient(135deg, #f3e5f5 0%, #fdf2f8 50%, #fef7f0 100%);
+        border: 2px solid rgba(194, 24, 91, 0.3);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(194, 24, 91, 0.15);
+        transition: all 0.3s ease;
+    }
+    
+    .invoice-header {
+        background: linear-gradient(135deg, #c2185b 0%, #512da8 50%, #e91e63 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+    
+    .status-badge {
+        padding: 8px 16px;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    
+    .status-paid { background: #28a745; color: white; }
+    .status-sent { background: #ffc107; color: #212529; }
+    .status-draft { background: #6c757d; color: white; }
+    .status-overdue { background: #dc3545; color: white; }
+    .status-viewed { background: #17a2b8; color: white; }
+    .status-cancelled { background: #6c757d; color: white; }
+    
+    .payment-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="billing-card p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h1 class="mb-0 text-primary">📄 Invoice Details</h1>
+                    <div>
+                        <a href="{% url 'billing:advanced_invoice_print' invoice.invoice_id %}" class="btn btn-success me-2" target="_blank">
+                            <i class="fas fa-print"></i> Print Invoice
+                        </a>
+                        <a href="{% url 'billing:advanced_invoice_list' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to Invoices
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invoice Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="invoice-header">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2 class="mb-2">King Dupatta House</h2>
+                        <p class="mb-1">GST: {{ invoice.company.gst_number }}</p>
+                        <p class="mb-1">{{ invoice.company.address }}</p>
+                        <p class="mb-0">Phone: {{ invoice.company.phone }}</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <h3 class="mb-2">INVOICE</h3>
+                        <p class="mb-1"><strong>Invoice #:</strong> {{ invoice.invoice_number }}</p>
+                        <p class="mb-1"><strong>Date:</strong> {{ invoice.date|date:"M d, Y" }}</p>
+                        <p class="mb-1"><strong>Due Date:</strong> {{ invoice.due_date|date:"M d, Y" }}</p>
+                        <p class="mb-0">
+                            <span class="status-badge status-{{ invoice.status }}">
+                                {{ invoice.status|title }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Details -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="billing-card p-4">
+                <h5 class="text-primary mb-3">👤 Bill To:</h5>
+                <p class="mb-1"><strong>{{ invoice.customer.name }}</strong></p>
+                {% if invoice.customer.email %}
+                <p class="mb-1">📧 {{ invoice.customer.email }}</p>
+                {% endif %}
+                {% if invoice.customer.phone %}
+                <p class="mb-1">📞 {{ invoice.customer.phone }}</p>
+                {% endif %}
+                {% if invoice.customer.address %}
+                <p class="mb-1">📍 {{ invoice.customer.address }}</p>
+                {% endif %}
+                {% if invoice.customer.gst_number %}
+                <p class="mb-0">🏢 GST: {{ invoice.customer.gst_number }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="billing-card p-4">
+                <h5 class="text-primary mb-3">💰 Payment Info:</h5>
+                <p class="mb-1"><strong>Subtotal:</strong> ₹{{ invoice.subtotal|floatformat:2 }}</p>
+                <p class="mb-1"><strong>Discount:</strong> ₹{{ invoice.discount_amount|floatformat:2 }}</p>
+                <p class="mb-1"><strong>GST ({{ invoice.tax_rate }}%):</strong> ₹{{ invoice.tax_amount|floatformat:2 }}</p>
+                <p class="mb-0"><strong>Total Amount:</strong> ₹{{ invoice.total_amount|floatformat:2 }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invoice Items -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="billing-card p-4">
+                <h5 class="text-primary mb-3">🛍️ Invoice Items</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Category</th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                                <th>Discount</th>
+                                <th>Tax</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in invoice.items.all %}
+                            <tr>
+                                <td>{{ item.description }}</td>
+                                <td>{{ item.category|default:"-" }}</td>
+                                <td>{{ item.quantity }} {{ item.unit }}</td>
+                                <td>₹{{ item.unit_price|floatformat:2 }}</td>
+                                <td>{{ item.discount_percentage|floatformat:1 }}%</td>
+                                <td>{{ item.tax_rate|floatformat:1 }}%</td>
+                                <td><strong>₹{{ item.total_price|floatformat:2 }}</strong></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Records -->
+    {% if payments %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="billing-card p-4">
+                <h5 class="text-primary mb-3">💳 Payment Records</h5>
+                {% for payment in payments %}
+                <div class="payment-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>₹{{ payment.amount|floatformat:2 }}</strong>
+                            <span class="badge bg-primary ms-2">{{ payment.payment_method|title }}</span>
+                        </div>
+                        <div class="text-muted">
+                            {{ payment.payment_date|date:"M d, Y H:i" }}
+                        </div>
+                    </div>
+                    {% if payment.payment_reference %}
+                    <p class="mb-1 mt-2"><strong>Reference:</strong> {{ payment.payment_reference }}</p>
+                    {% endif %}
+                    {% if payment.notes %}
+                    <p class="mb-0 mt-1"><strong>Notes:</strong> {{ payment.notes }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Notes -->
+    {% if invoice.notes %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="billing-card p-4">
+                <h5 class="text-primary mb-3">📝 Notes</h5>
+                <p class="mb-0">{{ invoice.notes }}</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Actions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="billing-card p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-1">Invoice Actions</h5>
+                        <p class="text-muted mb-0">Manage this invoice</p>
+                    </div>
+                    <div>
+                        <a href="{% url 'billing:advanced_invoice_print' invoice.invoice_id %}" class="btn btn-success me-2" target="_blank">
+                            <i class="fas fa-print"></i> Print Invoice
+                        </a>
+                        {% if invoice.status != 'paid' %}
+                        <a href="{% url 'billing:mark_invoice_paid' invoice.invoice_id %}" class="btn btn-warning me-2">
+                            <i class="fas fa-check"></i> Mark as Paid
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'billing:advanced_invoice_list' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-list"></i> All Invoices
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
