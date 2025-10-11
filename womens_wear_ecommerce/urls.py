@@ -30,10 +30,14 @@ urlpatterns = [
 ]
 
 # Serve media and static files
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-# Serve static files from the appropriate directory
 if settings.DEBUG:
+    # Development: Serve media files
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # Development: Serve static files
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
 else:
+    # Production: Serve static files from collected directory
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    # Production: Media files should be served by web server (nginx/apache)
+    # For development/testing, you can still serve media files in production
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
