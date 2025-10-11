@@ -24,10 +24,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-your-secret-key-here-change-in-production'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # ALLOWED_HOSTS = ['*'] 
 ALLOWED_HOSTS = ['kingdupattahouse.in', 'www.kingdupattahouse.in', '3.109.208.181', 'localhost', '127.0.0.1'] # Allow all hosts for development
+
+# CSRF Settings for Production
+CSRF_TRUSTED_ORIGINS = [
+    'https://kingdupattahouse.in',
+    'https://www.kingdupattahouse.in',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000'
+]
+
+# CSRF Cookie Settings
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SAMESITE = 'Lax'
 
 
 # Application definition
