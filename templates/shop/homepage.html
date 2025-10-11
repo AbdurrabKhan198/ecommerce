@@ -349,66 +349,31 @@
         <div class="row g-4">
             {% for category in categories %}
             <div class="col-lg-4 col-md-6">
-                <div class="category-card">
-                    <img src="{% if category.image %}{{ category.image.url }}{% else %}https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80{% endif %}" 
-                         alt="{{ category.name }}" class="card-img">
-                    <div class="card-img-overlay">
-                        <h5 class="card-title">{{ category.name }}</h5>
-                        <p class="card-text">{{ category.description|truncatewords:10 }}</p>
-                        <a href="{{ category.get_absolute_url }}" class="btn btn-primary">
-                            <i class="fas fa-arrow-right me-2"></i>Shop {{ category.name }}
-                        </a>
+                <a href="{{ category.get_absolute_url }}" class="text-decoration-none">
+                    <div class="category-card">
+                        {% if category.image %}
+                            <img src="{{ category.image.url }}" 
+                                 alt="{{ category.name }}" 
+                                 class="card-img"
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80';">
+                        {% else %}
+                            <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                                 alt="{{ category.name }}" 
+                                 class="card-img">
+                        {% endif %}
+                        <div class="card-img-overlay d-flex flex-column justify-content-end">
+                            <h5 class="card-title text-white text-shadow">{{ category.name }}</h5>
+                            <p class="card-text text-white text-shadow">{{ category.description|truncatewords:10 }}</p>
+                            <div class="btn btn-primary align-self-start">
+                                <i class="fas fa-arrow-right me-2"></i>Shop {{ category.name }}
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             {% empty %}
-            <!-- Default categories with beautiful images -->
-            <div class="col-lg-4 col-md-6">
-                <a href="{% url 'shop:shop' %}?category=leggings" class="text-decoration-none">
-                    <div class="category-card">
-                    <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
-                         alt="Leggings" class="card-img" onerror="this.src='https://via.placeholder.com/400x300/f8f9fa/6c757d?text=Leggings'">
-                        <div class="card-img-overlay">
-                            <h5 class="card-title">Leggings</h5>
-                        <p class="card-text">Comfort meets style in our premium leggings collection</p>
-                            <div class="btn btn-primary">
-                            <i class="fas fa-arrow-right me-2"></i>Shop Leggings
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            
-            <div class="col-lg-4 col-md-6">
-                <a href="{% url 'shop:shop' %}?category=pants" class="text-decoration-none">
-                    <div class="category-card">
-                    <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
-                         alt="Pants" class="card-img" onerror="this.src='https://via.placeholder.com/400x300/f8f9fa/6c757d?text=Pants'">
-                        <div class="card-img-overlay">
-                            <h5 class="card-title">Pants</h5>
-                        <p class="card-text">Versatile elegance for every occasion and style</p>
-                            <div class="btn btn-primary">
-                            <i class="fas fa-arrow-right me-2"></i>Shop Pants
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            
-            <div class="col-lg-4 col-md-6">
-                <a href="{% url 'shop:shop' %}?category=dupattas" class="text-decoration-none">
-                <div class="category-card">
-                        <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
-                         alt="Dupattas" class="card-img" onerror="this.src='https://via.placeholder.com/400x300/f8f9fa/6c757d?text=Dupattas'">
-                    <div class="card-img-overlay">
-                        <h5 class="card-title">Dupattas</h5>
-                        <p class="card-text">Traditional elegance redefined for modern women</p>
-                            <div class="btn btn-primary">
-                            <i class="fas fa-arrow-right me-2"></i>Shop Dupattas
-                            </div>
-                        </div>
-                    </div>
-                </a>
+            <div class="col-12 text-center">
+                <p class="text-muted">No categories found. Please add categories in the admin panel.</p>
             </div>
             {% endfor %}
         </div>

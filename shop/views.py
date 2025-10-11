@@ -18,15 +18,14 @@ from .forms import ContactForm, ReviewForm, WhatsAppSubscriptionForm
 
 def homepage(request):
     """Homepage view"""
-    print("Homepage view called!")  # Debug output
     
-    # Get actual data from database
-    categories = Category.objects.filter(is_active=True).order_by('sort_order', 'name')[:3]
+    # Get featured products
     featured_products = Product.objects.filter(is_active=True, is_featured=True).order_by('-created_at')[:4]
+    
     # Get bestseller products in specific order
-    bestseller_products = Product.objects.filter(is_active=True, is_bestseller=True).order_by(
-        'name'  # This will show them in alphabetical order as per your request
-    )[:4]
+    bestseller_products = Product.objects.filter(is_active=True, is_bestseller=True).order_by('name')[:4]
+    
+    # Get recent products
     recent_products = Product.objects.filter(is_active=True).order_by('-created_at')[:4]
     
     # Get recent approved reviews
@@ -34,7 +33,6 @@ def homepage(request):
     recent_reviews = Review.objects.filter(is_approved=True).select_related('user', 'product').order_by('-created_at')[:3]
     
     context = {
-        'categories': categories,
         'featured_products': featured_products,
         'bestseller_products': bestseller_products,
         'recent_products': recent_products,

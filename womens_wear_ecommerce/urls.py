@@ -29,11 +29,11 @@ urlpatterns = [
     path('bill/', include('billing.advanced_urls')),
 ]
 
-# Serve media files during development
+# Serve media and static files
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Serve static files from the appropriate directory
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
 else:
-    # Production: serve static files from STATIC_ROOT
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
