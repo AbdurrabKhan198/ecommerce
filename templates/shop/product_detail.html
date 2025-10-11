@@ -421,49 +421,6 @@
     margin-top: 2rem;
 }
 
-.sticky-buy-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--white);
-    border-top: 1px solid var(--grey-200);
-    padding: 1rem;
-    box-shadow: var(--shadow-lg);
-    z-index: 1000;
-    transform: translateY(100%);
-    transition: var(--transition-normal);
-}
-
-.sticky-buy-bar.show {
-    transform: translateY(0);
-}
-
-.sticky-buy-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.sticky-product-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.sticky-product-image {
-    width: 50px;
-    height: 50px;
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-}
-
-.sticky-actions {
-    display: flex;
-    gap: 1rem;
-}
 
 @media (max-width: 768px) {
     .product-info {
@@ -487,14 +444,6 @@
         font-size: 2rem;
     }
     
-    .sticky-buy-content {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .sticky-actions {
-        width: 100%;
-    }
 }
 </style>
 {% endblock %}
@@ -998,30 +947,6 @@
     </div>
 </div>
 
-<!-- Sticky Buy Bar -->
-<div class="sticky-buy-bar" id="stickyBuyBar">
-    <div class="sticky-buy-content">
-        <div class="sticky-product-info">
-            <div class="sticky-product-image">
-                {% with product.images.first as first_image %}
-                <img src="{% if first_image %}{{ first_image.image.url }}{% else %}https://images.unsplash.com/photo-1583391733956-6c78276477e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80{% endif %}" alt="{{ product.name }}">
-                {% endwith %}
-            </div>
-            <div>
-                <h6 class="mb-0">Premium Cotton Ankle Length Leggings</h6>
-                <span class="text-primary fw-bold">₹799</span>
-            </div>
-        </div>
-        <div class="sticky-actions">
-            <button class="btn btn-outline-primary">
-                <i class="far fa-heart me-2"></i>Wishlist
-            </button>
-            <button class="btn btn-primary">
-                <i class="fas fa-shopping-cart me-2"></i>Add to Cart
-            </button>
-        </div>
-    </div>
-</div>
 
 <!-- Size Guide Modal -->
 <div class="modal fade" id="sizeGuideModal" tabindex="-1">
@@ -1110,8 +1035,6 @@ function initializeProductDetailSpecific() {
     // Add to cart functionality
     initializeAddToCart();
     
-    // Sticky buy bar
-    initializeStickyBuyBar();
     
     // Review interactions
     initializeReviews();
@@ -1204,24 +1127,6 @@ function initializeAddToCart() {
 
 // Wishlist functionality is now handled by main.js
 
-function initializeStickyBuyBar() {
-    const stickyBuyBar = document.getElementById('stickyBuyBar');
-    const productActions = document.querySelector('.product-actions');
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                stickyBuyBar.classList.remove('show');
-            } else {
-                stickyBuyBar.classList.add('show');
-            }
-        });
-    });
-    
-    if (productActions) {
-        observer.observe(productActions);
-    }
-}
 
 function initializeReviews() {
     // Helpful button functionality
