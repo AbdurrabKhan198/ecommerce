@@ -9,8 +9,9 @@ import json
 from datetime import datetime, timedelta
 from .models import CompanyProfile, Customer, Invoice, InvoiceItem
 from .forms import CustomerForm, InvoiceForm, InvoiceItemForm, CompanyProfileForm
+from .decorators import superuser_required_with_login
 
-@login_required
+@superuser_required_with_login
 def billing_dashboard(request):
     """Billing dashboard"""
     # Get or create company profile
@@ -42,13 +43,13 @@ def billing_dashboard(request):
     }
     return render(request, 'billing/dashboard.html', context)
 
-@login_required
+@superuser_required_with_login
 def customer_list(request):
     """Customer list"""
     customers = Customer.objects.all().order_by('-created_at')
     return render(request, 'billing/customer_list.html', {'customers': customers})
 
-@login_required
+@superuser_required_with_login
 def customer_add(request):
     """Add new customer"""
     if request.method == 'POST':
@@ -62,13 +63,13 @@ def customer_add(request):
     
     return render(request, 'billing/customer_add.html', {'form': form})
 
-@login_required
+@superuser_required_with_login
 def invoice_list(request):
     """Invoice list"""
     invoices = Invoice.objects.all().order_by('-created_at')
     return render(request, 'billing/invoice_list.html', {'invoices': invoices})
 
-@login_required
+@superuser_required_with_login
 def invoice_create(request):
     """Create new invoice"""
     if request.method == 'POST':
@@ -105,19 +106,19 @@ def invoice_create(request):
         'customers': customers
     })
 
-@login_required
+@superuser_required_with_login
 def invoice_detail(request, invoice_id):
     """Invoice detail view"""
     invoice = get_object_or_404(Invoice, id=invoice_id)
     return render(request, 'billing/invoice_detail.html', {'invoice': invoice})
 
-@login_required
+@superuser_required_with_login
 def invoice_print(request, invoice_id):
     """Print invoice"""
     invoice = get_object_or_404(Invoice, id=invoice_id)
     return render(request, 'billing/invoice_print.html', {'invoice': invoice})
 
-@login_required
+@superuser_required_with_login
 def company_profile(request):
     """Company profile management"""
     company = get_object_or_404(CompanyProfile, id=1)
@@ -133,6 +134,7 @@ def company_profile(request):
     
     return render(request, 'billing/company_profile.html', {'form': form})
 
+@superuser_required_with_login
 @csrf_exempt
 def add_invoice_item(request):
     """AJAX endpoint to add invoice item"""

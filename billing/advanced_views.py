@@ -15,8 +15,9 @@ from .advanced_models import (
     AdvancedCompanyProfile, AdvancedCustomer, AdvancedInvoice, 
     AdvancedInvoiceItem, PaymentRecord, InvoiceTemplate
 )
+from .decorators import superuser_required_with_login
 
-@login_required
+@superuser_required_with_login
 def advanced_dashboard(request):
     """Advanced billing dashboard with analytics"""
     # Get company profile
@@ -75,7 +76,7 @@ def advanced_dashboard(request):
     }
     return render(request, 'billing/advanced_dashboard.html', context)
 
-@login_required
+@superuser_required_with_login
 def advanced_customer_list(request):
     """Advanced customer management"""
     customers = AdvancedCustomer.objects.all().order_by('-created_at')
@@ -101,7 +102,7 @@ def advanced_customer_list(request):
     }
     return render(request, 'billing/advanced_customer_list.html', context)
 
-@login_required
+@superuser_required_with_login
 def advanced_customer_detail(request, customer_id):
     """Detailed customer view"""
     customer = get_object_or_404(AdvancedCustomer, customer_id=customer_id)
@@ -123,7 +124,7 @@ def advanced_customer_detail(request, customer_id):
     }
     return render(request, 'billing/advanced_customer_detail.html', context)
 
-@login_required
+@superuser_required_with_login
 def advanced_invoice_create(request):
     """Advanced invoice creation with multiple features"""
     if request.method == 'POST':
@@ -190,7 +191,7 @@ def advanced_invoice_create(request):
     }
     return render(request, 'billing/advanced_invoice_create.html', context)
 
-@login_required
+@superuser_required_with_login
 def advanced_invoice_detail(request, invoice_id):
     """Advanced invoice detail view"""
     invoice = get_object_or_404(AdvancedInvoice, invoice_id=invoice_id)
@@ -202,7 +203,7 @@ def advanced_invoice_detail(request, invoice_id):
     }
     return render(request, 'billing/advanced_invoice_detail.html', context)
 
-@login_required
+@superuser_required_with_login
 def advanced_invoice_print(request, invoice_id):
     """Advanced invoice printing with templates"""
     invoice = get_object_or_404(AdvancedInvoice, invoice_id=invoice_id)
@@ -216,7 +217,7 @@ def advanced_invoice_print(request, invoice_id):
     }
     return render(request, 'billing/advanced_invoice_print.html', context)
 
-@login_required
+@superuser_required_with_login
 def advanced_invoice_list(request):
     """Advanced invoice listing with filters"""
     invoices = AdvancedInvoice.objects.select_related('customer').order_by('-created_at')
@@ -247,7 +248,7 @@ def advanced_invoice_list(request):
     }
     return render(request, 'billing/advanced_invoice_list.html', context)
 
-@login_required
+@superuser_required_with_login
 def mark_invoice_paid(request, invoice_id):
     """Mark invoice as paid with payment details"""
     if request.method == 'POST':
@@ -275,7 +276,7 @@ def mark_invoice_paid(request, invoice_id):
     invoice = get_object_or_404(AdvancedInvoice, invoice_id=invoice_id)
     return render(request, 'billing/mark_paid.html', {'invoice': invoice})
 
-@login_required
+@superuser_required_with_login
 def advanced_analytics(request):
     """Advanced analytics and reports"""
     # Date range
@@ -315,6 +316,7 @@ def advanced_analytics(request):
     }
     return render(request, 'billing/advanced_analytics.html', context)
 
+@superuser_required_with_login
 @csrf_exempt
 def ajax_calculate_totals(request):
     """AJAX endpoint for real-time calculations"""
