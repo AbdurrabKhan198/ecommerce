@@ -61,6 +61,7 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-left: 5px;
+            white-space: nowrap;
         }
         
         .navbar-brand:hover .logo-image {
@@ -75,6 +76,16 @@
         @media (max-width: 576px) {
             .logo-image {
                 height: 35px;
+            }
+            .brand-text {
+                font-size: 1rem;
+                margin-left: 3px;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .brand-text {
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -116,7 +127,7 @@
                     <div class="logo-container">
                         <img src="/static/images/logo.png" alt="King Dupatta House" class="logo-image">
                     </div>
-                    <span class="d-none d-sm-inline brand-text">{{ site_name|default:"King Dupatta House" }}</span>
+                    <span class="brand-text">{{ site_name|default:"King Dupatta House" }}</span>
                 </a>
                 
                 <!-- Mobile Toggle -->
