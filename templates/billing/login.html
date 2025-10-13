@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <title>Billing System Login</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #1e40af 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+        
+        .billing-login-container {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .billing-login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #1e40af 100%);
+        }
+        
+        .billing-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .billing-logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+        }
+        
+        .billing-logo-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+        
+        .billing-logo-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .billing-logo-subtitle {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .billing-form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .billing-form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #374151;
+            font-size: 0.9rem;
+        }
+        
+        .billing-form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #f9fafb;
+        }
+        
+        .billing-form-control:focus {
+            outline: none;
+            border-color: #2563eb;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .billing-form-control::placeholder {
+            color: #9ca3af;
+        }
+        
+        .billing-input-group {
+            position: relative;
+        }
+        
+        .billing-input-group .billing-form-control {
+            padding-right: 3rem;
+        }
+        
+        .billing-input-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .billing-input-icon:hover {
+            color: #2563eb;
+        }
+        
+        .billing-form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .billing-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .billing-checkbox input[type="checkbox"] {
+            width: 1rem;
+            height: 1rem;
+            accent-color: #2563eb;
+        }
+        
+        .billing-checkbox label {
+            font-size: 0.9rem;
+            color: #374151;
+            cursor: pointer;
+        }
+        
+        .billing-forgot-link {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .billing-forgot-link:hover {
+            color: #1d4ed8;
+        }
+        
+        .billing-login-btn {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .billing-login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+        }
+        
+        .billing-login-btn:active {
+            transform: translateY(0);
+        }
+        
+        .billing-login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .billing-divider {
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+        
+        .billing-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: #e5e7eb;
+            z-index: 1;
+        }
+        
+        .billing-divider span {
+            background-color: white;
+            padding: 0 1rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .billing-back-link {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .billing-back-link a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .billing-back-link a:hover {
+            color: #1d4ed8;
+        }
+        
+        .billing-alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .billing-alert-success {
+            background-color: #dcfce7;
+            border-color: #16a34a;
+            color: #166534;
+        }
+        
+        .billing-alert-error {
+            background-color: #fee2e2;
+            border-color: #dc2626;
+            color: #991b1b;
+        }
+        
+        .billing-alert-warning {
+            background-color: #fef3c7;
+            border-color: #d97706;
+            color: #92400e;
+        }
+        
+        .billing-security-notice {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .billing-security-notice i {
+            color: #2563eb;
+            margin-right: 0.5rem;
+        }
+        
+        .billing-security-notice small {
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+        
+        @media (max-width: 480px) {
+            .billing-login-container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+            
+            .billing-logo-icon {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .billing-logo-icon i {
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* Loading spinner */
+        .billing-spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: billing-spin 1s linear infinite;
+        }
+        
+        @keyframes billing-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="billing-login-container">
+        <!-- Logo and Title -->
+        <div class="billing-logo">
+            <div class="billing-logo-icon">
+                <i class="fas fa-calculator"></i>
+            </div>
+            <h1 class="billing-logo-title">Billing System</h1>
+            <p class="billing-logo-subtitle">Superuser Access Required</p>
+        </div>
+        
+        <!-- Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="billing-alert billing-alert-{{ message.tags }}">
+                    <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}times-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <!-- Login Form -->
+        <form method="post" id="billingLoginForm">
+            {% csrf_token %}
+            <div class="billing-form-group">
+                <label for="id_email" class="billing-form-label">Email or Username</label>
+                <input type="text" 
+                       name="email" 
+                       id="id_email" 
+                       class="billing-form-control" 
+                       placeholder="Enter your email or username"
+                       value="{{ form.email.value|default:'' }}"
+                       required>
+            </div>
+            
+            <div class="billing-form-group">
+                <label for="id_password" class="billing-form-label">Password</label>
+                <div class="billing-input-group">
+                    <input type="password" 
+                           name="password" 
+                           id="id_password" 
+                           class="billing-form-control" 
+                           placeholder="Enter your password"
+                           required>
+                    <i class="fas fa-eye billing-input-icon" id="togglePassword"></i>
+                </div>
+            </div>
+            
+            <div class="billing-form-options">
+                <div class="billing-checkbox">
+                    <input type="checkbox" name="remember_me" id="id_remember_me">
+                    <label for="id_remember_me">Remember me</label>
+                </div>
+                <a href="#" class="billing-forgot-link">Forgot password?</a>
+            </div>
+            
+            <button type="submit" class="billing-login-btn" id="loginBtn">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>Access Billing System</span>
+            </button>
+        </form>
+        
+        <div class="billing-divider">
+            <span>Secure Access</span>
+        </div>
+        
+        <div class="billing-back-link">
+            <a href="/">
+                <i class="fas fa-arrow-left"></i>
+                Back to Main Website
+            </a>
+        </div>
+        
+        <div class="billing-security-notice">
+            <i class="fas fa-shield-alt"></i>
+            <small>This billing system is restricted to authorized superusers only. All access is logged and monitored.</small>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Password toggle
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('id_password');
+            
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+            
+            // Form submission with loading state
+            const form = document.getElementById('billingLoginForm');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            form.addEventListener('submit', function() {
+                loginBtn.innerHTML = '<span class="billing-spinner"></span> Authenticating...';
+                loginBtn.disabled = true;
+            });
+            
+            // Auto-hide alerts
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.billing-alert');
+                alerts.forEach(function(alert) {
+                    alert.style.transition = 'opacity 0.5s ease';
+                    alert.style.opacity = '0';
+                    setTimeout(function() {
+                        alert.remove();
+                    }, 500);
+                });
+            }, 5000);
+            
+            // Focus on email field
+            document.getElementById('id_email').focus();
+        });
+    </script>
+</body>
+</html>

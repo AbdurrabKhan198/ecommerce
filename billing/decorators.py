@@ -13,7 +13,7 @@ def superuser_required(view_func):
             # Redirect to login if not authenticated
             from django.shortcuts import redirect
             from django.urls import reverse
-            return redirect(f"{reverse('accounts:login')}?next={request.get_full_path()}")
+            return redirect(f"{reverse('billing:login')}?next={request.get_full_path()}")
         
         if not request.user.is_superuser:
             # Show access denied page for non-superusers
@@ -35,7 +35,7 @@ def superuser_required_with_login(view_func):
             # Redirect to login if not authenticated
             from django.shortcuts import redirect
             from django.urls import reverse
-            return redirect(f"{reverse('accounts:login')}?next={request.get_full_path()}")
+            return redirect(f"{reverse('billing:login')}?next={request.get_full_path()}")
         
         if not request.user.is_superuser:
             # Show access denied page for non-superusers
