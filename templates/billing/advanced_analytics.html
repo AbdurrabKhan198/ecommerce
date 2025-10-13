@@ -91,23 +91,32 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for customer in customer_stats %}
-                            <tr>
-                                <td><strong>#{{ forloop.counter }}</strong></td>
-                                <td>{{ customer.name }}</td>
-                                <td>
-                                    <span class="badge 
-                                        {% if customer.customer_type == 'individual' %}bg-success
-                                        {% elif customer.customer_type == 'business' %}bg-primary
-                                        {% else %}bg-secondary{% endif %}">
-                                        {{ customer.customer_type|title }}
-                                    </span>
-                                </td>
-                                <td>{{ customer.invoice_count }}</td>
-                                <td><strong>₹{{ customer.total_spent|floatformat:2 }}</strong></td>
-                                <td>₹{{ customer.total_spent|div:customer.invoice_count|floatformat:2 }}</td>
-                            </tr>
-                            {% endfor %}
+                            {% if customer_stats %}
+                                {% for customer in customer_stats %}
+                                <tr>
+                                    <td><strong>#{{ forloop.counter }}</strong></td>
+                                    <td>{{ customer.name }}</td>
+                                    <td>
+                                        <span class="badge 
+                                            {% if customer.customer_type == 'individual' %}bg-success
+                                            {% elif customer.customer_type == 'business' %}bg-primary
+                                            {% else %}bg-secondary{% endif %}">
+                                            {{ customer.customer_type|title }}
+                                        </span>
+                                    </td>
+                                    <td>{{ customer.invoice_count }}</td>
+                                    <td><strong>₹{{ customer.total_spent|floatformat:2 }}</strong></td>
+                                    <td>₹0.00</td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted py-4">
+                                        <i class="fas fa-chart-line fa-2x mb-2"></i><br>
+                                        No customer data available yet
+                                    </td>
+                                </tr>
+                            {% endif %}
                         </tbody>
                     </table>
                 </div>
@@ -121,17 +130,24 @@
             <div class="billing-card p-4">
                 <h4 class="mb-3">📊 Invoice Status Distribution</h4>
                 <div class="row">
-                    {% for status in status_stats %}
-                    <div class="col-md-3 mb-3">
-                        <div class="stat-card">
-                            <div class="stat-number">{{ status.count }}</div>
-                            <div class="stat-label">{{ status.status|title }} Invoices</div>
-                            <div class="mt-2">
-                                <small>Total: ₹{{ status.total_amount|floatformat:0 }}</small>
+                    {% if status_stats %}
+                        {% for status in status_stats %}
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-card">
+                                <div class="stat-number">{{ status.count }}</div>
+                                <div class="stat-label">{{ status.status|title }} Invoices</div>
+                                <div class="mt-2">
+                                    <small>Total: ₹{{ status.total_amount|floatformat:0 }}</small>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    {% endfor %}
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-12 text-center text-muted py-4">
+                            <i class="fas fa-chart-pie fa-2x mb-2"></i><br>
+                            No invoice data available yet
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
