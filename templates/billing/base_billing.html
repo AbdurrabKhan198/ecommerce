@@ -8,16 +8,19 @@
     <title>{% block title %}Billing System - King Dupatta House{% endblock %}</title>
     
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <!-- Billing System CSS -->
     {% load static %}
@@ -25,21 +28,32 @@
     
     <style>
         :root {
-            --primary-color: #2563eb;
-            --primary-light: #dbeafe;
-            --secondary-color: #64748b;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
-            --dark-color: #1e293b;
-            --light-color: #f8fafc;
-            --border-color: #e2e8f0;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #a5b4fc;
+            --secondary: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #06b6d4;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-            --radius-sm: 0.375rem;
-            --radius-md: 0.5rem;
-            --radius-lg: 0.75rem;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
         }
         
         * {
@@ -50,399 +64,755 @@
         
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--light-color);
-            color: var(--dark-color);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark);
             line-height: 1.6;
         }
         
-        /* Header */
+        .billing-container {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: var(--shadow-2xl);
+            margin: 16px;
+            min-height: calc(100vh - 32px);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
         .billing-header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, #1d4ed8 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 1rem 0;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .billing-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .billing-header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .billing-header p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            font-weight: 400;
+        }
+        
+        .billing-navbar {
+            background: white;
+            border-bottom: 3px solid var(--primary);
+            padding: 1.5rem 2rem;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .billing-navbar .navbar-brand {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.75rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .billing-navbar .nav-link {
+            color: var(--gray-600);
+            font-weight: 500;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+        }
+        
+        .billing-navbar .nav-link:hover {
+            background: var(--gray-50);
+            color: var(--primary);
+            transform: translateY(-1px);
+        }
+        
+        .billing-navbar .nav-link.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
             box-shadow: var(--shadow-md);
         }
         
-        .billing-header .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: white;
-            text-decoration: none;
+        .billing-content {
+            padding: 2.5rem;
+            min-height: calc(100vh - 300px);
         }
         
-        .billing-header .navbar-brand:hover {
-            color: var(--primary-light);
-        }
-        
-        .billing-nav {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-        
-        .billing-nav a {
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius-sm);
-            transition: all 0.3s ease;
-        }
-        
-        .billing-nav a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-        
-        .billing-nav a.active {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-        
-        /* Main Content */
-        .billing-main {
-            min-height: calc(100vh - 80px);
-            padding: 2rem 0;
-        }
-        
-        .billing-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-        
-        /* Cards */
         .billing-card {
             background: white;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-color);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            position: relative;
         }
         
-        .billing-card-header {
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1rem;
-            margin-bottom: 1.5rem;
+        .billing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
         }
         
-        .billing-card-title {
-            font-size: 1.25rem;
+        .billing-card:hover {
+            box-shadow: var(--shadow-xl);
+            transform: translateY(-4px);
+        }
+        
+        .billing-card .card-header {
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 2rem;
             font-weight: 600;
-            color: var(--dark-color);
-            margin: 0;
+            color: var(--gray-800);
+            font-size: 1.125rem;
         }
         
-        /* Buttons */
+        .billing-card .card-body {
+            padding: 2rem;
+        }
+        
         .btn-billing {
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius-sm);
-            font-weight: 500;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border: none;
+            color: white;
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
+            box-shadow: var(--shadow-md);
         }
         
-        .btn-primary-billing {
-            background-color: var(--primary-color);
+        .btn-billing:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
             color: white;
         }
         
-        .btn-primary-billing:hover {
-            background-color: #1d4ed8;
-            color: white;
+        .btn-billing-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
-        .btn-success-billing {
-            background-color: var(--success-color);
+        .btn-billing-outline:hover {
+            background: var(--primary);
             color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
         
-        .btn-success-billing:hover {
-            background-color: #059669;
-            color: white;
-        }
-        
-        .btn-warning-billing {
-            background-color: var(--warning-color);
-            color: white;
-        }
-        
-        .btn-warning-billing:hover {
-            background-color: #d97706;
-            color: white;
-        }
-        
-        .btn-danger-billing {
-            background-color: var(--danger-color);
-            color: white;
-        }
-        
-        .btn-danger-billing:hover {
-            background-color: #dc2626;
-            color: white;
-        }
-        
-        /* Tables */
         .billing-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
         }
         
-        .billing-table th,
-        .billing-table td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
+        .billing-table thead {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
         }
         
         .billing-table th {
-            background-color: var(--light-color);
+            border: none;
             font-weight: 600;
-            color: var(--dark-color);
+            padding: 1.25rem;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .billing-table td {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--gray-200);
+            vertical-align: middle;
         }
         
         .billing-table tbody tr:hover {
-            background-color: var(--light-color);
+            background-color: var(--gray-50);
         }
         
-        /* Forms */
-        .billing-form-group {
-            margin-bottom: 1rem;
+        .billing-table tbody tr:last-child td {
+            border-bottom: none;
         }
         
-        .billing-form-label {
-            display: block;
-            font-weight: 500;
+        .badge-paid {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+        
+        .badge-pending {
+            background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+        
+        .badge-overdue {
+            background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+        
+        .form-control {
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 0.875rem 1rem;
+            font-size: 0.875rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: var(--gray-700);
             margin-bottom: 0.5rem;
-            color: var(--dark-color);
+            font-size: 0.875rem;
         }
         
-        .billing-form-control {
-            width: 100%;
-            padding: 0.5rem 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
+        .alert {
+            border-radius: 16px;
+            border: none;
+            padding: 1.25rem 1.5rem;
+            font-weight: 500;
         }
         
-        .billing-form-control:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        .alert-success {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+            border-left: 4px solid var(--success);
         }
         
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+        .alert-danger {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #991b1b;
+            border-left: 4px solid var(--danger);
         }
         
-        .stat-card {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: 1.5rem;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-color);
+        .alert-warning {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #92400e;
+            border-left: 4px solid var(--warning);
         }
         
-        .stat-card-icon {
-            width: 3rem;
-            height: 3rem;
+        .alert-info {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            color: #1e40af;
+            border-left: 4px solid var(--info);
+        }
+        
+        .floating-action {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
             border-radius: 50%;
+            width: 64px;
+            height: 64px;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-xl);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .floating-action:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-2xl);
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .stats-card .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
+            color: white;
             margin-bottom: 1rem;
         }
         
-        .stat-card-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--dark-color);
+        .stats-card .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--gray-900);
             margin-bottom: 0.5rem;
         }
         
-        .stat-card-label {
-            color: var(--secondary-color);
+        .stats-card .stat-label {
+            color: var(--gray-600);
+            font-weight: 500;
             font-size: 0.875rem;
         }
         
-        /* Alerts */
-        .billing-alert {
-            padding: 1rem;
-            border-radius: var(--radius-sm);
-            margin-bottom: 1rem;
-            border: 1px solid;
+        .chart-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+            margin-bottom: 2rem;
         }
         
-        .billing-alert-success {
-            background-color: #dcfce7;
-            border-color: #16a34a;
-            color: #166534;
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
         }
         
-        .billing-alert-warning {
-            background-color: #fef3c7;
-            border-color: #d97706;
-            color: #92400e;
-        }
-        
-        .billing-alert-danger {
-            background-color: #fee2e2;
-            border-color: #dc2626;
-            color: #991b1b;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .billing-nav {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .billing-container {
-                padding: 0 0.5rem;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        /* Loading Spinner */
-        .billing-spinner {
+        .spinner {
             display: inline-block;
-            width: 1rem;
-            height: 1rem;
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid var(--primary-color);
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
             border-radius: 50%;
-            animation: billing-spin 1s linear infinite;
+            animation: spin 1s linear infinite;
         }
         
-        @keyframes billing-spin {
+        @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .sidebar {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+        
+        .sidebar .nav-link {
+            color: var(--gray-600);
+            font-weight: 500;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar .nav-link:hover {
+            background: var(--gray-50);
+            color: var(--primary);
+        }
+        
+        .sidebar .nav-link.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--gray-500);
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: var(--gray-300);
+        }
+        
+        .empty-state h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--gray-700);
+        }
+        
+        .empty-state p {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (max-width: 1200px) {
+            .billing-container {
+                margin: 12px;
+                border-radius: 20px;
+            }
+            
+            .billing-content {
+                padding: 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .billing-container {
+                margin: 8px;
+                border-radius: 16px;
+            }
+            
+            .billing-header {
+                padding: 2rem 1.5rem;
+            }
+            
+            .billing-header h1 {
+                font-size: 2.25rem;
+            }
+            
+            .billing-header p {
+                font-size: 1.125rem;
+            }
+            
+            .billing-content {
+                padding: 1.5rem;
+            }
+            
+            .billing-navbar {
+                padding: 1rem;
+            }
+            
+            .billing-navbar .navbar-nav {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .floating-action {
+                bottom: 1rem;
+                right: 1rem;
+                width: 56px;
+                height: 56px;
+                font-size: 1.25rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .billing-header h1 {
+                font-size: 1.875rem;
+            }
+            
+            .billing-header p {
+                font-size: 1rem;
+            }
+            
+            .billing-table {
+                font-size: 0.875rem;
+            }
+            
+            .billing-table th,
+            .billing-table td {
+                padding: 1rem 0.75rem;
+            }
+            
+            .stats-card {
+                padding: 1.5rem;
+            }
+            
+            .stats-card .stat-number {
+                font-size: 2rem;
+            }
         }
     </style>
     
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- Billing Header -->
-    <header class="billing-header">
-        <div class="billing-container">
-            <div class="d-flex justify-content-between align-items-center">
-                <a href="{% url 'billing:advanced_dashboard' %}" class="navbar-brand">
-                    <i class="fas fa-calculator me-2"></i>
-                    Billing System
+    <div class="billing-container">
+        <!-- Header -->
+        <div class="billing-header" data-aos="fade-down">
+            <h1><i class="fas fa-calculator me-3"></i>Billing System</h1>
+            <p>Professional Invoice Management & Analytics Dashboard</p>
+        </div>
+        
+        <!-- Navigation -->
+        <nav class="billing-navbar navbar navbar-expand-lg" data-aos="fade-up">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'billing:advanced_dashboard' %}">
+                    <i class="fas fa-chart-line me-2"></i>Dashboard
                 </a>
                 
-                <nav class="billing-nav">
-                    <a href="{% url 'billing:advanced_dashboard' %}" class="{% if request.resolver_match.url_name == 'advanced_dashboard' %}active{% endif %}">
-                        <i class="fas fa-tachometer-alt me-1"></i>Dashboard
-                    </a>
-                    <a href="{% url 'billing:advanced_customer_list' %}" class="{% if 'customer' in request.resolver_match.url_name %}active{% endif %}">
-                        <i class="fas fa-users me-1"></i>Customers
-                    </a>
-                    <a href="{% url 'billing:advanced_invoice_list' %}" class="{% if 'invoice' in request.resolver_match.url_name %}active{% endif %}">
-                        <i class="fas fa-file-invoice me-1"></i>Invoices
-                    </a>
-                    <a href="{% url 'billing:advanced_analytics' %}" class="{% if request.resolver_match.url_name == 'advanced_analytics' %}active{% endif %}">
-                        <i class="fas fa-chart-bar me-1"></i>Analytics
-                    </a>
-                    <a href="/" class="ms-3">
-                        <i class="fas fa-external-link-alt me-1"></i>Main Site
-                    </a>
-                </nav>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'billing:advanced_dashboard' %}">
+                                <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'billing:advanced_invoice_list' %}">
+                                <i class="fas fa-file-invoice me-1"></i>Invoices
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'billing:advanced_customer_list' %}">
+                                <i class="fas fa-users me-1"></i>Customers
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'billing:advanced_analytics' %}">
+                                <i class="fas fa-chart-bar me-1"></i>Analytics
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'billing:company_profile' %}">
+                                <i class="fas fa-building me-1"></i>Company
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user me-1"></i>{{ user.get_full_name|default:user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{% url 'billing:company_profile' %}">
+                                    <i class="fas fa-cog me-2"></i>Settings
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'billing:logout' %}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </header>
-    
-    <!-- Main Content -->
-    <main class="billing-main">
-        <div class="billing-container">
+        </nav>
+        
+        <!-- Main Content -->
+        <div class="billing-content">
             <!-- Messages -->
             {% if messages %}
-                {% for message in messages %}
-                    <div class="billing-alert billing-alert-{{ message.tags }}">
-                        <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'warning' %}exclamation-triangle{% elif message.tags == 'error' %}times-circle{% else %}info-circle{% endif %} me-2"></i>
-                        {{ message }}
+                <div class="row mb-4">
+                    <div class="col-12">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" data-aos="fade-up">
+                                <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% elif message.tags == 'warning' %}exclamation-circle{% else %}info-circle{% endif %} me-2"></i>
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
+                </div>
             {% endif %}
             
             {% block content %}{% endblock %}
         </div>
-    </main>
+    </div>
     
-    <!-- Footer -->
-    <footer class="bg-dark text-white py-4 mt-5">
-        <div class="billing-container">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <p class="mb-0">&copy; 2025 King Dupatta House - Billing System. All rights reserved.</p>
+    <!-- Floating Action Button -->
+    <button class="floating-action" data-bs-toggle="modal" data-bs-target="#quickInvoiceModal" title="Quick Invoice" data-aos="fade-up">
+        <i class="fas fa-plus"></i>
+    </button>
+    
+    <!-- Quick Invoice Modal -->
+    <div class="modal fade" id="quickInvoiceModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-file-invoice me-2"></i>Quick Invoice
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="col-md-6 text-end">
-                    <small class="text-muted">Restricted to Superusers Only</small>
+                <div class="modal-body">
+                    <p class="text-muted">Create a new invoice quickly</p>
+                    <a href="{% url 'billing:advanced_invoice_create' %}" class="btn btn-billing w-100">
+                        <i class="fas fa-plus me-2"></i>Create New Invoice
+                    </a>
                 </div>
             </div>
         </div>
-    </footer>
+    </div>
     
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    <!-- AOS Animation -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
     <!-- Billing System JS -->
-    <script src="{% static 'billing/js/billing.js' %}"></script>
+    <script src="{% static 'billing/js/billing.js' %}" defer></script>
     
     <script>
-        // Auto-hide alerts after 5 seconds
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(function() {
-                const alerts = document.querySelectorAll('.billing-alert');
-                alerts.forEach(function(alert) {
-                    alert.style.transition = 'opacity 0.5s ease';
-                    alert.style.opacity = '0';
-                    setTimeout(function() {
-                        alert.remove();
-                    }, 500);
-                });
-            }, 5000);
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
         });
         
-        // Loading states for buttons
-        document.querySelectorAll('.btn-billing').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                if (this.type === 'submit' || this.href) {
-                    this.innerHTML = '<span class="billing-spinner me-2"></span>Loading...';
-                    this.disabled = true;
-                }
-            });
+        // Auto-hide alerts
+        setTimeout(function() {
+            $('.alert').fadeOut('slow');
+        }, 5000);
+        
+        // Add fade-in animation to cards
+        $(document).ready(function() {
+            $('.billing-card').addClass('fade-in');
         });
         
-        // Table row click handlers
-        document.querySelectorAll('.billing-table tbody tr').forEach(function(row) {
-            row.style.cursor = 'pointer';
-            row.addEventListener('click', function() {
-                const link = this.querySelector('a');
-                if (link) {
-                    window.location.href = link.href;
-                }
-            });
+        // Smooth scrolling for anchor links
+        $('a[href^="#"]').on('click', function(event) {
+            var target = $(this.getAttribute('href'));
+            if( target.length ) {
+                event.preventDefault();
+                $('html, body').stop().animate({
+                    scrollTop: target.offset().top - 100
+                }, 1000);
+            }
         });
+        
+        // Add loading states to forms
+        $('form').on('submit', function() {
+            $(this).find('button[type="submit"]').addClass('loading');
+        });
+        
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+        
+        // Add hover effects to cards
+        $('.billing-card').hover(
+            function() {
+                $(this).addClass('pulse');
+            },
+            function() {
+                $(this).removeClass('pulse');
+            }
+        );
     </script>
     
     {% block extra_js %}{% endblock %}

@@ -5,230 +5,673 @@
 
 {% block extra_css %}
 <style>
-    .billing-card {
-        background: linear-gradient(135deg, #f3e5f5 0%, #fdf2f8 50%, #fef7f0 100%);
-        border: 2px solid rgba(194, 24, 91, 0.3);
+    .invoice-detail-container {
+        background: white;
         border-radius: 20px;
-        box-shadow: 0 8px 32px rgba(194, 24, 91, 0.15);
-        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+        overflow: hidden;
     }
     
     .invoice-header {
-        background: linear-gradient(135deg, #c2185b 0%, #512da8 50%, #e91e63 100%);
+        background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
         color: white;
-        padding: 30px;
-        border-radius: 15px;
-        margin-bottom: 30px;
+        padding: 3rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .invoice-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="white" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .invoice-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .invoice-subtitle {
+        font-size: 1.25rem;
+        opacity: 0.9;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .invoice-meta {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .meta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+    
+    .meta-item {
+        text-align: center;
+    }
+    
+    .meta-label {
+        font-size: 0.875rem;
+        opacity: 0.8;
+        margin-bottom: 0.5rem;
+    }
+    
+    .meta-value {
+        font-size: 1.25rem;
+        font-weight: 700;
     }
     
     .status-badge {
-        padding: 8px 16px;
+        padding: 0.75rem 1.5rem;
         border-radius: 25px;
-        font-size: 1rem;
-        font-weight: bold;
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        display: inline-block;
+    }
+    
+    .status-paid { background: #d1fae5; color: #065f46; }
+    .status-sent { background: #fef3c7; color: #92400e; }
+    .status-draft { background: #f3f4f6; color: #374151; }
+    .status-overdue { background: #fee2e2; color: #991b1b; }
+    .status-viewed { background: #dbeafe; color: #1e40af; }
+    .status-cancelled { background: #f3f4f6; color: #374151; }
+    
+    .info-section {
+        background: #f8fafc;
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .info-section-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e5e7eb;
+    }
+    
+    .info-section-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        margin-right: 1rem;
+    }
+    
+    .info-section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0;
+    }
+    
+    .customer-info {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        border: 2px solid #0ea5e9;
+        border-radius: 16px;
+        padding: 2rem;
+    }
+    
+    .customer-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #0c4a6e;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .customer-title i {
+        margin-right: 0.5rem;
+        color: #0ea5e9;
+    }
+    
+    .customer-details {
+        color: #0c4a6e;
+        font-size: 0.875rem;
+        line-height: 1.6;
+    }
+    
+    .customer-details p {
+        margin-bottom: 0.5rem;
+    }
+    
+    .payment-info {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        border: 2px solid #22c55e;
+        border-radius: 16px;
+        padding: 2rem;
+    }
+    
+    .payment-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #14532d;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .payment-title i {
+        margin-right: 0.5rem;
+        color: #22c55e;
+    }
+    
+    .payment-details {
+        color: #14532d;
+        font-size: 0.875rem;
+        line-height: 1.6;
+    }
+    
+    .payment-details p {
+        margin-bottom: 0.5rem;
+    }
+    
+    .items-table {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+    }
+    
+    .items-table thead {
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        color: white;
+    }
+    
+    .items-table th {
+        border: none;
+        font-weight: 600;
+        padding: 1.5rem;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    
+    .items-table td {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+        vertical-align: middle;
+    }
+    
+    .items-table tbody tr:hover {
+        background-color: #f8fafc;
+    }
+    
+    .items-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .payment-record {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+    
+    .payment-record:hover {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+    
+    .payment-record:last-child {
+        margin-bottom: 0;
+    }
+    
+    .payment-header {
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    
+    .payment-amount {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1f2937;
+    }
+    
+    .payment-method {
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
         text-transform: uppercase;
     }
     
-    .status-paid { background: #28a745; color: white; }
-    .status-sent { background: #ffc107; color: #212529; }
-    .status-draft { background: #6c757d; color: white; }
-    .status-overdue { background: #dc3545; color: white; }
-    .status-viewed { background: #17a2b8; color: white; }
-    .status-cancelled { background: #6c757d; color: white; }
+    .payment-date {
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
     
-    .payment-card {
-        background: white;
-        border-radius: 15px;
-        padding: 20px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        margin-bottom: 15px;
+    .payment-details {
+        color: #6b7280;
+        font-size: 0.875rem;
+        line-height: 1.6;
+    }
+    
+    .payment-details p {
+        margin-bottom: 0.5rem;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .btn-action {
+        padding: 0.875rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .btn-print {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+    }
+    
+    .btn-print:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        color: white;
+    }
+    
+    .btn-mark-paid {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+    }
+    
+    .btn-mark-paid:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+        color: white;
+    }
+    
+    .btn-back {
+        background: #f3f4f6;
+        color: #374151;
+        border: 2px solid #d1d5db;
+    }
+    
+    .btn-back:hover {
+        background: #e5e7eb;
+        color: #1f2937;
+        transform: translateY(-2px);
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: #6b7280;
+    }
+    
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        color: #d1d5db;
+    }
+    
+    .empty-state h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #374151;
+    }
+    
+    .empty-state p {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+        .invoice-header {
+            padding: 2rem 1.5rem;
+        }
+        
+        .invoice-title {
+            font-size: 2rem;
+        }
+        
+        .invoice-subtitle {
+            font-size: 1rem;
+        }
+        
+        .meta-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .info-section {
+            padding: 1.5rem;
+        }
+        
+        .items-table th,
+        .items-table td {
+            padding: 1rem 0.75rem;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+        }
+        
+        .btn-action {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .invoice-detail-container {
+            margin: 0;
+            border-radius: 0;
+        }
+        
+        .invoice-header {
+            padding: 1.5rem 1rem;
+        }
+        
+        .invoice-title {
+            font-size: 1.5rem;
+        }
+        
+        .info-section {
+            padding: 1rem;
+        }
+        
+        .items-table {
+            font-size: 0.875rem;
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4">
-    <!-- Header -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="billing-card p-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h1 class="mb-0 text-primary">📄 Invoice Details</h1>
-                    <div>
-                        <a href="{% url 'billing:advanced_invoice_print' invoice.invoice_id %}" class="btn btn-success me-2" target="_blank">
-                            <i class="fas fa-print"></i> Print Invoice
+<div class="container-fluid">
+    <div class="invoice-detail-container">
+        <!-- Invoice Header -->
+        <div class="invoice-header">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="invoice-title">📄 Invoice Details</h1>
+                    <p class="invoice-subtitle">Professional invoice management and tracking</p>
+                </div>
+                <div class="col-lg-4 text-end">
+                    <div class="action-buttons">
+                        <a href="{% url 'billing:advanced_invoice_print' invoice.invoice_id %}" class="btn-action btn-print" target="_blank">
+                            <i class="fas fa-print"></i>
+                            Print Invoice
                         </a>
-                        <a href="{% url 'billing:advanced_invoice_list' %}" class="btn btn-outline-secondary">
-                            <i class="fas fa-arrow-left"></i> Back to Invoices
+                        <a href="{% url 'billing:advanced_invoice_list' %}" class="btn-action btn-back">
+                            <i class="fas fa-arrow-left"></i>
+                            Back to Invoices
                         </a>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Invoice Header -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="invoice-header">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h2 class="mb-2">King Dupatta House</h2>
-                        <p class="mb-1">GST: {{ invoice.company.gst_number }}</p>
-                        <p class="mb-1">{{ invoice.company.address }}</p>
-                        <p class="mb-0">Phone: {{ invoice.company.phone }}</p>
+            
+            <div class="invoice-meta">
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <div class="meta-label">Invoice Number</div>
+                        <div class="meta-value">{{ invoice.invoice_number }}</div>
                     </div>
-                    <div class="col-md-6 text-end">
-                        <h3 class="mb-2">INVOICE</h3>
-                        <p class="mb-1"><strong>Invoice #:</strong> {{ invoice.invoice_number }}</p>
-                        <p class="mb-1"><strong>Date:</strong> {{ invoice.date|date:"M d, Y" }}</p>
-                        <p class="mb-1"><strong>Due Date:</strong> {{ invoice.due_date|date:"M d, Y" }}</p>
-                        <p class="mb-0">
+                    <div class="meta-item">
+                        <div class="meta-label">Date</div>
+                        <div class="meta-value">{{ invoice.date|date:"M d, Y" }}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Due Date</div>
+                        <div class="meta-value">{{ invoice.due_date|date:"M d, Y" }}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Status</div>
+                        <div class="meta-value">
                             <span class="status-badge status-{{ invoice.status }}">
                                 {{ invoice.status|title }}
                             </span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Customer Details -->
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <div class="billing-card p-4">
-                <h5 class="text-primary mb-3">👤 Bill To:</h5>
-                <p class="mb-1"><strong>{{ invoice.customer.name }}</strong></p>
-                {% if invoice.customer.email %}
-                <p class="mb-1">📧 {{ invoice.customer.email }}</p>
-                {% endif %}
-                {% if invoice.customer.phone %}
-                <p class="mb-1">📞 {{ invoice.customer.phone }}</p>
-                {% endif %}
-                {% if invoice.customer.address %}
-                <p class="mb-1">📍 {{ invoice.customer.address }}</p>
-                {% endif %}
-                {% if invoice.customer.gst_number %}
-                <p class="mb-0">🏢 GST: {{ invoice.customer.gst_number }}</p>
-                {% endif %}
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="billing-card p-4">
-                <h5 class="text-primary mb-3">💰 Payment Info:</h5>
-                <p class="mb-1"><strong>Subtotal:</strong> ₹{{ invoice.subtotal|floatformat:2 }}</p>
-                <p class="mb-1"><strong>Discount:</strong> ₹{{ invoice.discount_amount|floatformat:2 }}</p>
-                <p class="mb-1"><strong>GST ({{ invoice.tax_rate }}%):</strong> ₹{{ invoice.tax_amount|floatformat:2 }}</p>
-                <p class="mb-0"><strong>Total Amount:</strong> ₹{{ invoice.total_amount|floatformat:2 }}</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Invoice Items -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="billing-card p-4">
-                <h5 class="text-primary mb-3">🛍️ Invoice Items</h5>
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Description</th>
-                                <th>Category</th>
-                                <th>Quantity</th>
-                                <th>Unit Price</th>
-                                <th>Discount</th>
-                                <th>Tax</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in invoice.items.all %}
-                            <tr>
-                                <td>{{ item.description }}</td>
-                                <td>{{ item.category|default:"-" }}</td>
-                                <td>{{ item.quantity }} {{ item.unit }}</td>
-                                <td>₹{{ item.unit_price|floatformat:2 }}</td>
-                                <td>{{ item.discount_percentage|floatformat:1 }}%</td>
-                                <td>{{ item.tax_rate|floatformat:1 }}%</td>
-                                <td><strong>₹{{ item.total_price|floatformat:2 }}</strong></td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Payment Records -->
-    {% if payments %}
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="billing-card p-4">
-                <h5 class="text-primary mb-3">💳 Payment Records</h5>
-                {% for payment in payments %}
-                <div class="payment-card">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>₹{{ payment.amount|floatformat:2 }}</strong>
-                            <span class="badge bg-primary ms-2">{{ payment.payment_method|title }}</span>
-                        </div>
-                        <div class="text-muted">
-                            {{ payment.payment_date|date:"M d, Y H:i" }}
                         </div>
                     </div>
-                    {% if payment.payment_reference %}
-                    <p class="mb-1 mt-2"><strong>Reference:</strong> {{ payment.payment_reference }}</p>
-                    {% endif %}
-                    {% if payment.notes %}
-                    <p class="mb-0 mt-1"><strong>Notes:</strong> {{ payment.notes }}</p>
-                    {% endif %}
                 </div>
-                {% endfor %}
             </div>
         </div>
-    </div>
-    {% endif %}
 
-    <!-- Notes -->
-    {% if invoice.notes %}
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="billing-card p-4">
-                <h5 class="text-primary mb-3">📝 Notes</h5>
-                <p class="mb-0">{{ invoice.notes }}</p>
-            </div>
-        </div>
-    </div>
-    {% endif %}
-
-    <!-- Actions -->
-    <div class="row">
-        <div class="col-12">
-            <div class="billing-card p-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="mb-1">Invoice Actions</h5>
-                        <p class="text-muted mb-0">Manage this invoice</p>
-                    </div>
-                    <div>
-                        <a href="{% url 'billing:advanced_invoice_print' invoice.invoice_id %}" class="btn btn-success me-2" target="_blank">
-                            <i class="fas fa-print"></i> Print Invoice
-                        </a>
-                        {% if invoice.status != 'paid' %}
-                        <a href="{% url 'billing:mark_invoice_paid' invoice.invoice_id %}" class="btn btn-warning me-2">
-                            <i class="fas fa-check"></i> Mark as Paid
-                        </a>
+        <!-- Customer and Payment Info -->
+        <div class="row p-4">
+            <div class="col-lg-6">
+                <div class="customer-info">
+                    <h4 class="customer-title">
+                        <i class="fas fa-user"></i>
+                        Bill To
+                    </h4>
+                    <div class="customer-details">
+                        <p><strong>{{ invoice.customer.name }}</strong></p>
+                        {% if invoice.customer.email %}
+                        <p>📧 {{ invoice.customer.email }}</p>
                         {% endif %}
-                        <a href="{% url 'billing:advanced_invoice_list' %}" class="btn btn-outline-primary">
-                            <i class="fas fa-list"></i> All Invoices
-                        </a>
+                        {% if invoice.customer.phone %}
+                        <p>📞 {{ invoice.customer.phone }}</p>
+                        {% endif %}
+                        {% if invoice.customer.address %}
+                        <p>📍 {{ invoice.customer.address }}</p>
+                        {% endif %}
+                        {% if invoice.customer.gst_number %}
+                        <p>🏢 GST: {{ invoice.customer.gst_number }}</p>
+                        {% endif %}
                     </div>
                 </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="payment-info">
+                    <h4 class="payment-title">
+                        <i class="fas fa-rupee-sign"></i>
+                        Payment Information
+                    </h4>
+                    <div class="payment-details">
+                        <p><strong>Subtotal:</strong> ₹{{ invoice.subtotal|floatformat:2 }}</p>
+                        <p><strong>Discount:</strong> ₹{{ invoice.discount_amount|floatformat:2 }}</p>
+                        <p><strong>GST ({{ invoice.tax_rate }}%):</strong> ₹{{ invoice.tax_amount|floatformat:2 }}</p>
+                        <p><strong>Total Amount:</strong> ₹{{ invoice.total_amount|floatformat:2 }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invoice Items -->
+        <div class="info-section">
+            <div class="info-section-header">
+                <div class="info-section-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <h3 class="info-section-title">Invoice Items</h3>
+            </div>
+            
+            <div class="items-table">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Discount</th>
+                            <th>Tax</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in invoice.items.all %}
+                        <tr>
+                            <td>
+                                <strong>{{ item.description }}</strong>
+                                {% if item.notes %}
+                                <br><small class="text-muted">{{ item.notes }}</small>
+                                {% endif %}
+                            </td>
+                            <td>{{ item.category|default:"-" }}</td>
+                            <td>{{ item.quantity }} {{ item.unit }}</td>
+                            <td>₹{{ item.unit_price|floatformat:2 }}</td>
+                            <td>{{ item.discount_percentage|floatformat:1 }}%</td>
+                            <td>{{ item.tax_rate|floatformat:1 }}%</td>
+                            <td><strong>₹{{ item.total_price|floatformat:2 }}</strong></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Payment Records -->
+        {% if payments %}
+        <div class="info-section">
+            <div class="info-section-header">
+                <div class="info-section-icon">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <h3 class="info-section-title">Payment Records</h3>
+            </div>
+            
+            {% for payment in payments %}
+            <div class="payment-record">
+                <div class="payment-header">
+                    <div class="payment-amount">₹{{ payment.amount|floatformat:2 }}</div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="payment-method">{{ payment.payment_method|title }}</span>
+                        <span class="payment-date">{{ payment.payment_date|date:"M d, Y H:i" }}</span>
+                    </div>
+                </div>
+                {% if payment.payment_reference %}
+                <p class="payment-details"><strong>Reference:</strong> {{ payment.payment_reference }}</p>
+                {% endif %}
+                {% if payment.notes %}
+                <p class="payment-details"><strong>Notes:</strong> {{ payment.notes }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Notes -->
+        {% if invoice.notes %}
+        <div class="info-section">
+            <div class="info-section-header">
+                <div class="info-section-icon">
+                    <i class="fas fa-sticky-note"></i>
+                </div>
+                <h3 class="info-section-title">Notes</h3>
+            </div>
+            <p class="mb-0">{{ invoice.notes }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Terms and Conditions -->
+        {% if invoice.terms_conditions %}
+        <div class="info-section">
+            <div class="info-section-header">
+                <div class="info-section-icon">
+                    <i class="fas fa-file-contract"></i>
+                </div>
+                <h3 class="info-section-title">Terms & Conditions</h3>
+            </div>
+            <p class="mb-0">{{ invoice.terms_conditions }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Action Buttons -->
+        <div class="info-section">
+            <div class="info-section-header">
+                <div class="info-section-icon">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <h3 class="info-section-title">Invoice Actions</h3>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="{% url 'billing:advanced_invoice_print' invoice.invoice_id %}" class="btn-action btn-print" target="_blank">
+                    <i class="fas fa-print"></i>
+                    Print Invoice
+                </a>
+                {% if invoice.status != 'paid' %}
+                <a href="{% url 'billing:mark_invoice_paid' invoice.invoice_id %}" class="btn-action btn-mark-paid">
+                    <i class="fas fa-check"></i>
+                    Mark as Paid
+                </a>
+                {% endif %}
+                <a href="{% url 'billing:advanced_invoice_list' %}" class="btn-action btn-back">
+                    <i class="fas fa-list"></i>
+                    All Invoices
+                </a>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Add animation to elements
+document.addEventListener('DOMContentLoaded', function() {
+    const elements = document.querySelectorAll('.info-section, .payment-record, .items-table');
+    elements.forEach((element, index) => {
+        setTimeout(() => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(20px)';
+            element.style.transition = 'all 0.6s ease';
+            
+            setTimeout(() => {
+                element.style.opacity = '1';
+                element.style.transform = 'translateY(0)';
+            }, 100);
+        }, index * 100);
+    });
+});
+
+// Add hover effects to payment records
+document.querySelectorAll('.payment-record').forEach(record => {
+    record.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-2px)';
+    });
+    
+    record.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+    });
+});
+</script>
 {% endblock %}

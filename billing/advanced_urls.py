@@ -30,6 +30,9 @@ urlpatterns = [
     # Analytics
     path('analytics/', advanced_views.advanced_analytics, name='advanced_analytics'),
     
+    # Company Profile
+    path('company/', advanced_views.company_profile, name='company_profile'),
+    
     # AJAX Endpoints
     path('api/calculate-totals/', advanced_views.ajax_calculate_totals, name='ajax_calculate_totals'),
 ]

@@ -357,3 +357,38 @@ def ajax_calculate_totals(request):
             return JsonResponse({'error': str(e)}, status=400)
     
     return JsonResponse({'error': 'Invalid request'}, status=405)
+
+
+@superuser_required_with_login
+def company_profile(request):
+    """Company profile management"""
+    try:
+        company = AdvancedCompanyProfile.objects.get_or_create(id=1)[0]
+        
+        if request.method == 'POST':
+            # Update company profile
+            company.company_name = request.POST.get('company_name', company.company_name)
+            company.address = request.POST.get('address', company.address)
+            company.city = request.POST.get('city', company.city)
+            company.state = request.POST.get('state', company.state)
+            company.pincode = request.POST.get('pincode', company.pincode)
+            company.phone = request.POST.get('phone', company.phone)
+            company.email = request.POST.get('email', company.email)
+            company.gst_number = request.POST.get('gst_number', company.gst_number)
+            company.pan_number = request.POST.get('pan_number', company.pan_number)
+            company.bank_name = request.POST.get('bank_name', company.bank_name)
+            company.account_number = request.POST.get('account_number', company.account_number)
+            company.ifsc_code = request.POST.get('ifsc_code', company.ifsc_code)
+            company.save()
+            
+            messages.success(request, 'Company profile updated successfully!')
+            return redirect('billing:company_profile')
+        
+        context = {
+            'company': company,
+        }
+        return render(request, 'billing/company_profile.html', context)
+        
+    except Exception as e:
+        messages.error(request, f'Error loading company profile: {str(e)}')
+        return render(request, 'billing/company_profile.html', {'company': None})

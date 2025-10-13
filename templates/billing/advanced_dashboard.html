@@ -4,26 +4,56 @@
 
 {% block extra_css %}
 <style>
-    .dashboard-card {
-        background: linear-gradient(135deg, #f3e5f5 0%, #fdf2f8 50%, #fef7f0 100%);
-        border: 2px solid rgba(194, 24, 91, 0.3);
+    .dashboard-hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
         border-radius: 20px;
-        box-shadow: 0 8px 32px rgba(194, 24, 91, 0.15);
-        transition: all 0.3s ease;
+        padding: 3rem;
+        margin-bottom: 2rem;
+        position: relative;
         overflow: hidden;
     }
     
-    .dashboard-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 16px 48px rgba(194, 24, 91, 0.25);
+    .dashboard-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .dashboard-hero h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .dashboard-hero p {
+        font-size: 1.25rem;
+        opacity: 0.9;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
     }
     
     .stat-card {
-        background: linear-gradient(135deg, #c2185b 0%, #512da8 50%, #e91e63 100%);
-        color: white;
-        border-radius: 15px;
-        padding: 25px;
-        text-align: center;
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+        transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
     }
@@ -31,282 +61,459 @@
     .stat-card::before {
         content: '';
         position: absolute;
-        top: -50%;
-        right: -50%;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-        animation: shimmer 3s infinite;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     }
     
-    @keyframes shimmer {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     }
+    
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .stat-icon.primary { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+    .stat-icon.success { background: linear-gradient(135deg, #10b981, #059669); }
+    .stat-icon.warning { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .stat-icon.danger { background: linear-gradient(135deg, #ef4444, #dc2626); }
     
     .stat-number {
-        font-size: 3rem;
-        font-weight: bold;
-        margin-bottom: 10px;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+        line-height: 1;
     }
     
     .stat-label {
-        font-size: 1.1rem;
-        opacity: 0.9;
+        color: #6b7280;
         font-weight: 500;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
     
     .chart-container {
         background: white;
-        border-radius: 15px;
-        padding: 20px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+        margin-bottom: 2rem;
+    }
+    
+    .chart-header {
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+    
+    .chart-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0;
+    }
+    
+    .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
     }
     
     .quick-action-btn {
-        background: linear-gradient(135deg, #ff6b9d 0%, #ffc107 50%, #00bcd4 100%);
-        border: none;
-        border-radius: 25px;
-        padding: 15px 30px;
-        color: white;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+        background: white;
+        border: 2px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 1.5rem;
+        text-decoration: none;
+        color: #374151;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .quick-action-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+    
+    .quick-action-btn:hover::before {
+        transform: scaleX(1);
     }
     
     .quick-action-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        border-color: #6366f1;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15);
+        color: #6366f1;
+    }
+    
+    .quick-action-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
         color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+    
+    .quick-action-title {
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .quick-action-desc {
+        font-size: 0.875rem;
+        color: #6b7280;
     }
     
     .recent-activity {
-        max-height: 400px;
-        overflow-y: auto;
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
     }
     
     .activity-item {
-        background: white;
-        border-radius: 10px;
-        padding: 15px;
-        margin-bottom: 10px;
-        border-left: 4px solid #c2185b;
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #6366f1;
         transition: all 0.3s ease;
     }
     
     .activity-item:hover {
+        background: #f1f5f9;
         transform: translateX(5px);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .activity-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    .activity-header {
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+    
+    .activity-title {
+        font-weight: 600;
+        color: #1f2937;
+        margin: 0;
+    }
+    
+    .activity-date {
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
+    
+    .activity-desc {
+        color: #6b7280;
+        font-size: 0.875rem;
+        margin: 0;
     }
     
     .status-badge {
-        padding: 6px 12px;
+        padding: 0.5rem 1rem;
         border-radius: 20px;
-        font-size: 0.8rem;
-        font-weight: bold;
+        font-size: 0.75rem;
+        font-weight: 600;
         text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
     
-    .status-paid { background: #28a745; color: white; }
-    .status-sent { background: #ffc107; color: #212529; }
-    .status-draft { background: #6c757d; color: white; }
-    .status-overdue { background: #dc3545; color: white; }
+    .status-paid { background: #d1fae5; color: #065f46; }
+    .status-sent { background: #fef3c7; color: #92400e; }
+    .status-draft { background: #f3f4f6; color: #374151; }
+    .status-overdue { background: #fee2e2; color: #991b1b; }
+    
+    .empty-state {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: #6b7280;
+    }
+    
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        color: #d1d5db;
+    }
+    
+    .empty-state h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #374151;
+    }
+    
+    .empty-state p {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+        .dashboard-hero {
+            padding: 2rem 1.5rem;
+        }
+        
+        .dashboard-hero h1 {
+            font-size: 2rem;
+        }
+        
+        .dashboard-hero p {
+            font-size: 1rem;
+        }
+        
+        .stats-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        .stat-card {
+            padding: 1.5rem;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+        }
+        
+        .quick-actions {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .chart-container,
+        .recent-activity {
+            padding: 1.5rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .quick-actions {
+            grid-template-columns: 1fr;
+        }
+        
+        .activity-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4">
-    <!-- Header -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="dashboard-card p-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h1 class="mb-0 text-primary">🚀 Advanced Billing Dashboard</h1>
-                        <p class="text-muted mb-0">Professional billing system with advanced analytics</p>
-                    </div>
-                    <div>
-                        <a href="{% url 'billing:advanced_invoice_create' %}" class="quick-action-btn me-2">
-                            <i class="fas fa-plus"></i> New Invoice
-                        </a>
-                        <a href="{% url 'billing:advanced_analytics' %}" class="btn btn-outline-primary">
-                            <i class="fas fa-chart-line"></i> Analytics
-                        </a>
-                    </div>
-                </div>
+<div class="container-fluid">
+    <!-- Hero Section -->
+    <div class="dashboard-hero" data-aos="fade-down">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1>🚀 Advanced Billing Dashboard</h1>
+                <p>Professional billing system with advanced analytics and real-time insights</p>
+            </div>
+            <div class="col-lg-4 text-end">
+                <a href="{% url 'billing:advanced_invoice_create' %}" class="btn btn-light btn-lg me-2">
+                    <i class="fas fa-plus me-2"></i>New Invoice
+                </a>
+                <a href="{% url 'billing:advanced_analytics' %}" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-chart-line me-2"></i>Analytics
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- Key Statistics -->
-    <div class="row mb-4">
-        <div class="col-lg-3 col-md-6 mb-3">
-            <div class="stat-card">
-                <div class="stat-number">{{ total_invoices }}</div>
-                <div class="stat-label">Total Invoices</div>
+    <!-- Statistics Cards -->
+    <div class="stats-grid" data-aos="fade-up">
+        <div class="stat-card">
+            <div class="stat-icon primary">
+                <i class="fas fa-file-invoice"></i>
             </div>
+            <div class="stat-number">{{ total_invoices }}</div>
+            <div class="stat-label">Total Invoices</div>
         </div>
-        <div class="col-lg-3 col-md-6 mb-3">
-            <div class="stat-card">
-                <div class="stat-number">{{ paid_invoices }}</div>
-                <div class="stat-label">Paid Invoices</div>
+        
+        <div class="stat-card">
+            <div class="stat-icon success">
+                <i class="fas fa-check-circle"></i>
             </div>
+            <div class="stat-number">{{ paid_invoices }}</div>
+            <div class="stat-label">Paid Invoices</div>
         </div>
-        <div class="col-lg-3 col-md-6 mb-3">
-            <div class="stat-card">
-                <div class="stat-number">₹{{ total_revenue|floatformat:0 }}</div>
-                <div class="stat-label">Total Revenue</div>
+        
+        <div class="stat-card">
+            <div class="stat-icon warning">
+                <i class="fas fa-rupee-sign"></i>
             </div>
+            <div class="stat-number">₹{{ total_revenue|floatformat:0 }}</div>
+            <div class="stat-label">Total Revenue</div>
         </div>
-        <div class="col-lg-3 col-md-6 mb-3">
-            <div class="stat-card">
-                <div class="stat-number">{{ overdue_invoices }}</div>
-                <div class="stat-label">Overdue Invoices</div>
+        
+        <div class="stat-card">
+            <div class="stat-icon danger">
+                <i class="fas fa-exclamation-triangle"></i>
             </div>
+            <div class="stat-number">{{ overdue_invoices }}</div>
+            <div class="stat-label">Overdue Invoices</div>
         </div>
     </div>
 
     <!-- Charts and Analytics -->
     <div class="row mb-4">
         <div class="col-lg-8">
-            <div class="dashboard-card p-4">
-                <h4 class="mb-3">📈 Revenue Trend (Last 6 Months)</h4>
-                <div class="chart-container">
-                    <canvas id="revenueChart" width="400" height="200"></canvas>
+            <div class="chart-container" data-aos="fade-right">
+                <div class="chart-header">
+                    <h3 class="chart-title">📈 Revenue Trend (Last 6 Months)</h3>
                 </div>
+                <canvas id="revenueChart" height="100"></canvas>
             </div>
         </div>
         <div class="col-lg-4">
-            <div class="dashboard-card p-4">
+            <div class="recent-activity" data-aos="fade-left">
                 <h4 class="mb-3">🏆 Top Customers</h4>
-                <div class="recent-activity">
+                {% if top_customers %}
                     {% for customer in top_customers %}
                     <div class="activity-item">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <strong>{{ customer.name }}</strong>
-                                <br>
-                                <small class="text-muted">{{ customer.customer_type|title }}</small>
-                            </div>
-                            <div class="text-end">
-                                <strong>₹{{ customer.total_spent|floatformat:0 }}</strong>
-                                <br>
-                                <small class="text-muted">{{ customer.invoices.count }} invoices</small>
-                            </div>
+                        <div class="activity-header">
+                            <h6 class="activity-title">{{ customer.name }}</h6>
+                            <span class="activity-date">{{ customer.customer_type|title }}</span>
                         </div>
+                        <p class="activity-desc">
+                            <strong>₹{{ customer.total_spent|floatformat:0 }}</strong> • {{ customer.invoices.count }} invoices
+                        </p>
                     </div>
                     {% endfor %}
-                </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-users"></i>
+                        <h3>No Customers Yet</h3>
+                        <p>Start by adding your first customer</p>
+                        <a href="{% url 'billing:advanced_customer_list' %}" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Add Customer
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
 
     <!-- Quick Actions -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="dashboard-card p-4">
-                <h4 class="mb-3">⚡ Quick Actions</h4>
-                <div class="row">
-                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
-                        <a href="{% url 'billing:advanced_invoice_create' %}" class="btn btn-primary w-100">
-                            <i class="fas fa-file-invoice"></i><br>Create Invoice
-                        </a>
-                    </div>
-                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
-                        <a href="{% url 'billing:advanced_customer_list' %}" class="btn btn-success w-100">
-                            <i class="fas fa-users"></i><br>Customers
-                        </a>
-                    </div>
-                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
-                        <a href="{% url 'billing:advanced_invoice_list' %}" class="btn btn-info w-100">
-                            <i class="fas fa-list"></i><br>All Invoices
-                        </a>
-                    </div>
-                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
-                        <a href="{% url 'billing:advanced_analytics' %}" class="btn btn-warning w-100">
-                            <i class="fas fa-chart-bar"></i><br>Analytics
-                        </a>
-                    </div>
-                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
-                        <a href="#" class="btn btn-secondary w-100">
-                            <i class="fas fa-download"></i><br>Export
-                        </a>
-                    </div>
-                    <div class="col-lg-2 col-md-4 col-sm-6 mb-2">
-                        <a href="#" class="btn btn-dark w-100">
-                            <i class="fas fa-cog"></i><br>Settings
-                        </a>
-                    </div>
-                </div>
+    <div class="quick-actions" data-aos="fade-up">
+        <a href="{% url 'billing:advanced_invoice_create' %}" class="quick-action-btn">
+            <div class="quick-action-icon">
+                <i class="fas fa-file-invoice"></i>
             </div>
-        </div>
+            <div class="quick-action-title">Create Invoice</div>
+            <div class="quick-action-desc">Generate new invoice</div>
+        </a>
+        
+        <a href="{% url 'billing:advanced_customer_list' %}" class="quick-action-btn">
+            <div class="quick-action-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="quick-action-title">Manage Customers</div>
+            <div class="quick-action-desc">View and edit customers</div>
+        </a>
+        
+        <a href="{% url 'billing:advanced_invoice_list' %}" class="quick-action-btn">
+            <div class="quick-action-icon">
+                <i class="fas fa-list"></i>
+            </div>
+            <div class="quick-action-title">All Invoices</div>
+            <div class="quick-action-desc">View invoice history</div>
+        </a>
+        
+        <a href="{% url 'billing:advanced_analytics' %}" class="quick-action-btn">
+            <div class="quick-action-icon">
+                <i class="fas fa-chart-bar"></i>
+            </div>
+            <div class="quick-action-title">Analytics</div>
+            <div class="quick-action-desc">View detailed reports</div>
+        </a>
+        
+        <a href="#" class="quick-action-btn">
+            <div class="quick-action-icon">
+                <i class="fas fa-download"></i>
+            </div>
+            <div class="quick-action-title">Export Data</div>
+            <div class="quick-action-desc">Download reports</div>
+        </a>
+        
+        <a href="{% url 'billing:company_profile' %}" class="quick-action-btn">
+            <div class="quick-action-icon">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="quick-action-title">Settings</div>
+            <div class="quick-action-desc">Configure system</div>
+        </a>
     </div>
 
     <!-- Recent Activity -->
-    <div class="row">
-        <div class="col-12">
-            <div class="dashboard-card p-4">
-                <h4 class="mb-3">📋 Recent Invoices</h4>
-                {% if recent_invoices %}
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Invoice #</th>
-                                <th>Customer</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Amount</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for invoice in recent_invoices %}
-                            <tr>
-                                <td><strong>{{ invoice.invoice_number }}</strong></td>
-                                <td>{{ invoice.customer.name }}</td>
-                                <td>{{ invoice.date|date:"M d, Y" }}</td>
-                                <td>
-                                    <span class="status-badge status-{{ invoice.status }}">
-                                        {{ invoice.status|title }}
-                                    </span>
-                                </td>
-                                <td><strong>₹{{ invoice.total_amount|floatformat:2 }}</strong></td>
-                                <td>
-                                    <a href="{% url 'billing:advanced_invoice_detail' invoice.invoice_id %}" 
-                                       class="btn btn-sm btn-outline-primary me-1">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a href="{% url 'billing:advanced_invoice_print' invoice.invoice_id %}" 
-                                       class="btn btn-sm btn-outline-success" target="_blank">
-                                        <i class="fas fa-print"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+    <div class="recent-activity" data-aos="fade-up">
+        <h4 class="mb-3">📋 Recent Invoices</h4>
+        {% if recent_invoices %}
+            {% for invoice in recent_invoices %}
+            <div class="activity-item">
+                <div class="activity-header">
+                    <h6 class="activity-title">{{ invoice.invoice_number }} - {{ invoice.customer.name }}</h6>
+                    <span class="activity-date">{{ invoice.date|date:"M d, Y" }}</span>
                 </div>
-                {% else %}
-                <div class="text-center py-4">
-                    <i class="fas fa-file-invoice fa-3x text-muted mb-3"></i>
-                    <p class="text-muted">No invoices created yet. Create your first invoice!</p>
-                    <a href="{% url 'billing:advanced_invoice_create' %}" class="quick-action-btn">
-                        <i class="fas fa-plus"></i> Create Invoice
-                    </a>
-                </div>
-                {% endif %}
+                <p class="activity-desc">
+                    <span class="status-badge status-{{ invoice.status }}">{{ invoice.status|title }}</span>
+                    <strong class="ms-2">₹{{ invoice.total_amount|floatformat:2 }}</strong>
+                </p>
             </div>
-        </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-file-invoice"></i>
+                <h3>No Invoices Yet</h3>
+                <p>Create your first invoice to get started</p>
+                <a href="{% url 'billing:advanced_invoice_create' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Create Invoice
+                </a>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 // Revenue Chart
 const ctx = document.getElementById('revenueChart').getContext('2d');
@@ -317,31 +524,85 @@ const revenueChart = new Chart(ctx, {
         datasets: [{
             label: 'Revenue (₹)',
             data: {{ monthly_data|safe }},
-            borderColor: '#c2185b',
-            backgroundColor: 'rgba(194, 24, 91, 0.1)',
+            borderColor: '#6366f1',
+            backgroundColor: 'rgba(99, 102, 241, 0.1)',
             borderWidth: 3,
             fill: true,
-            tension: 0.4
+            tension: 0.4,
+            pointBackgroundColor: '#6366f1',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
+            pointRadius: 6,
+            pointHoverRadius: 8
         }]
     },
     options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             legend: {
                 display: false
+            },
+            tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                titleColor: '#ffffff',
+                bodyColor: '#ffffff',
+                borderColor: '#6366f1',
+                borderWidth: 1,
+                cornerRadius: 8
             }
         },
         scales: {
             y: {
                 beginAtZero: true,
+                grid: {
+                    color: '#f3f4f6',
+                    drawBorder: false
+                },
                 ticks: {
+                    color: '#6b7280',
+                    font: {
+                        size: 12
+                    },
                     callback: function(value) {
                         return '₹' + value.toLocaleString();
                     }
                 }
+            },
+            x: {
+                grid: {
+                    display: false
+                },
+                ticks: {
+                    color: '#6b7280',
+                    font: {
+                        size: 12
+                    }
+                }
             }
+        },
+        interaction: {
+            intersect: false,
+            mode: 'index'
         }
     }
+});
+
+// Add animation to stat cards
+document.addEventListener('DOMContentLoaded', function() {
+    const statCards = document.querySelectorAll('.stat-card');
+    statCards.forEach((card, index) => {
+        setTimeout(() => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.6s ease';
+            
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100);
+        }, index * 100);
+    });
 });
 </script>
 {% endblock %}
