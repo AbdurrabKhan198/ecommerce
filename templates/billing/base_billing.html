@@ -16,8 +16,6 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -439,14 +437,6 @@
             font-size: 0.875rem;
         }
         
-        .chart-container {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: var(--shadow-lg);
-            border: 1px solid var(--gray-200);
-            margin-bottom: 2rem;
-        }
         
         .loading {
             opacity: 0.6;
@@ -672,11 +662,6 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'billing:advanced_customer_list' %}">
                                 <i class="fas fa-users me-1"></i>Customers
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'billing:advanced_analytics' %}">
-                                <i class="fas fa-chart-bar me-1"></i>Analytics
                             </a>
                         </li>
                         <li class="nav-item">

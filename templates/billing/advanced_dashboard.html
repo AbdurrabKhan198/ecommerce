@@ -107,28 +107,6 @@
         letter-spacing: 0.05em;
     }
     
-    .chart-container {
-        background: white;
-        border-radius: 20px;
-        padding: 2rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        border: 1px solid #e5e7eb;
-        margin-bottom: 2rem;
-    }
-    
-    .chart-header {
-        display: flex;
-        justify-content: between;
-        align-items: center;
-        margin-bottom: 2rem;
-    }
-    
-    .chart-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #1f2937;
-        margin: 0;
-    }
     
     .quick-actions {
         display: grid;
@@ -346,13 +324,10 @@
             <div class="col-lg-8">
                 <h1>🚀 Advanced Billing Dashboard</h1>
                 <p>Professional billing system with advanced analytics and real-time insights</p>
-            </div>
+                    </div>
             <div class="col-lg-4 text-end">
                 <a href="{% url 'billing:advanced_invoice_create' %}" class="btn btn-light btn-lg me-2">
                     <i class="fas fa-plus me-2"></i>New Invoice
-                </a>
-                <a href="{% url 'billing:advanced_analytics' %}" class="btn btn-outline-light btn-lg">
-                    <i class="fas fa-chart-line me-2"></i>Analytics
                 </a>
             </div>
         </div>
@@ -360,7 +335,7 @@
 
     <!-- Statistics Cards -->
     <div class="stats-grid" data-aos="fade-up">
-        <div class="stat-card">
+            <div class="stat-card">
             <div class="stat-icon primary">
                 <i class="fas fa-file-invoice"></i>
             </div>
@@ -368,7 +343,7 @@
             <div class="stat-label">Total Invoices</div>
         </div>
         
-        <div class="stat-card">
+            <div class="stat-card">
             <div class="stat-icon success">
                 <i class="fas fa-check-circle"></i>
             </div>
@@ -376,7 +351,7 @@
             <div class="stat-label">Paid Invoices</div>
         </div>
         
-        <div class="stat-card">
+            <div class="stat-card">
             <div class="stat-icon warning">
                 <i class="fas fa-rupee-sign"></i>
             </div>
@@ -384,7 +359,7 @@
             <div class="stat-label">Total Revenue</div>
         </div>
         
-        <div class="stat-card">
+            <div class="stat-card">
             <div class="stat-icon danger">
                 <i class="fas fa-exclamation-triangle"></i>
             </div>
@@ -393,31 +368,27 @@
         </div>
     </div>
 
-    <!-- Charts and Analytics -->
+    <!-- Top Customers -->
     <div class="row mb-4">
-        <div class="col-lg-8">
-            <div class="chart-container" data-aos="fade-right">
-                <div class="chart-header">
-                    <h3 class="chart-title">📈 Revenue Trend (Last 6 Months)</h3>
-                </div>
-                <canvas id="revenueChart" height="100"></canvas>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="recent-activity" data-aos="fade-left">
+        <div class="col-12">
+            <div class="recent-activity" data-aos="fade-up">
                 <h4 class="mb-3">🏆 Top Customers</h4>
                 {% if top_customers %}
+                    <div class="row">
                     {% for customer in top_customers %}
+                        <div class="col-lg-4 col-md-6 mb-3">
                     <div class="activity-item">
-                        <div class="activity-header">
-                            <h6 class="activity-title">{{ customer.name }}</h6>
-                            <span class="activity-date">{{ customer.customer_type|title }}</span>
+                                <div class="activity-header">
+                                    <h6 class="activity-title">{{ customer.name }}</h6>
+                                    <span class="activity-date">{{ customer.customer_type|title }}</span>
+                            </div>
+                                <p class="activity-desc">
+                                    <strong>₹{{ customer.total_spent|floatformat:0 }}</strong> • {{ customer.invoices.count }} invoices
+                                </p>
+                            </div>
                         </div>
-                        <p class="activity-desc">
-                            <strong>₹{{ customer.total_spent|floatformat:0 }}</strong> • {{ customer.invoices.count }} invoices
-                        </p>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 {% else %}
                     <div class="empty-state">
                         <i class="fas fa-users"></i>
@@ -426,7 +397,7 @@
                         <a href="{% url 'billing:advanced_customer_list' %}" class="btn btn-primary">
                             <i class="fas fa-plus me-2"></i>Add Customer
                         </a>
-                    </div>
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -437,39 +408,32 @@
         <a href="{% url 'billing:advanced_invoice_create' %}" class="quick-action-btn">
             <div class="quick-action-icon">
                 <i class="fas fa-file-invoice"></i>
-            </div>
+                    </div>
             <div class="quick-action-title">Create Invoice</div>
             <div class="quick-action-desc">Generate new invoice</div>
-        </a>
+                        </a>
         
         <a href="{% url 'billing:advanced_customer_list' %}" class="quick-action-btn">
             <div class="quick-action-icon">
                 <i class="fas fa-users"></i>
-            </div>
+                    </div>
             <div class="quick-action-title">Manage Customers</div>
             <div class="quick-action-desc">View and edit customers</div>
-        </a>
+                        </a>
         
         <a href="{% url 'billing:advanced_invoice_list' %}" class="quick-action-btn">
             <div class="quick-action-icon">
                 <i class="fas fa-list"></i>
-            </div>
+                    </div>
             <div class="quick-action-title">All Invoices</div>
             <div class="quick-action-desc">View invoice history</div>
-        </a>
+                        </a>
         
-        <a href="{% url 'billing:advanced_analytics' %}" class="quick-action-btn">
-            <div class="quick-action-icon">
-                <i class="fas fa-chart-bar"></i>
-            </div>
-            <div class="quick-action-title">Analytics</div>
-            <div class="quick-action-desc">View detailed reports</div>
-        </a>
         
         <a href="#" class="quick-action-btn">
             <div class="quick-action-icon">
                 <i class="fas fa-download"></i>
-            </div>
+                    </div>
             <div class="quick-action-title">Export Data</div>
             <div class="quick-action-desc">Download reports</div>
         </a>
@@ -485,9 +449,9 @@
 
     <!-- Recent Activity -->
     <div class="recent-activity" data-aos="fade-up">
-        <h4 class="mb-3">📋 Recent Invoices</h4>
-        {% if recent_invoices %}
-            {% for invoice in recent_invoices %}
+                <h4 class="mb-3">📋 Recent Invoices</h4>
+                {% if recent_invoices %}
+                            {% for invoice in recent_invoices %}
             <div class="activity-item">
                 <div class="activity-header">
                     <h6 class="activity-title">{{ invoice.invoice_number }} - {{ invoice.customer.name }}</h6>
@@ -499,95 +463,22 @@
                 </p>
             </div>
             {% endfor %}
-        {% else %}
+                {% else %}
             <div class="empty-state">
                 <i class="fas fa-file-invoice"></i>
                 <h3>No Invoices Yet</h3>
                 <p>Create your first invoice to get started</p>
                 <a href="{% url 'billing:advanced_invoice_create' %}" class="btn btn-primary">
                     <i class="fas fa-plus me-2"></i>Create Invoice
-                </a>
-            </div>
-        {% endif %}
+                    </a>
+                </div>
+                {% endif %}
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-// Revenue Chart
-const ctx = document.getElementById('revenueChart').getContext('2d');
-const revenueChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: {{ monthly_data|safe }},
-        datasets: [{
-            label: 'Revenue (₹)',
-            data: {{ monthly_data|safe }},
-            borderColor: '#6366f1',
-            backgroundColor: 'rgba(99, 102, 241, 0.1)',
-            borderWidth: 3,
-            fill: true,
-            tension: 0.4,
-            pointBackgroundColor: '#6366f1',
-            pointBorderColor: '#ffffff',
-            pointBorderWidth: 2,
-            pointRadius: 6,
-            pointHoverRadius: 8
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false
-            },
-            tooltip: {
-                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                titleColor: '#ffffff',
-                bodyColor: '#ffffff',
-                borderColor: '#6366f1',
-                borderWidth: 1,
-                cornerRadius: 8
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                grid: {
-                    color: '#f3f4f6',
-                    drawBorder: false
-                },
-                ticks: {
-                    color: '#6b7280',
-                    font: {
-                        size: 12
-                    },
-                    callback: function(value) {
-                        return '₹' + value.toLocaleString();
-                    }
-                }
-            },
-            x: {
-                grid: {
-                    display: false
-                },
-                ticks: {
-                    color: '#6b7280',
-                    font: {
-                        size: 12
-                    }
-                }
-            }
-        },
-        interaction: {
-            intersect: false,
-            mode: 'index'
-        }
-    }
-});
-
 // Add animation to stat cards
 document.addEventListener('DOMContentLoaded', function() {
     const statCards = document.querySelectorAll('.stat-card');
