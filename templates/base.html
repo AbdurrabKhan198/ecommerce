@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,15 +7,141 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     
     <!-- SEO Meta Tags -->
-    <title>{% block title %}{{ page_title|default:"Premium Women's Wear - Leggings, Pants & Dupattas" }}{% endblock %}</title>
-    <meta name="description" content="{% block meta_description %}{{ meta_description|default:"Shop premium women's leggings, pants & dupattas online. High-quality fabrics, perfect fit guarantee, free shipping above "|add:currency_symbol|add:free_shipping_threshold|add:"." }}{% endblock %}">
-    <meta name="keywords" content="{% block meta_keywords %}women's wear, leggings, pants, dupattas, online shopping, fashion{% endblock %}">
+    <title>{% block title %}{{ page_title|default:"King Dupatta House - Premium Dupattas, Leggings & Pants in Lucknow Since 1982" }}{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}{{ meta_description|default:"King Dupatta House - Trusted since 1982 for premium dupattas, leggings & pants in Lucknow. Shop online with free shipping above ₹999. Best dupatta house near me in Lucknow." }}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}dupatta house near me, dupatta house in lucknow, dupatta house lucknow, king dupatta house, women's wear lucknow, leggings lucknow, pants lucknow, dupattas lucknow, online dupatta store, premium dupattas, cotton dupattas, silk dupattas, designer dupattas, traditional wear lucknow, ethnic wear lucknow, women's clothing lucknow, fashion store lucknow, textile shop lucknow, fabric store lucknow, women's boutique lucknow, online shopping lucknow, ecommerce lucknow, fashion ecommerce, women's fashion online, traditional indian wear, ethnic clothing, indian women's wear, dupatta collection, leggings collection, pants collection, women's accessories, fashion accessories, clothing store, textile shop, fashion boutique, women's fashion, indian fashion, traditional fashion, ethnic fashion, designer wear, premium clothing, quality fabrics, perfect fit guarantee, free shipping, online shopping, ecommerce, fashion ecommerce, women's wear ecommerce{% endblock %}">
+    
+    <!-- Location-based SEO -->
+    <meta name="geo.region" content="IN-UP">
+    <meta name="geo.placename" content="Lucknow">
+    <meta name="geo.position" content="26.8467;80.9462">
+    <meta name="ICBM" content="26.8467, 80.9462">
+    
+    <!-- Business Information -->
+    <meta name="business:contact_data:street_address" content="Akbari Gate, Near Nakkhas, Victoria Street, Nakkhas-226003">
+    <meta name="business:contact_data:locality" content="Lucknow">
+    <meta name="business:contact_data:region" content="Uttar Pradesh">
+    <meta name="business:contact_data:postal_code" content="226003">
+    <meta name="business:contact_data:country_name" content="India">
+    <meta name="business:contact_data:phone_number" content="+91 7860247786">
+    <meta name="business:contact_data:email" content="Kingdupattahouse@gmail.com">
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow">
+    <meta name="bingbot" content="index, follow">
+    <meta name="author" content="King Dupatta House">
+    <meta name="publisher" content="King Dupatta House">
+    <meta name="copyright" content="King Dupatta House">
+    <meta name="language" content="en">
+    <meta name="revisit-after" content="7 days">
+    <meta name="distribution" content="global">
+    <meta name="rating" content="general">
+    <meta name="target" content="all">
+    
+    <!-- Mobile SEO -->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="King Dupatta House">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'images/site.webmanifest' %}">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="{% block og_title %}{{ page_title|default:"Premium Women's Wear" }}{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}{{ meta_description|default:"Shop premium women's wear online" }}{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}{{ page_title|default:"King Dupatta House - Premium Dupattas, Leggings & Pants in Lucknow" }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ meta_description|default:"King Dupatta House - Trusted since 1982 for premium dupattas, leggings & pants in Lucknow. Shop online with free shipping above ₹999." }}{% endblock %}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{% block og_image %}{{ request.build_absolute_uri }}{% static 'images/logo.png' %}{% endblock %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="King Dupatta House">
+    <meta property="og:locale" content="en_IN">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ page_title|default:"King Dupatta House - Premium Dupattas, Leggings & Pants in Lucknow" }}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{{ meta_description|default:"King Dupatta House - Trusted since 1982 for premium dupattas, leggings & pants in Lucknow." }}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ request.build_absolute_uri }}{% static 'images/logo.png' %}{% endblock %}">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "King Dupatta House",
+        "description": "Premium women's wear store specializing in dupattas, leggings, and pants since 1982",
+        "url": "{{ request.build_absolute_uri }}",
+        "logo": "{{ request.build_absolute_uri }}{% static 'images/logo.png' %}",
+        "image": "{{ request.build_absolute_uri }}{% static 'images/logo.png' %}",
+        "telephone": "+91 7860247786",
+        "email": "Kingdupattahouse@gmail.com",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Akbari Gate, Near Nakkhas, Victoria Street, Nakkhas-226003",
+            "addressLocality": "Lucknow",
+            "addressRegion": "Uttar Pradesh",
+            "postalCode": "226003",
+            "addressCountry": "IN"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "26.8467",
+            "longitude": "80.9462"
+        },
+        "openingHours": "Mo-Sa 10:00-20:00",
+        "priceRange": "₹₹",
+        "paymentAccepted": "Cash, Credit Card, UPI, Net Banking",
+        "currenciesAccepted": "INR",
+        "foundingDate": "1982",
+        "sameAs": [
+            "https://www.instagram.com/kingdupattahouse",
+            "https://www.facebook.com/kingdupattahouse"
+        ],
+        "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Women's Wear Collection",
+            "itemListElement": [
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Product",
+                        "name": "Premium Dupattas",
+                        "description": "High-quality dupattas in various fabrics and designs"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Product",
+                        "name": "Comfortable Leggings",
+                        "description": "Premium leggings for all occasions"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Product",
+                        "name": "Stylish Pants",
+                        "description": "Trendy pants for modern women"
+                    }
+                }
+            ]
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.0",
+            "reviewCount": "14"
+        }
+    }
+    </script>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">

@@ -37,8 +37,9 @@ def homepage(request):
         'bestseller_products': bestseller_products,
         'recent_products': recent_products,
         'recent_reviews': recent_reviews,
-        'page_title': 'King Dupatta House - Premium Dupattas, Leggings & Pants Since 1982',
-        'meta_description': 'King Dupatta House - Trusted since 1982 for premium dupattas, leggings & pants. Located in Lucknow, serving customers nationwide with quality fabrics and perfect fit guarantee.',
+        'page_title': 'King Dupatta House - Best Dupatta House in Lucknow | Premium Dupattas, Leggings & Pants Since 1982',
+        'meta_description': 'King Dupatta House - The best dupatta house near me in Lucknow since 1982. Premium dupattas, leggings & pants with free shipping above ₹999. Trusted by 50+ lakh customers. Shop online now!',
+        'meta_keywords': 'dupatta house near me, dupatta house in lucknow, dupatta house lucknow, king dupatta house, best dupatta store lucknow, premium dupattas lucknow, women wear lucknow, leggings lucknow, pants lucknow, online dupatta store, cotton dupattas, silk dupattas, designer dupattas, traditional wear lucknow, ethnic wear lucknow, women clothing lucknow, fashion store lucknow, textile shop lucknow, fabric store lucknow, women boutique lucknow, online shopping lucknow, ecommerce lucknow, fashion ecommerce, women fashion online, traditional indian wear, ethnic clothing, indian women wear, dupatta collection, leggings collection, pants collection, women accessories, fashion accessories, clothing store, textile shop, fashion boutique, women fashion, indian fashion, traditional fashion, ethnic fashion, designer wear, premium clothing, quality fabrics, perfect fit guarantee, free shipping, online shopping, ecommerce, fashion ecommerce, women wear ecommerce',
         'currency_symbol': '₹',
         'free_shipping_threshold': '999',
         'site_name': 'King Dupatta House',
@@ -172,8 +173,9 @@ def shop(request):
         'fabric_choices': fabric_choices,
         'occasion_choices': occasion_choices,
         'current_filters': request.GET,
-        'page_title': 'Shop Women\'s Wear - All Products',
-        'meta_description': 'Shop our complete collection of premium women\'s wear including leggings, pants, and dupattas. Free shipping on orders above ₹999.',
+        'page_title': 'Shop Women\'s Wear Online - Premium Dupattas, Leggings & Pants in Lucknow | King Dupatta House',
+        'meta_description': 'Shop premium women\'s wear online at King Dupatta House. Complete collection of dupattas, leggings, and pants in Lucknow. Free shipping above ₹999. Best dupatta house near me.',
+        'meta_keywords': 'shop women wear online, dupatta house near me, dupatta house in lucknow, women wear lucknow, leggings online, pants online, dupattas online, premium women wear, cotton dupattas, silk dupattas, designer dupattas, traditional wear, ethnic wear, women clothing, fashion store, textile shop, fabric store, women boutique, online shopping, ecommerce, fashion ecommerce, women fashion online, traditional indian wear, ethnic clothing, indian women wear, dupatta collection, leggings collection, pants collection, women accessories, fashion accessories, clothing store, textile shop, fashion boutique, women fashion, indian fashion, traditional fashion, ethnic fashion, designer wear, premium clothing, quality fabrics, perfect fit guarantee, free shipping, online shopping, ecommerce, fashion ecommerce, women wear ecommerce',
     }
     return render(request, 'shop/shop.html', context)
 
@@ -201,8 +203,9 @@ def category_view(request, category_slug):
         'subcategories': subcategories,
         'page_obj': page_obj,
         'products': page_obj.object_list,
-        'page_title': f'{category.meta_title or category.name}',
-        'meta_description': category.meta_description or category.description[:150],
+        'page_title': f'{category.meta_title or category.name} in Lucknow | Best {category.name} Store Near Me | King Dupatta House',
+        'meta_description': f'{category.meta_description or category.description[:150]} Shop premium {category.name.lower()} in Lucknow at King Dupatta House. Best dupatta house near me with free shipping above ₹999.',
+        'meta_keywords': f'{category.name.lower()} lucknow, {category.name.lower()} near me, {category.name.lower()} store lucknow, best {category.name.lower()} store, {category.name.lower()} online, premium {category.name.lower()}, {category.name.lower()} collection, {category.name.lower()} store near me, dupatta house near me, dupatta house in lucknow, women wear lucknow, fashion store lucknow, textile shop lucknow, fabric store lucknow, women boutique lucknow, online shopping lucknow, ecommerce lucknow, fashion ecommerce, women fashion online, traditional indian wear, ethnic clothing, indian women wear, women accessories, fashion accessories, clothing store, textile shop, fashion boutique, women fashion, indian fashion, traditional fashion, ethnic fashion, designer wear, premium clothing, quality fabrics, perfect fit guarantee, free shipping, online shopping, ecommerce, fashion ecommerce, women wear ecommerce',
     }
     return render(request, 'shop/category.html', context)
 
@@ -281,8 +284,9 @@ def product_detail(request, product_slug):
         'related_products': related_products,
         'in_wishlist': in_wishlist,
         'review_form': ReviewForm(),
-        'page_title': f'{product.meta_title or product.name}',
-        'meta_description': product.meta_description or product.short_description,
+        'page_title': f'{product.meta_title or product.name} | Premium {product.category.name} in Lucknow | King Dupatta House',
+        'meta_description': f'{product.meta_description or product.short_description} Buy premium {product.name} in Lucknow at King Dupatta House. Best dupatta house near me with free shipping above ₹999.',
+        'meta_keywords': f'{product.name.lower()}, {product.category.name.lower()} lucknow, {product.category.name.lower()} near me, {product.category.name.lower()} store lucknow, best {product.category.name.lower()} store, {product.category.name.lower()} online, premium {product.category.name.lower()}, {product.category.name.lower()} collection, {product.category.name.lower()} store near me, dupatta house near me, dupatta house in lucknow, women wear lucknow, fashion store lucknow, textile shop lucknow, fabric store lucknow, women boutique lucknow, online shopping lucknow, ecommerce lucknow, fashion ecommerce, women fashion online, traditional indian wear, ethnic clothing, indian women wear, women accessories, fashion accessories, clothing store, textile shop, fashion boutique, women fashion, indian fashion, traditional fashion, ethnic fashion, designer wear, premium clothing, quality fabrics, perfect fit guarantee, free shipping, online shopping, ecommerce, fashion ecommerce, women wear ecommerce',
     }
     return render(request, 'shop/product_detail.html', context)
 
@@ -310,7 +314,9 @@ def search(request):
         'query': query,
         'page_obj': page_obj,
         'products': page_obj.object_list,
-        'page_title': f'Search Results for "{query}"' if query else 'Search',
+        'page_title': f'Search Results for "{query}" in Lucknow | King Dupatta House' if query else 'Search Women\'s Wear in Lucknow | King Dupatta House',
+        'meta_description': f'Search results for "{query}" at King Dupatta House. Find premium dupattas, leggings, and pants in Lucknow. Best dupatta house near me with free shipping above ₹999.' if query else 'Search premium women\'s wear at King Dupatta House. Find dupattas, leggings, and pants in Lucknow. Best dupatta house near me.',
+        'meta_keywords': f'search {query}, {query} lucknow, {query} near me, {query} store lucknow, best {query} store, {query} online, premium {query}, {query} collection, {query} store near me, dupatta house near me, dupatta house in lucknow, women wear lucknow, fashion store lucknow, textile shop lucknow, fabric store lucknow, women boutique lucknow, online shopping lucknow, ecommerce lucknow, fashion ecommerce, women fashion online, traditional indian wear, ethnic clothing, indian women wear, women accessories, fashion accessories, clothing store, textile shop, fashion boutique, women fashion, indian fashion, traditional fashion, ethnic fashion, designer wear, premium clothing, quality fabrics, perfect fit guarantee, free shipping, online shopping, ecommerce, fashion ecommerce, women wear ecommerce' if query else 'search women wear, search dupattas, search leggings, search pants, women wear lucknow, fashion store lucknow, textile shop lucknow, fabric store lucknow, women boutique lucknow, online shopping lucknow, ecommerce lucknow, fashion ecommerce, women fashion online, traditional indian wear, ethnic clothing, indian women wear, women accessories, fashion accessories, clothing store, textile shop, fashion boutique, women fashion, indian fashion, traditional fashion, ethnic fashion, designer wear, premium clothing, quality fabrics, perfect fit guarantee, free shipping, online shopping, ecommerce, fashion ecommerce, women wear ecommerce',
     }
     return render(request, 'shop/search.html', context)
 
@@ -318,8 +324,9 @@ def search(request):
 def about(request):
     """About us view"""
     context = {
-        'page_title': 'About Us - Our Story of Fashion & Quality',
-        'meta_description': 'Learn about our journey to create premium women\'s fashion. Quality leggings, pants & dupattas. Customer-focused brand.',
+        'page_title': 'About King Dupatta House - Best Dupatta House in Lucknow Since 1982 | Our Story',
+        'meta_description': 'Learn about King Dupatta House - the best dupatta house near me in Lucknow since 1982. Our journey of creating premium women\'s fashion with quality leggings, pants & dupattas. Customer-focused brand.',
+        'meta_keywords': 'about king dupatta house, dupatta house near me, dupatta house in lucknow, dupatta house lucknow, king dupatta house story, best dupatta store lucknow, premium dupattas lucknow, women wear lucknow, leggings lucknow, pants lucknow, online dupatta store, cotton dupattas, silk dupattas, designer dupattas, traditional wear lucknow, ethnic wear lucknow, women clothing lucknow, fashion store lucknow, textile shop lucknow, fabric store lucknow, women boutique lucknow, online shopping lucknow, ecommerce lucknow, fashion ecommerce, women fashion online, traditional indian wear, ethnic clothing, indian women wear, dupatta collection, leggings collection, pants collection, women accessories, fashion accessories, clothing store, textile shop, fashion boutique, women fashion, indian fashion, traditional fashion, ethnic fashion, designer wear, premium clothing, quality fabrics, perfect fit guarantee, free shipping, online shopping, ecommerce, fashion ecommerce, women wear ecommerce',
     }
     return render(request, 'shop/about.html', context)
 
@@ -337,8 +344,9 @@ def contact(request):
     
     context = {
         'form': form,
-        'page_title': 'Contact Us - We\'re Here to Help!',
-        'meta_description': 'Get help with orders, returns, size guide & more. 24/7 support available.',
+        'page_title': 'Contact King Dupatta House - Best Dupatta House in Lucknow | We\'re Here to Help!',
+        'meta_description': 'Contact King Dupatta House - the best dupatta house near me in Lucknow. Get help with orders, returns, size guide & more. 24/7 support available. Call +91 7860247786.',
+        'meta_keywords': 'contact king dupatta house, dupatta house near me, dupatta house in lucknow, dupatta house lucknow, king dupatta house contact, best dupatta store lucknow, premium dupattas lucknow, women wear lucknow, leggings lucknow, pants lucknow, online dupatta store, cotton dupattas, silk dupattas, designer dupattas, traditional wear lucknow, ethnic wear lucknow, women clothing lucknow, fashion store lucknow, textile shop lucknow, fabric store lucknow, women boutique lucknow, online shopping lucknow, ecommerce lucknow, fashion ecommerce, women fashion online, traditional indian wear, ethnic clothing, indian women wear, dupatta collection, leggings collection, pants collection, women accessories, fashion accessories, clothing store, textile shop, fashion boutique, women fashion, indian fashion, traditional fashion, ethnic fashion, designer wear, premium clothing, quality fabrics, perfect fit guarantee, free shipping, online shopping, ecommerce, fashion ecommerce, women wear ecommerce',
     }
     return render(request, 'shop/contact.html', context)
 
@@ -377,8 +385,9 @@ def reviews(request):
         'total_reviews': total_reviews,
         'avg_rating': round(avg_rating, 1),
         'rating_distribution': rating_distribution,
-        'page_title': 'Customer Reviews - King Dupatta House',
-        'meta_description': 'Read what our customers say about King Dupatta House. Real reviews from satisfied customers about our premium women\'s wear.',
+        'page_title': 'Customer Reviews - King Dupatta House | Best Dupatta House in Lucknow | 4.0/5 Stars',
+        'meta_description': 'Read what our customers say about King Dupatta House - the best dupatta house near me in Lucknow. Real reviews from satisfied customers about our premium women\'s wear. 4.0/5 stars with 14+ reviews.',
+        'meta_keywords': 'king dupatta house reviews, dupatta house near me reviews, dupatta house in lucknow reviews, dupatta house lucknow reviews, king dupatta house customer reviews, best dupatta store lucknow reviews, premium dupattas lucknow reviews, women wear lucknow reviews, leggings lucknow reviews, pants lucknow reviews, online dupatta store reviews, cotton dupattas reviews, silk dupattas reviews, designer dupattas reviews, traditional wear lucknow reviews, ethnic wear lucknow reviews, women clothing lucknow reviews, fashion store lucknow reviews, textile shop lucknow reviews, fabric store lucknow reviews, women boutique lucknow reviews, online shopping lucknow reviews, ecommerce lucknow reviews, fashion ecommerce reviews, women fashion online reviews, traditional indian wear reviews, ethnic clothing reviews, indian women wear reviews, dupatta collection reviews, leggings collection reviews, pants collection reviews, women accessories reviews, fashion accessories reviews, clothing store reviews, textile shop reviews, fashion boutique reviews, women fashion reviews, indian fashion reviews, traditional fashion reviews, ethnic fashion reviews, designer wear reviews, premium clothing reviews, quality fabrics reviews, perfect fit guarantee reviews, free shipping reviews, online shopping reviews, ecommerce reviews, fashion ecommerce reviews, women wear ecommerce reviews',
     }
     return render(request, 'shop/reviews.html', context)
 
