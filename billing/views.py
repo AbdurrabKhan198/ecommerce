@@ -41,13 +41,13 @@ def billing_dashboard(request):
         'paid_invoices': paid_invoices,
         'total_amount': total_amount,
     }
-    return render(request, 'billing/dashboard.html', context)
+    return render(request, 'billing/advanced_dashboard.html', context)
 
 @superuser_required_with_login
 def customer_list(request):
     """Customer list"""
     customers = Customer.objects.all().order_by('-created_at')
-    return render(request, 'billing/customer_list.html', {'customers': customers})
+    return render(request, 'billing/advanced_customer_list.html', {'customers': customers})
 
 @superuser_required_with_login
 def customer_add(request):
@@ -61,13 +61,13 @@ def customer_add(request):
     else:
         form = CustomerForm()
     
-    return render(request, 'billing/customer_add.html', {'form': form})
+    return render(request, 'billing/advanced_customer_list.html', {'form': form})
 
 @superuser_required_with_login
 def invoice_list(request):
     """Invoice list"""
     invoices = Invoice.objects.all().order_by('-created_at')
-    return render(request, 'billing/invoice_list.html', {'invoices': invoices})
+    return render(request, 'billing/advanced_invoice_list.html', {'invoices': invoices})
 
 @superuser_required_with_login
 def invoice_create(request):
@@ -129,7 +129,7 @@ def invoice_create(request):
             }
     
     invoice_form = SimpleInvoiceForm()
-    return render(request, 'billing/invoice_create.html', {
+    return render(request, 'billing/advanced_invoice_create.html', {
         'invoice_form': invoice_form
     })
 

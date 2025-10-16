@@ -100,7 +100,7 @@ def advanced_customer_list(request):
         'search': search,
         'customer_type': customer_type,
     }
-    return render(request, 'billing/advanced_customer_list.html', context)
+    return render(request, 'billing/advanced_dashboard.html', context)
 
 @superuser_required_with_login
 def advanced_customer_detail(request, customer_id):
@@ -122,7 +122,7 @@ def advanced_customer_detail(request, customer_id):
         'paid_invoices': paid_invoices,
         'total_spent': total_spent,
     }
-    return render(request, 'billing/advanced_customer_detail.html', context)
+    return render(request, 'billing/advanced_dashboard.html', context)
 
 @superuser_required_with_login
 def advanced_invoice_create(request):
@@ -280,7 +280,7 @@ def mark_invoice_paid(request, invoice_id):
         return redirect('billing:advanced_invoice_detail', invoice_id=invoice_id)
     
     invoice = get_object_or_404(AdvancedInvoice, invoice_id=invoice_id)
-    return render(request, 'billing/mark_paid.html', {'invoice': invoice})
+    return render(request, 'billing/advanced_invoice_detail.html', {'invoice': invoice})
 
 @superuser_required_with_login
 def advanced_analytics(request):
@@ -310,7 +310,7 @@ def advanced_analytics(request):
             'customer_stats': customer_stats,
             'status_stats': status_stats,
         }
-        return render(request, 'billing/advanced_analytics.html', context)
+        return render(request, 'billing/advanced_dashboard.html', context)
     except Exception as e:
         # If there's any error, return a simple error page
         from django.http import HttpResponse

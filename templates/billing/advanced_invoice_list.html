@@ -568,10 +568,11 @@
                             Print
                         </a>
                         {% if invoice.status != 'paid' %}
-                        <a href="{% url 'billing:mark_invoice_paid' invoice.invoice_id %}" class="btn-action btn-mark-paid">
+                        <!-- Mark Paid Disabled -->
+                        <!-- <a href="{% url 'billing:mark_invoice_paid' invoice.invoice_id %}" class="btn-action btn-mark-paid">
                             <i class="fas fa-check"></i>
                             Mark Paid
-                        </a>
+                        </a> -->
                         {% endif %}
                     </div>
                 </div>
