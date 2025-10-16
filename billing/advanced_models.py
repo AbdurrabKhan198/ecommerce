@@ -137,7 +137,7 @@ class AdvancedInvoice(models.Model):
     discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0, 
                                            validators=[MinValueValidator(0), MaxValueValidator(100)])
     discount_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('18.00'))
+    tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('5.00'))  # CGST + SGST = 5%
     tax_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     
@@ -251,7 +251,7 @@ class AdvancedInvoiceItem(models.Model):
     discount_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     
     # Tax
-    tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('18.00'))
+    tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('5.00'))  # CGST + SGST = 5%
     tax_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     
     # Final amounts

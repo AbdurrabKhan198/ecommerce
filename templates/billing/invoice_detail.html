@@ -105,7 +105,8 @@
             <div class="billing-card p-4">
                 <h5 class="text-primary mb-3">💰 Payment Info:</h5>
                 <p class="mb-1"><strong>Subtotal:</strong> ₹{{ invoice.subtotal|floatformat:2 }}</p>
-                <p class="mb-1"><strong>GST ({{ invoice.tax_rate }}%):</strong> ₹{{ invoice.tax_amount|floatformat:2 }}</p>
+                <p class="mb-1"><strong>CGST (2.5%):</strong> ₹{% widthratio invoice.tax_amount 2 1 %}</p>
+                <p class="mb-1"><strong>SGST (2.5%):</strong> ₹{% widthratio invoice.tax_amount 2 1 %}</p>
                 <p class="mb-0"><strong>Total Amount:</strong> ₹{{ invoice.total_amount|floatformat:2 }}</p>
             </div>
         </div>

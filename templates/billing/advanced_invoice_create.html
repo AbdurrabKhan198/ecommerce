@@ -376,56 +376,45 @@
                 <h1 class="form-section-title" style="color: white; margin: 0;">Create Advanced Invoice</h1>
                 <p style="margin: 0; opacity: 0.9;">Generate professional invoices with detailed analytics</p>
             </div>
-        </div>
+                </div>
 
-        <form method="post" id="invoiceForm">
-            {% csrf_token %}
-            
+                <form method="post" id="invoiceForm">
+                    {% csrf_token %}
+                    
             <!-- Invoice Details Section -->
             <div class="form-section">
                 <div class="form-section-header">
                     <div class="form-section-icon">
                         <i class="fas fa-info-circle"></i>
-                    </div>
+                                </div>
                     <h3 class="form-section-title">Invoice Details</h3>
-                </div>
+                                    </div>
+                
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Invoice Date *</label>
+                                                <input type="date" name="date" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                            <label class="form-label">Notes</label>
+                            <textarea name="notes" class="form-control" rows="3" placeholder="Additional notes..."></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
                 
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label">Customer *</label>
-                            <select name="customer" class="form-control" required>
-                                <option value="">Select Customer</option>
-                                {% for customer in customers %}
-                                <option value="{{ customer.customer_id }}">{{ customer.name }} ({{ customer.customer_type|title }})</option>
-                                {% endfor %}
-                            </select>
+                                    <div class="mb-3">
+                                        <label class="form-label">Discount Percentage</label>
+                                        <input type="number" name="discount_percentage" class="form-control" step="0.01" min="0" max="100" value="0">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mb-3">
-                            <label class="form-label">Invoice Date *</label>
-                            <input type="date" name="date" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="mb-3">
-                            <label class="form-label">Due Date *</label>
-                            <input type="date" name="due_date" class="form-control" required>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label">Discount Percentage</label>
-                            <input type="number" name="discount_percentage" class="form-control" step="0.01" min="0" max="100" value="0">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+                        
             <!-- Company Information -->
             <div class="form-section">
                 <div class="company-info-card">
@@ -434,14 +423,14 @@
                         Company Information
                     </h4>
                     <div class="company-details">
-                        <p><strong>{{ company.name }}</strong></p>
+                                    <p><strong>{{ company.name }}</strong></p>
                         <p>GST: {{ company.gst_number }}</p>
                         <p>{{ company.address }}</p>
                         <p>Phone: {{ company.phone }}</p>
                         <p>Email: {{ company.email }}</p>
-                    </div>
-                </div>
-            </div>
+                                </div>
+                            </div>
+                        </div>
 
             <!-- Invoice Items Section -->
             <div class="form-section">
@@ -450,18 +439,18 @@
                         <i class="fas fa-shopping-cart"></i>
                     </div>
                     <h3 class="form-section-title">Invoice Items</h3>
-                </div>
-                
+                    </div>
+
                 <div class="items-container">
                     <button type="button" class="add-item-btn" id="addItemBtn">
                         <i class="fas fa-plus"></i>
                         Add Item
-                    </button>
+                            </button>
                     
-                    <div id="itemsContainer">
-                        <!-- Items will be added here dynamically -->
-                    </div>
-                    
+                            <div id="itemsContainer">
+                                <!-- Items will be added here dynamically -->
+                            </div>
+                            
                     <!-- Totals Section -->
                     <div class="totals-section">
                         <h4 class="totals-title">💰 Invoice Totals</h4>
@@ -469,50 +458,54 @@
                             <div class="total-item">
                                 <div class="total-label">Subtotal</div>
                                 <div class="total-value" id="subtotal">₹0.00</div>
-                            </div>
+                                        </div>
                             <div class="total-item">
                                 <div class="total-label">Discount</div>
                                 <div class="total-value" id="discount">₹0.00</div>
-                            </div>
+                                        </div>
                             <div class="total-item">
-                                <div class="total-label">GST (18%)</div>
-                                <div class="total-value" id="taxAmount">₹0.00</div>
-                            </div>
-                        </div>
+                                <div class="total-label">CGST (2.5%)</div>
+                                <div class="total-value" id="cgstAmount">₹0.00</div>
+                                    </div>
+                            <div class="total-item">
+                                <div class="total-label">SGST (2.5%)</div>
+                                <div class="total-value" id="sgstAmount">₹0.00</div>
+                                        </div>
+                                    </div>
                         <div class="final-total">
                             <div class="final-total-label">Total Amount</div>
                             <div class="final-total-value" id="totalAmount">₹0.00</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
             <!-- Notes and Terms Section -->
             <div class="form-section">
                 <div class="form-section-header">
                     <div class="form-section-icon">
                         <i class="fas fa-sticky-note"></i>
-                    </div>
+                                </div>
                     <h3 class="form-section-title">Additional Information</h3>
-                </div>
+                                </div>
                 
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label">Notes</label>
                             <textarea name="notes" class="form-control" rows="4" placeholder="Additional notes for the invoice..."></textarea>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
+                        <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label">Terms & Conditions</label>
                             <textarea name="terms" class="form-control" rows="4" placeholder="Terms and conditions...">1. No Exchange On Sunday.
 2. Exchange Within A Week.
 3. No Return Of Money.</textarea>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
             <!-- Form Actions -->
             <div class="form-actions">
@@ -523,9 +516,9 @@
                 <button type="submit" class="btn-submit">
                     <i class="fas fa-save"></i>
                     Create Invoice
-                </button>
-            </div>
-        </form>
+                        </button>
+                    </div>
+                </form>
     </div>
 </div>
 {% endblock %}
@@ -559,36 +552,36 @@ function addItemRow() {
             <div class="col-md-4">
                 <div class="mb-3">
                     <label class="form-label">Description *</label>
-                    <input type="text" class="form-control" name="item_description_${itemCount}" placeholder="Item Description" required>
+                <input type="text" class="form-control" name="item_description_${itemCount}" placeholder="Item Description" required>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="mb-3">
                     <label class="form-label">Category</label>
-                    <input type="text" class="form-control" name="item_category_${itemCount}" placeholder="Category">
+                <input type="text" class="form-control" name="item_category_${itemCount}" placeholder="Category">
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="mb-3">
                     <label class="form-label">Quantity *</label>
-                    <input type="number" class="form-control" name="item_quantity_${itemCount}" placeholder="Qty" min="0.001" step="0.001" value="1" required>
+                <input type="number" class="form-control" name="item_quantity_${itemCount}" placeholder="Qty" min="0.001" step="0.001" value="1" required>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="mb-3">
                     <label class="form-label">Unit</label>
-                    <select class="form-control" name="item_unit_${itemCount}">
-                        <option value="pcs">pcs</option>
-                        <option value="kg">kg</option>
-                        <option value="mtr">mtr</option>
-                        <option value="set">set</option>
-                    </select>
+                <select class="form-control" name="item_unit_${itemCount}">
+                    <option value="pcs">pcs</option>
+                    <option value="kg">kg</option>
+                    <option value="mtr">mtr</option>
+                    <option value="set">set</option>
+                </select>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="mb-3">
                     <label class="form-label">Price *</label>
-                    <input type="number" class="form-control" name="item_price_${itemCount}" placeholder="Price" step="0.01" min="0" required>
+                <input type="number" class="form-control" name="item_price_${itemCount}" placeholder="Price" step="0.01" min="0" required>
                 </div>
             </div>
         </div>
@@ -596,13 +589,13 @@ function addItemRow() {
             <div class="col-md-3">
                 <div class="mb-3">
                     <label class="form-label">Discount %</label>
-                    <input type="number" class="form-control" name="item_discount_${itemCount}" placeholder="Disc%" step="0.01" min="0" max="100" value="0">
+                <input type="number" class="form-control" name="item_discount_${itemCount}" placeholder="Disc%" step="0.01" min="0" max="100" value="0">
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="mb-3">
                     <label class="form-label">Tax %</label>
-                    <input type="number" class="form-control" name="item_tax_${itemCount}" placeholder="Tax%" step="0.01" min="0" value="18">
+                    <input type="number" class="form-control" name="item_tax_${itemCount}" placeholder="Tax%" step="0.01" min="0" value="5">
                 </div>
             </div>
             <div class="col-md-6">
@@ -668,10 +661,15 @@ function calculateTotals() {
     
     const totalAmount = finalSubtotal + totalTax;
     
+    // Calculate CGST and SGST (split the total tax)
+    const cgstAmount = totalTax / 2;
+    const sgstAmount = totalTax / 2;
+    
     // Update display
     document.getElementById('subtotal').textContent = `₹${subtotal.toFixed(2)}`;
     document.getElementById('discount').textContent = `₹${(totalDiscount + invoiceDiscountAmount).toFixed(2)}`;
-    document.getElementById('taxAmount').textContent = `₹${totalTax.toFixed(2)}`;
+    document.getElementById('cgstAmount').textContent = `₹${cgstAmount.toFixed(2)}`;
+    document.getElementById('sgstAmount').textContent = `₹${sgstAmount.toFixed(2)}`;
     document.getElementById('totalAmount').textContent = `₹${totalAmount.toFixed(2)}`;
 }
 

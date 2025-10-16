@@ -1,221 +1,441 @@
-{% extends 'billing/base_billing.html' %}
-{% load static %}
-
-{% block title %}Print Invoice {{ invoice.invoice_number }} - King Dupatta House{% endblock %}
-
-{% block extra_css %}
-<style>
-    @media print {
-        body * {
-            visibility: hidden;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice {{ invoice.invoice_number }} - King Dupatta House</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .print-area, .print-area * {
-            visibility: visible;
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.4;
+            color: #333;
+            background: white;
         }
-        .print-area {
-            position: absolute;
-            left: 0;
-            top: 0;
+        
+        .invoice-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        
+        /* Header Section */
+        .header-section {
+            display: flex;
+            margin-bottom: 30px;
+        }
+        
+        .company-logo-section {
+            background: #1e3a8a;
+            color: white;
+            padding: 20px;
+            border-radius: 0 0 20px 0;
+            flex: 1;
+        }
+        
+        .company-logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .company-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .gst-info {
+            background: #1e40af;
+            color: white;
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .contact-section {
+            background: #8b5cf6;
+            color: white;
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .contact-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .invoice-title {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            color: #000;
+        }
+        
+        .invoice-meta {
+            text-align: right;
+            color: #000;
+        }
+        
+        .invoice-meta p {
+            margin: 5px 0;
+        }
+        
+        /* Bill To Section */
+        .bill-to-section {
+            margin: 20px 0;
+        }
+        
+        .bill-to-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        
+        .bill-to-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #000;
+        }
+        
+        /* Items Table */
+        .items-table {
             width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
         }
-        .no-print {
-            display: none !important;
+        
+        .items-table th {
+            background: #8b5cf6;
+            color: white;
+            padding: 12px 8px;
+            text-align: left;
+            font-weight: bold;
         }
-    }
+        
+        .items-table td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .items-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+        
+        .items-table tr:last-child {
+            background: #8b5cf6;
+            color: white;
+            font-weight: bold;
+        }
+        
+        /* Payment Summary */
+        .payment-summary {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+        }
+        
+        .banking-details {
+            flex: 1;
+            margin-right: 20px;
+        }
+        
+        .banking-details h3 {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .banking-details p {
+            margin: 5px 0;
+        }
+        
+        .totals-table {
+            width: 300px;
+            border-collapse: collapse;
+        }
+        
+        .totals-table td {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+        }
+        
+        .totals-table .label {
+            background: #f3f4f6;
+            font-weight: bold;
+        }
+        
+        .totals-table .total-row {
+            background: #8b5cf6;
+            color: white;
+            font-weight: bold;
+        }
+        
+        /* Amount in Words */
+        .amount-words {
+            background: #dbeafe;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .amount-words strong {
+            color: #1e40af;
+        }
+        
+        /* Terms and Conditions */
+        .terms-section {
+            background: #fef3c7;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .terms-section h3 {
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        
+        .terms-section ol {
+            margin-left: 20px;
+        }
+        
+        .terms-section li {
+            margin: 5px 0;
+        }
+        
+        /* Signature Section */
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+        
+        .signature-box {
+            text-align: center;
+            width: 200px;
+        }
+        
+        .signature-line {
+            border-bottom: 2px solid #333;
+            height: 50px;
+            margin-bottom: 10px;
+        }
+        
+        .signature-box p {
+            font-weight: bold;
+        }
+        
+        /* Print Styles */
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            
+            .invoice-container {
+                max-width: none;
+                margin: 0;
+                padding: 0;
+            }
+            
+            .no-print {
+                display: none;
+            }
+        }
+        
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 1000;
+        }
+        
+        .print-button:hover {
+            background: #7c3aed;
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button no-print" onclick="window.print()">🖨️ Print Invoice</button>
     
-    .invoice-header {
-        background: linear-gradient(135deg, #c2185b 0%, #512da8 50%, #e91e63 100%);
-        color: white;
-        padding: 30px;
-        border-radius: 15px;
-        margin-bottom: 30px;
-    }
-    
-    .invoice-body {
-        background: white;
-        border: 2px solid #e9ecef;
-        border-radius: 15px;
-        padding: 30px;
-        margin-bottom: 30px;
-    }
-    
-    .invoice-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-    }
-    
-    .invoice-table th,
-    .invoice-table td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #dee2e6;
-    }
-    
-    .invoice-table th {
-        background-color: #f8f9fa;
-        font-weight: bold;
-    }
-    
-    .invoice-totals {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border-radius: 10px;
-        margin-top: 20px;
-    }
-    
-    .total-row {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-        font-size: 16px;
-    }
-    
-    .total-row.final {
-        font-size: 20px;
-        font-weight: bold;
-        border-top: 2px solid #dee2e6;
-        padding-top: 10px;
-        margin-top: 10px;
-    }
-</style>
-{% endblock %}
-
-{% block content %}
-<div class="container-fluid py-4">
-    <!-- Print Controls -->
-    <div class="row mb-4 no-print">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h4 class="mb-0">🖨️ Print Invoice</h4>
-                        <div>
-                            <button onclick="window.print()" class="btn btn-primary me-2">
-                                <i class="fas fa-print"></i> Print Invoice
-                            </button>
-                            <a href="{% url 'billing:invoice_detail' invoice.id %}" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left"></i> Back to Invoice
-                            </a>
-                        </div>
+    <div class="invoice-container">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="company-logo-section">
+                <div class="company-logo">KDH</div>
+                <div class="company-name">KING DUPATTA HOUSE</div>
+                <div class="gst-info">
+                    <strong>GSTIN:</strong> {{ invoice.company.gst_number }} | 
+                    <strong>State:</strong> 09 - Uttar Pradesh
+                </div>
+            </div>
+            
+            <div class="contact-section">
+                <div class="contact-row">
+                    <div class="contact-item">
+                        <span>📞</span>
+                        <span>{{ invoice.company.phone }}</span>
+                    </div>
+                    <div class="contact-item">
+                        <span>📧</span>
+                        <span>{{ invoice.company.email }}</span>
+                    </div>
+                    <div class="contact-item">
+                        <span>📍</span>
+                        <span>{{ invoice.company.address }}</span>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Invoice Print Area -->
-    <div class="print-area">
-        <!-- Invoice Header -->
-        <div class="invoice-header">
-            <div class="row">
-                <div class="col-md-6">
-                    <h1 class="mb-2">King Dupatta House</h1>
-                    <p class="mb-1">GST Number: {{ invoice.company.gst_number }}</p>
-                    <p class="mb-1">{{ invoice.company.address }}</p>
-                    <p class="mb-0">Phone: {{ invoice.company.phone }} | Email: {{ invoice.company.email }}</p>
-                </div>
-                <div class="col-md-6 text-end">
-                    <h2 class="mb-3">INVOICE</h2>
-                    <p class="mb-1"><strong>Invoice #:</strong> {{ invoice.invoice_number }}</p>
-                    <p class="mb-1"><strong>Date:</strong> {{ invoice.date|date:"M d, Y" }}</p>
-                    <p class="mb-0"><strong>Due Date:</strong> {{ invoice.due_date|date:"M d, Y" }}</p>
+                
+                <div class="invoice-title">Tax Invoice</div>
+                
+                <div class="invoice-meta">
+                    <p><strong>Invoice No:</strong> {{ invoice.invoice_number }}</p>
+                    <p><strong>Date:</strong> {{ invoice.date|date:"d/m/Y" }}</p>
                 </div>
             </div>
         </div>
-
-        <!-- Customer Details -->
-        <div class="invoice-body">
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <h5 class="text-primary mb-3">Bill To:</h5>
-                    <p class="mb-1"><strong>{{ invoice.customer.name }}</strong></p>
-                    {% if invoice.customer.email %}
-                    <p class="mb-1">Email: {{ invoice.customer.email }}</p>
-                    {% endif %}
-                    {% if invoice.customer.phone %}
-                    <p class="mb-1">Phone: {{ invoice.customer.phone }}</p>
-                    {% endif %}
-                    {% if invoice.customer.address %}
-                    <p class="mb-1">{{ invoice.customer.address }}</p>
-                    {% endif %}
-                    {% if invoice.customer.gst_number %}
-                    <p class="mb-0">GST: {{ invoice.customer.gst_number }}</p>
-                    {% endif %}
-                </div>
-                <div class="col-md-6">
-                    <h5 class="text-primary mb-3">Payment Terms:</h5>
-                    <p class="mb-1">Payment due within 30 days</p>
-                    <p class="mb-0">Late payments may incur additional charges</p>
-                </div>
+        
+        <!-- Bill To Section -->
+        <div class="bill-to-section">
+            <div class="bill-to-title">Bill To:</div>
+            <div class="bill-to-name">{{ invoice.customer.name }}</div>
+        </div>
+        
+        <!-- Items Table -->
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Item Name</th>
+                    <th>HSN/SAC</th>
+                    <th>Quantity</th>
+                    <th>Price/Unit</th>
+                    <th>GST</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in invoice.items.all %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>-</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>₹{{ item.unit_price|floatformat:2 }}</td>
+                    <td>₹{{ item.tax_amount|floatformat:2 }} ({{ item.tax_rate|floatformat:1 }}%)</td>
+                    <td>₹{{ item.total_price|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td>Total</td>
+                    <td></td>
+                    <td></td>
+                    <td>{{ invoice.items.count }}</td>
+                    <td></td>
+                    <td>₹{% widthratio invoice.tax_amount 2 1 %}</td>
+                    <td>₹{{ invoice.total_amount|floatformat:2 }}</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Payment Summary -->
+        <div class="payment-summary">
+            <div class="banking-details">
+                <h3>Pay To:</h3>
+                <p><strong>Bank Name:</strong> {{ invoice.company.bank_name|default:"HDFC BANK, LUCKNOW CHOWK - UTTAR PRADESH" }}</p>
+                <p><strong>Account No:</strong> {{ invoice.company.account_number|default:"50200016138197" }}</p>
+                <p><strong>IFSC Code:</strong> {{ invoice.company.ifsc_code|default:"HDFC0000596" }}</p>
+                <p><strong>Account Holder:</strong> AHTIRAM ALI ANSARI</p>
             </div>
-
-            <!-- Invoice Items -->
-            <div class="table-responsive">
-                <table class="invoice-table">
-                    <thead>
-                        <tr>
-                            <th>Description</th>
-                            <th style="width: 100px;">Qty</th>
-                            <th style="width: 120px;">Unit Price</th>
-                            <th style="width: 120px;">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in invoice.items.all %}
-                        <tr>
-                            <td>{{ item.description }}</td>
-                            <td>{{ item.quantity }}</td>
-                            <td>₹{{ item.unit_price|floatformat:2 }}</td>
-                            <td>₹{{ item.total_price|floatformat:2 }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
+            
+            <div>
+                <table class="totals-table">
+                    <tr>
+                        <td class="label">Sub Total:</td>
+                        <td>₹{{ invoice.subtotal|floatformat:2 }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">CGST@2.5%:</td>
+                        <td>₹{% widthratio invoice.tax_amount 2 1 %}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">SGST@2.5%:</td>
+                        <td>₹{% widthratio invoice.tax_amount 2 1 %}</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td class="label">Total:</td>
+                        <td>₹{{ invoice.total_amount|floatformat:2 }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Received:</td>
+                        <td>₹{{ invoice.total_amount|floatformat:2 }}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Balance:</td>
+                        <td>₹0.00</td>
+                    </tr>
                 </table>
             </div>
-
-            <!-- Invoice Totals -->
-            <div class="invoice-totals">
-                <div class="row">
-                    <div class="col-md-6">
-                        {% if invoice.notes %}
-                        <h6 class="text-primary mb-2">Notes:</h6>
-                        <p class="mb-0">{{ invoice.notes }}</p>
-                        {% endif %}
-                    </div>
-                    <div class="col-md-6">
-                        <div class="total-row">
-                            <span>Subtotal:</span>
-                            <span>₹{{ invoice.subtotal|floatformat:2 }}</span>
-                        </div>
-                        <div class="total-row">
-                            <span>GST ({{ invoice.tax_rate }}%):</span>
-                            <span>₹{{ invoice.tax_amount|floatformat:2 }}</span>
-                        </div>
-                        <div class="total-row final">
-                            <span>Total Amount:</span>
-                            <span>₹{{ invoice.total_amount|floatformat:2 }}</span>
-                        </div>
-                    </div>
-                </div>
+        </div>
+        
+        <!-- Amount in Words -->
+        <div class="amount-words">
+            <strong>Invoice Amount In Words:</strong> {{ invoice.total_amount|floatformat:0|add:"0" }} Rupees Only
+        </div>
+        
+        <!-- Terms and Conditions -->
+        <div class="terms-section">
+            <h3>Terms And Conditions:</h3>
+            <ol>
+                <li>No Exchange On Sunday.</li>
+                <li>Exchange Within A Week.</li>
+                <li>No Return Of Money.</li>
+            </ol>
+        </div>
+        
+        <!-- Signature Section -->
+        <div class="signature-section">
+            <div class="signature-box">
+                <div class="signature-line"></div>
+                <p><strong>For: KING DUPATTA HOUSE</strong></p>
+                <br><br>
+                <p>Authorized Signatory</p>
             </div>
         </div>
-
-        <!-- Footer -->
-        <div class="text-center mt-4">
-            <p class="text-muted mb-0">
-                Thank you for your business! | King Dupatta House | Since 1982
-            </p>
-        </div>
     </div>
-</div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-// Auto-print on page load (optional)
-// window.onload = function() {
-//     window.print();
-// };
-</script>
-{% endblock %}
+    
+    <script>
+        // Auto-print when page loads (optional)
+        // window.onload = function() {
+        //     window.print();
+        // }
+    </script>
+</body>
+</html>

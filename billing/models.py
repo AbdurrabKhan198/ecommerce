@@ -52,7 +52,7 @@ class Invoice(models.Model):
     due_date = models.DateField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
     subtotal = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=18.00)  # GST 18%
+    tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=5.00)  # CGST + SGST = 5%
     tax_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     notes = models.TextField(blank=True, null=True)

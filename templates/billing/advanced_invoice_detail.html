@@ -507,7 +507,8 @@
                     <div class="payment-details">
                         <p><strong>Subtotal:</strong> ₹{{ invoice.subtotal|floatformat:2 }}</p>
                         <p><strong>Discount:</strong> ₹{{ invoice.discount_amount|floatformat:2 }}</p>
-                        <p><strong>GST ({{ invoice.tax_rate }}%):</strong> ₹{{ invoice.tax_amount|floatformat:2 }}</p>
+                        <p><strong>CGST (2.5%):</strong> ₹{% widthratio invoice.tax_amount 2 1 %}</p>
+                        <p><strong>SGST (2.5%):</strong> ₹{% widthratio invoice.tax_amount 2 1 %}</p>
                         <p><strong>Total Amount:</strong> ₹{{ invoice.total_amount|floatformat:2 }}</p>
                     </div>
                 </div>

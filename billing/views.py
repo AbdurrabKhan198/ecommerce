@@ -73,10 +73,32 @@ def invoice_list(request):
 def invoice_create(request):
     """Create new invoice"""
     if request.method == 'POST':
-        invoice_form = InvoiceForm(request.POST)
-        if invoice_form.is_valid():
-            invoice = invoice_form.save(commit=False)
-            invoice.company = CompanyProfile.objects.get(id=1)
+        try:
+            # Get form data
+            invoice_date = request.POST.get('date')
+            notes = request.POST.get('notes', '')
+            
+            # Get or create a default company customer
+            company = CompanyProfile.objects.get(id=1)
+            customer, created = Customer.objects.get_or_create(
+                name="Company Invoice",
+                defaults={
+                    'email': company.email,
+                    'phone': company.phone,
+                    'address': company.address,
+                    'gst_number': company.gst_number
+                }
+            )
+            
+            # Create invoice
+            invoice = Invoice(
+                customer=customer,
+                company=company,
+                date=datetime.strptime(invoice_date, '%Y-%m-%d').date(),
+                due_date=datetime.strptime(invoice_date, '%Y-%m-%d').date(),  # Same as invoice date
+                notes=notes,
+                status='draft'
+            )
             invoice.save()
             
             # Handle invoice items
@@ -94,16 +116,21 @@ def invoice_create(request):
             
             messages.success(request, f'Invoice {invoice.invoice_number} created successfully!')
             return redirect('billing:invoice_detail', invoice_id=invoice.id)
-    else:
-        invoice_form = InvoiceForm()
-        # Set default dates
-        invoice_form.fields['date'].initial = datetime.now().date()
-        invoice_form.fields['due_date'].initial = (datetime.now() + timedelta(days=30)).date()
+            
+        except Exception as e:
+            messages.error(request, f'Error creating invoice: {str(e)}')
     
-    customers = Customer.objects.all()
+    # Create a simple form for date and notes
+    class SimpleInvoiceForm:
+        def __init__(self):
+            self.fields = {
+                'date': type('Field', (), {'initial': datetime.now().date()}),
+                'notes': type('Field', (), {'initial': ''})
+            }
+    
+    invoice_form = SimpleInvoiceForm()
     return render(request, 'billing/invoice_create.html', {
-        'invoice_form': invoice_form,
-        'customers': customers
+        'invoice_form': invoice_form
     })
 
 @superuser_required_with_login
@@ -116,7 +143,7 @@ def invoice_detail(request, invoice_id):
 def invoice_print(request, invoice_id):
     """Print invoice"""
     invoice = get_object_or_404(Invoice, id=invoice_id)
-    return render(request, 'billing/invoice_print.html', {'invoice': invoice})
+    return render(request, 'billing/professional_invoice_print.html', {'invoice': invoice})
 
 @superuser_required_with_login
 def company_profile(request):

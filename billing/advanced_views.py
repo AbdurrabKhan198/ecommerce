@@ -130,23 +130,31 @@ def advanced_invoice_create(request):
     if request.method == 'POST':
         try:
             # Get form data
-            customer_id = request.POST.get('customer')
             invoice_date = request.POST.get('date')
-            due_date = request.POST.get('due_date')
             notes = request.POST.get('notes', '')
             terms = request.POST.get('terms', '')
             discount_percentage = Decimal(request.POST.get('discount_percentage', 0))
             
-            # Get customer and company
-            customer = AdvancedCustomer.objects.get(customer_id=customer_id)
+            # Get or create a default company customer
             company = AdvancedCompanyProfile.objects.get(id=1)
+            customer, created = AdvancedCustomer.objects.get_or_create(
+                name="Company Invoice",
+                defaults={
+                    'customer_type': 'business',
+                    'email': company.email,
+                    'phone': company.phone,
+                    'address': company.address,
+                    'gst_number': company.gst_number,
+                    'is_active': True
+                }
+            )
             
             # Create invoice first
             invoice = AdvancedInvoice(
                 customer=customer,
                 company=company,
                 date=datetime.strptime(invoice_date, '%Y-%m-%d').date(),
-                due_date=datetime.strptime(due_date, '%Y-%m-%d').date(),
+                due_date=datetime.strptime(invoice_date, '%Y-%m-%d').date(),  # Same as invoice date
                 notes=notes,
                 terms_conditions=terms,
                 discount_percentage=discount_percentage,
@@ -182,11 +190,9 @@ def advanced_invoice_create(request):
         except Exception as e:
             messages.error(request, f'Error creating invoice: {str(e)}')
     
-    customers = AdvancedCustomer.objects.filter(is_active=True)
     company = AdvancedCompanyProfile.objects.get_or_create(id=1)[0]
     
     context = {
-        'customers': customers,
         'company': company,
     }
     return render(request, 'billing/advanced_invoice_create.html', context)
