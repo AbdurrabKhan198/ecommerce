@@ -1,18 +1,14 @@
 from django.urls import path
 from . import advanced_views
 from . import auth_views
-from . import test_views
 
 app_name = 'billing'
 
 urlpatterns = [
-    # Test routes
-    path('test/', test_views.test_billing, name='test'),
-    path('test-template/', test_views.test_template, name='test_template'),
-    
     # Authentication
     path('login/', auth_views.billing_login, name='login'),
     path('logout/', auth_views.billing_logout, name='logout'),
+    
     # Advanced Dashboard
     path('', advanced_views.advanced_dashboard, name='advanced_dashboard'),
     
