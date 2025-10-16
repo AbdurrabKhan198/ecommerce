@@ -18,11 +18,11 @@
             background: white;
     }
     
-        .invoice-container {
-            max-width: 800px;
-            margin: 0 auto;
+    .invoice-container {
+        max-width: 800px;
+        margin: 0 auto;
             padding: 5px;
-            background: white;
+        background: white;
             font-size: 0.8rem;
         }
         
@@ -33,16 +33,16 @@
         }
         
         .company-logo-section {
-            background: #1e3a8a;
+            background: linear-gradient(135deg, #c2185b 0%, #e91e63 100%);
             color: white;
             padding: 8px;
             border-radius: 0 0 20px 0;
             flex: 1;
-        }
+    }
     
-        .company-logo {
+    .company-logo {
             font-size: 1.5rem;
-            font-weight: bold;
+        font-weight: bold;
             margin-bottom: 4px;
         }
         
@@ -52,16 +52,16 @@
             object-fit: contain;
             margin-bottom: 4px;
             border-radius: 8px;
-        }
+    }
     
-        .company-name {
+    .company-name {
             font-size: 1.1rem;
-            font-weight: bold;
+        font-weight: bold;
             margin-bottom: 5px;
-        }
+    }
     
     .gst-info {
-            background: #1e40af;
+            background: #512da8;
         color: white;
         padding: 8px;
         border-radius: 5px;
@@ -69,13 +69,13 @@
     }
     
         .contact-section {
-            background: #8b5cf6;
+            background: linear-gradient(135deg, #512da8 0%, #c2185b 100%);
             color: white;
             padding: 8px;
             flex: 1;
-            display: flex;
+        display: flex;
             flex-direction: column;
-            justify-content: space-between;
+        justify-content: space-between;
         }
         
         .contact-row {
@@ -128,19 +128,19 @@
         
         /* Items Table */
         .items-table {
-            width: 100%;
-            border-collapse: collapse;
+        width: 100%;
+        border-collapse: collapse;
             margin: 5px 0;
             background: white;
             font-size: 0.7rem;
-        }
+    }
     
         .items-table th {
-            background: #8b5cf6;
-            color: white;
+            background: linear-gradient(135deg, #c2185b 0%, #e91e63 100%);
+        color: white;
             padding: 4px 3px;
-            text-align: left;
-            font-weight: bold;
+        text-align: left;
+        font-weight: bold;
             font-size: 0.65rem;
         }
         
@@ -155,7 +155,7 @@
         }
         
         .items-table tr:last-child {
-            background: #8b5cf6;
+            background: linear-gradient(135deg, #c2185b 0%, #e91e63 100%);
             color: white;
             font-weight: bold;
         }
@@ -247,8 +247,8 @@
         
         /* Signature Section */
         .signature-section {
-            display: flex;
-            justify-content: space-between;
+        display: flex;
+        justify-content: space-between;
             margin-top: 10px;
         }
         
@@ -333,31 +333,31 @@
             
             /* Ensure colors are preserved in PDF */
             .company-logo-section {
-                background: #1e3a8a !important;
+                background: linear-gradient(135deg, #c2185b 0%, #e91e63 100%) !important;
                 color: white !important;
                 -webkit-print-color-adjust: exact !important;
             }
             
             .gst-info {
-                background: #1e40af !important;
+                background: #512da8 !important;
                 color: white !important;
                 -webkit-print-color-adjust: exact !important;
             }
             
             .contact-section {
-                background: #8b5cf6 !important;
+                background: linear-gradient(135deg, #512da8 0%, #c2185b 100%) !important;
                 color: white !important;
                 -webkit-print-color-adjust: exact !important;
             }
             
             .items-table th {
-                background: #8b5cf6 !important;
+                background: linear-gradient(135deg, #512da8 0%, #c2185b 100%) !important;
                 color: white !important;
                 -webkit-print-color-adjust: exact !important;
             }
             
             .items-table tr:last-child {
-                background: #8b5cf6 !important;
+                background: linear-gradient(135deg, #512da8 0%, #c2185b 100%) !important;
                 color: white !important;
                 -webkit-print-color-adjust: exact !important;
             }
@@ -368,7 +368,7 @@
             }
             
             .totals-table .total-row {
-                background: #8b5cf6 !important;
+                background: linear-gradient(135deg, #512da8 0%, #c2185b 100%) !important;
                 color: white !important;
                 -webkit-print-color-adjust: exact !important;
             }
@@ -570,10 +570,7 @@
         <div class="instagram-section">
             <div class="instagram-title">📸 Follow Us on Instagram</div>
             <div class="qr-code">
-                <div>
-                    <div style="font-size: 0.7rem; margin-bottom: 5px;">Scan QR Code</div>
-                    <div style="font-size: 0.6rem;">@kingdupattahouse</div>
-                </div>
+                <img src="{% static 'images/king_dupatta_house_qr.png' %}" alt="Instagram QR Code" style="width: 50px; height: 50px;">
             </div>
             <div class="instagram-handle">@kingdupattahouse</div>
         </div>
