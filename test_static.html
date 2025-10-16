@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Static Files Test</title>
+</head>
+<body>
+    <h1>Static Files Test</h1>
+    
+    <h2>Test 1: Direct URL</h2>
+    <img src="/static/images/banner.jpg" alt="Banner" style="width: 300px; height: 200px; object-fit: cover;">
+    
+    <h2>Test 2: Django Static Tag</h2>
+    <img src="{% static 'images/banner.jpg' %}" alt="Banner" style="width: 300px; height: 200px; object-fit: cover;">
+    
+    <h2>Test 3: File Exists Check</h2>
+    <p>File should be at: /static/images/banner.jpg</p>
+    
+    <script>
+        // Test if image loads
+        const img = new Image();
+        img.onload = function() {
+            document.body.innerHTML += '<p style="color: green;">✅ Banner image loaded successfully!</p>';
+        };
+        img.onerror = function() {
+            document.body.innerHTML += '<p style="color: red;">❌ Banner image failed to load!</p>';
+        };
+        img.src = '/static/images/banner.jpg';
+    </script>
+</body>
+</html>
