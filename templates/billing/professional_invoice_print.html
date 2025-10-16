@@ -16,53 +16,62 @@
             line-height: 1.4;
             color: #333;
             background: white;
-        }
-        
+    }
+    
         .invoice-container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 5px;
             background: white;
+            font-size: 0.8rem;
         }
         
         /* Header Section */
         .header-section {
             display: flex;
-            margin-bottom: 30px;
+            margin-bottom: 8px;
         }
         
         .company-logo-section {
             background: #1e3a8a;
             color: white;
-            padding: 20px;
+            padding: 8px;
             border-radius: 0 0 20px 0;
             flex: 1;
         }
-        
+    
         .company-logo {
-            font-size: 2.5rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 4px;
         }
         
+        .logo-image {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            margin-bottom: 4px;
+            border-radius: 8px;
+        }
+    
         .company-name {
-            font-size: 1.8rem;
+            font-size: 1.1rem;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 5px;
         }
-        
-        .gst-info {
+    
+    .gst-info {
             background: #1e40af;
-            color: white;
-            padding: 8px;
-            border-radius: 5px;
-            font-size: 0.9rem;
-        }
-        
+        color: white;
+        padding: 8px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+    }
+    
         .contact-section {
             background: #8b5cf6;
             color: white;
-            padding: 20px;
+            padding: 8px;
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -71,21 +80,22 @@
         
         .contact-row {
             display: flex;
-            gap: 20px;
-            margin-bottom: 15px;
+            gap: 10px;
+            margin-bottom: 5px;
         }
         
         .contact-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
+            font-size: 0.7rem;
         }
         
         .invoice-title {
-            font-size: 2rem;
+            font-size: 1.2rem;
             font-weight: bold;
             text-align: center;
-            margin: 20px 0;
+            margin: 5px 0;
             color: #000;
         }
         
@@ -95,22 +105,23 @@
         }
         
         .invoice-meta p {
-            margin: 5px 0;
+            margin: 2px 0;
+            font-size: 0.7rem;
         }
         
         /* Bill To Section */
         .bill-to-section {
-            margin: 20px 0;
+            margin: 5px 0;
         }
         
         .bill-to-title {
             font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 10px;
+            font-size: 0.8rem;
+            margin-bottom: 2px;
         }
         
         .bill-to-name {
-            font-size: 1.3rem;
+            font-size: 0.9rem;
             font-weight: bold;
             color: #000;
         }
@@ -119,21 +130,24 @@
         .items-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
+            margin: 5px 0;
             background: white;
+            font-size: 0.7rem;
         }
-        
+    
         .items-table th {
             background: #8b5cf6;
             color: white;
-            padding: 12px 8px;
+            padding: 4px 3px;
             text-align: left;
             font-weight: bold;
+            font-size: 0.65rem;
         }
         
         .items-table td {
-            padding: 12px 8px;
+            padding: 3px 2px;
             border-bottom: 1px solid #e5e7eb;
+            font-size: 0.65rem;
         }
         
         .items-table tr:nth-child(even) {
@@ -150,31 +164,36 @@
         .payment-summary {
             display: flex;
             justify-content: space-between;
-            margin: 30px 0;
+            margin: 8px 0;
         }
         
         .banking-details {
             flex: 1;
-            margin-right: 20px;
+            margin-right: 10px;
+            font-size: 0.65rem;
         }
         
         .banking-details h3 {
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 2px;
+            font-size: 0.7rem;
         }
         
         .banking-details p {
-            margin: 5px 0;
+            margin: 1px 0;
+            font-size: 0.6rem;
         }
         
         .totals-table {
-            width: 300px;
+            width: 200px;
             border-collapse: collapse;
+            font-size: 0.65rem;
         }
         
         .totals-table td {
-            padding: 8px 12px;
+            padding: 2px 3px;
             border: 1px solid #d1d5db;
+            font-size: 0.6rem;
         }
         
         .totals-table .label {
@@ -191,10 +210,11 @@
         /* Amount in Words */
         .amount-words {
             background: #dbeafe;
-            padding: 15px;
+            padding: 4px;
             border-radius: 8px;
-            margin: 20px 0;
+            margin: 5px 0;
             border-left: 4px solid #3b82f6;
+            font-size: 0.65rem;
         }
         
         .amount-words strong {
@@ -204,45 +224,86 @@
         /* Terms and Conditions */
         .terms-section {
             background: #fef3c7;
-            padding: 15px;
+            padding: 4px;
             border-radius: 8px;
-            margin: 20px 0;
+            margin: 5px 0;
             border-left: 4px solid #f59e0b;
+            font-size: 0.65rem;
         }
         
         .terms-section h3 {
             color: #92400e;
-            margin-bottom: 10px;
+            margin-bottom: 2px;
+            font-size: 0.7rem;
         }
         
         .terms-section ol {
-            margin-left: 20px;
+            margin-left: 10px;
         }
         
         .terms-section li {
-            margin: 5px 0;
+            margin: 1px 0;
         }
         
         /* Signature Section */
         .signature-section {
             display: flex;
             justify-content: space-between;
-            margin-top: 40px;
+            margin-top: 10px;
         }
         
         .signature-box {
             text-align: center;
-            width: 200px;
+            width: 120px;
+            font-size: 0.65rem;
         }
         
         .signature-line {
             border-bottom: 2px solid #333;
-            height: 50px;
-            margin-bottom: 10px;
+            height: 20px;
+            margin-bottom: 2px;
         }
         
         .signature-box p {
+        font-weight: bold;
+    }
+    
+        /* Instagram QR Section */
+        .instagram-section {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: white;
+            padding: 4px;
+            border-radius: 10px;
+            margin: 5px 0;
+            text-align: center;
+            font-size: 0.65rem;
+        }
+        
+        .instagram-title {
+            font-size: 0.7rem;
             font-weight: bold;
+            margin-bottom: 2px;
+        }
+        
+        .qr-code {
+            width: 40px;
+            height: 40px;
+            margin: 2px auto;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.5rem;
+            color: #333;
+            text-align: center;
+            line-height: 1.1;
+        }
+        
+        .instagram-handle {
+            font-size: 0.6rem;
+            font-weight: bold;
+            margin-top: 2px;
         }
         
         /* Print Styles - Enhanced for PDF Color Support */
@@ -333,6 +394,18 @@
                 color: #92400e !important;
                 -webkit-print-color-adjust: exact !important;
             }
+            
+            .instagram-section {
+                background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%) !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+            
+            .qr-code {
+                background: white !important;
+                color: #333 !important;
+                -webkit-print-color-adjust: exact !important;
+            }
         }
         
         .print-button {
@@ -351,24 +424,25 @@
         
         .print-button:hover {
             background: #7c3aed;
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
     <button class="print-button no-print" onclick="window.print()">🖨️ Print Invoice</button>
     
-    <div class="invoice-container">
+        <div class="invoice-container">
         <!-- Header Section -->
         <div class="header-section">
             <div class="company-logo-section">
-                <div class="company-logo">KDH</div>
+                <img src="{% static 'images/logo.png' %}" alt="King Dupatta House Logo" class="logo-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="company-logo" style="display: none;">KDH</div>
                 <div class="company-name">KING DUPATTA HOUSE</div>
                 <div class="gst-info">
                     <strong>GSTIN:</strong> {{ invoice.company.gst_number }} | 
                     <strong>State:</strong> 09 - Uttar Pradesh
                 </div>
             </div>
-            
+
             <div class="contact-section">
                 <div class="contact-row">
                     <div class="contact-item">
@@ -398,33 +472,33 @@
         <div class="bill-to-section">
             <div class="bill-to-title">Bill To:</div>
             <div class="bill-to-name">{{ invoice.customer.name }}</div>
-        </div>
-        
-        <!-- Items Table -->
+            </div>
+
+            <!-- Items Table -->
         <table class="items-table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Item Name</th>
-                    <th>HSN/SAC</th>
-                    <th>Quantity</th>
-                    <th>Price/Unit</th>
-                    <th>GST</th>
-                    <th>Amount</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in invoice.items.all %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ item.description }}</td>
-                    <td>{{ item.hsn_code|default:"-" }}</td>
-                    <td>{{ item.quantity }} {{ item.unit }}</td>
-                    <td>₹{{ item.unit_price|floatformat:2 }}</td>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Item Name</th>
+                        <th>HSN/SAC</th>
+                        <th>Quantity</th>
+                        <th>Price/Unit</th>
+                        <th>GST</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in invoice.items.all %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ item.description }}</td>
+                        <td>{{ item.hsn_code|default:"-" }}</td>
+                        <td>{{ item.quantity }} {{ item.unit }}</td>
+                        <td>₹{{ item.unit_price|floatformat:2 }}</td>
                     <td>₹{{ item.tax_amount|floatformat:2 }} ({{ item.tax_rate|floatformat:1 }}%)</td>
-                    <td>₹{{ item.total_price|floatformat:2 }}</td>
-                </tr>
-                {% endfor %}
+                        <td>₹{{ item.total_price|floatformat:2 }}</td>
+                    </tr>
+                    {% endfor %}
                 <tr>
                     <td>Total</td>
                     <td></td>
@@ -432,68 +506,80 @@
                     <td>{{ invoice.items.count }}</td>
                     <td></td>
                     <td>₹{% widthratio invoice.tax_amount 2 1 %}</td>
-                    <td>₹{{ invoice.total_amount|floatformat:2 }}</td>
-                </tr>
-            </tbody>
-        </table>
-        
+                        <td>₹{{ invoice.total_amount|floatformat:2 }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
         <!-- Payment Summary -->
         <div class="payment-summary">
             <div class="banking-details">
                 <h3>Pay To:</h3>
-                <p><strong>Bank Name:</strong> {{ invoice.company.bank_name }}</p>
-                <p><strong>Account No:</strong> {{ invoice.company.account_number }}</p>
-                <p><strong>IFSC Code:</strong> {{ invoice.company.ifsc_code }}</p>
-                <p><strong>Account Holder:</strong> AHTIRAM ALI ANSARI</p>
-            </div>
-            
+                    <p><strong>Bank Name:</strong> {{ invoice.company.bank_name }}</p>
+                    <p><strong>Account No:</strong> {{ invoice.company.account_number }}</p>
+                    <p><strong>IFSC Code:</strong> {{ invoice.company.ifsc_code }}</p>
+                    <p><strong>Account Holder:</strong> AHTIRAM ALI ANSARI</p>
+                </div>
+                
             <div>
                 <table class="totals-table">
-                    <tr>
+                        <tr>
                         <td class="label">Sub Total:</td>
-                        <td>₹{{ invoice.subtotal|floatformat:2 }}</td>
-                    </tr>
-                    <tr>
+                            <td>₹{{ invoice.subtotal|floatformat:2 }}</td>
+                        </tr>
+                        <tr>
                         <td class="label">CGST@2.5%:</td>
                         <td>₹{% widthratio invoice.tax_amount 2 1 %}</td>
-                    </tr>
-                    <tr>
+                        </tr>
+                        <tr>
                         <td class="label">SGST@2.5%:</td>
                         <td>₹{% widthratio invoice.tax_amount 2 1 %}</td>
-                    </tr>
+                        </tr>
                     <tr class="total-row">
                         <td class="label">Total:</td>
-                        <td>₹{{ invoice.total_amount|floatformat:2 }}</td>
-                    </tr>
-                    <tr>
+                            <td>₹{{ invoice.total_amount|floatformat:2 }}</td>
+                        </tr>
+                        <tr>
                         <td class="label">Received:</td>
-                        <td>₹{{ invoice.total_amount|floatformat:2 }}</td>
-                    </tr>
-                    <tr>
+                            <td>₹{{ invoice.total_amount|floatformat:2 }}</td>
+                        </tr>
+                        <tr>
                         <td class="label">Balance:</td>
-                        <td>₹0.00</td>
-                    </tr>
-                </table>
+                            <td>₹0.00</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-        </div>
-        
-        <!-- Amount in Words -->
+
+            <!-- Amount in Words -->
         <div class="amount-words">
             <strong>Invoice Amount In Words:</strong> {{ invoice.total_amount|floatformat:0|add:"0" }} Rupees Only
-        </div>
-        
-        <!-- Terms and Conditions -->
+            </div>
+
+            <!-- Terms and Conditions -->
         <div class="terms-section">
             <h3>Terms And Conditions:</h3>
-            <ol>
-                <li>No Exchange On Sunday.</li>
-                <li>Exchange Within A Week.</li>
-                <li>No Return Of Money.</li>
-            </ol>
+                <ol>
+                    <li>No Exchange On Sunday.</li>
+                    <li>Exchange Within A Week.</li>
+                    <li>No Return Of Money.</li>
+                </ol>
+            </div>
+
+        <!-- Instagram QR Section -->
+        <div class="instagram-section">
+            <div class="instagram-title">📸 Follow Us on Instagram</div>
+            <div class="qr-code">
+                <div>
+                    <div style="font-size: 0.7rem; margin-bottom: 5px;">Scan QR Code</div>
+                    <div style="font-size: 0.6rem;">@kingdupattahouse</div>
+                </div>
+            </div>
+            <div class="instagram-handle">@kingdupattahouse</div>
         </div>
         
         <!-- Signature Section -->
-        <div class="signature-section">
+            <div class="signature-section">
             <div class="signature-box">
                 <div class="signature-line"></div>
                 <p><strong>For: KING DUPATTA HOUSE</strong></p>
