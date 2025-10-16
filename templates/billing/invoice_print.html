@@ -245,21 +245,93 @@
             font-weight: bold;
         }
         
-        /* Print Styles */
+        /* Print Styles - Enhanced for PDF Color Support */
         @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
             body {
                 margin: 0;
                 padding: 0;
+                background: white !important;
             }
             
             .invoice-container {
                 max-width: none;
                 margin: 0;
                 padding: 0;
+                background: white !important;
             }
             
             .no-print {
-                display: none;
+                display: none !important;
+            }
+            
+            /* Ensure colors are preserved in PDF */
+            .company-logo-section {
+                background: #1e3a8a !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+            
+            .gst-info {
+                background: #1e40af !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+            
+            .contact-section {
+                background: #8b5cf6 !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+            
+            .items-table th {
+                background: #8b5cf6 !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+            
+            .items-table tr:last-child {
+                background: #8b5cf6 !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+            
+            .totals-table .label {
+                background: #f3f4f6 !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+            
+            .totals-table .total-row {
+                background: #8b5cf6 !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+            
+            .amount-words {
+                background: #dbeafe !important;
+                border-left: 4px solid #3b82f6 !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+            
+            .amount-words strong {
+                color: #1e40af !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+            
+            .terms-section {
+                background: #fef3c7 !important;
+                border-left: 4px solid #f59e0b !important;
+                -webkit-print-color-adjust: exact !important;
+            }
+            
+            .terms-section h3 {
+                color: #92400e !important;
+                -webkit-print-color-adjust: exact !important;
             }
         }
         

@@ -528,7 +528,7 @@
         <div class="p-4">
             {% if invoices %}
                 {% for invoice in invoices %}
-                <div class="invoice-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|mul:100 }}">
+                <div class="invoice-card" data-aos="fade-up" data-aos-delay="{% widthratio forloop.counter0 1 100 %}">
                     <div class="invoice-header">
                         <div>
                             <h3 class="invoice-number">{{ invoice.invoice_number }}</h3>

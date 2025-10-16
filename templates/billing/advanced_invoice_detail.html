@@ -473,11 +473,6 @@
             <a href="{% url 'billing:advanced_invoice_list' %}" class="btn-secondary">
                 ← Back to Invoices
             </a>
-            {% if invoice.status == 'draft' %}
-            <a href="{% url 'billing:advanced_invoice_edit' invoice_id=invoice.invoice_id %}" class="btn-secondary">
-                ✏️ Edit Invoice
-            </a>
-            {% endif %}
         </div>
     </div>
 </div>
